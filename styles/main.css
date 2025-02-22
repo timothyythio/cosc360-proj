@@ -1,6 +1,4 @@
-/* styles/main.css */
 
-/* General Body Styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -8,10 +6,30 @@ body {
     display: flex;
 }
 
-/* Sidebar Styles */
+#content {
+    margin-top: 80px;
+    margin-left: 100px;
+    padding: 20px;
+    padding-bottom: 100px;
+    width: calc(100% - 100px);
+    box-sizing: border-box;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    width: calc(100% - 100px);
+    background-color: #3A3A3A;
+    color: #EAEAEA;
+    position: fixed;
+    bottom: 0;
+    left: 100px;
+}
+
+
 .navbar {
     width: 100px;
-    height: calc(100vh - 60px);  /* Adjust height to account for the topnav */
+    height: calc(100vh - 60px);  
     position: fixed;
     left: 0;
     top: 60px; 
@@ -69,7 +87,7 @@ body {
     color: white;
 }
 
-/* Top Navigation Bar */
+
 .topnav {
     position: fixed;
     top: 0;
@@ -124,25 +142,4 @@ body {
     height: 40px;
     border-radius: 50%;
     cursor: pointer;
-}
-
-/* Main Content */
-#content {
-    margin-top: 80px;
-    margin-left: 100px;
-    padding: 20px;
-    width: calc(100% - 100px);
-    box-sizing: border-box;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 10px;
-    width: calc(100% - 100px);
-    background-color: #3A3A3A;
-    color: #EAEAEA;
-    position: fixed;
-    bottom: 0;
-    left: 100px;
 }

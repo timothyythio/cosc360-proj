@@ -1,0 +1,175 @@
+
+.profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: black;
+    margin-top: 20px;
+}
+
+.profile-image-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-username {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.profile-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.btn {
+    background-color: #E0E0E0;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn:hover {
+    background-color: #BDBDBD;
+}
+
+.profile-bio {
+    background-color: #d2d2d2;
+    padding: 15px;
+    border-radius: 8px;
+    width: 60%;
+    text-align: center;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.profile-tabs {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.tab-btn {
+    background-color: #E0E0E0;
+    color: black;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.tab-btn.active {
+    background-color: #8b8b8b;
+    color: white;
+}
+
+.tab-content {
+    margin-top: 20px;
+    background-color: #d2d2d2;
+    padding: 20px;
+    border-radius: 8px;
+    width: 60%;
+    text-align: center;
+}
+
+.post {
+    background-color: white;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 15px;
+    text-align: left;
+    position: relative;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.post-image-small {
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.post-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    margin: 0;
+}
+
+.post-caption {
+    font-size: 16px;
+    color: black;
+    margin-bottom: 8px;
+}
+
+.post-meta {
+    font-size: 14px;
+    color: black;
+}
+
+.like-icon {
+    width: 12px;
+    height: 12px;
+    object-fit: contain;
+    vertical-align: baseline;
+}
+
+
+.comment {
+    background-color: white;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    padding: 15px;
+}
+
+.post-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+    margin-bottom: 8px;
+}
+
+.comment-text {
+    font-size: 16px;
+    color: black;
+    margin: 5px 0;
+}
+
+.thread {
+    border-left: 3px solid #4FB0C6;
+    padding-left: 15px;
+}
+
+.comment-reply {
+    margin-left: 20px;
+    position: relative;
+}
+
+.reply {
+    border-left: 2px solid black;
+    padding-left: 15px;
+    margin-top: 8px;
+}
