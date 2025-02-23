@@ -5,14 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bloggit</title>
     <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/newPost.css">
 </head>
 <body>
     <div id="app">
         <div id="topnav"></div>
         <div id="navbar"></div>
         <main id="content">
-            <h1>Welcome to the Bloggit!</h1>
-            <p>This is the new page page. </p>
+            <div id="create-container">
+                <img src="../assets/profile-icon.png" alt="Profile Image" class="profile-pic">
+                <h2>Create Post</h2>
+                <select>
+                    <option>Select a community or a topic</option>
+                </select>
+                <input type="text" placeholder="Title">
+                <h3>Add Photos...</h3>
+                <div class="img-upload">
+                    <div class="upload-container">
+                        <img src="../assets/plus-icon.png" alt="Upload Image">
+                    </div>
+                </div>
+                <textarea placeholder="Caption..."></textarea>
+                <div class="button-cont">
+                    <button class="save">Save Draft</button>
+                    <button class="post">Post</button>
+                </div>
+            </div>
         </main>
         <div id="footer"></div>
     </div>
