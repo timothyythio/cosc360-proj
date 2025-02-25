@@ -2,21 +2,50 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bloggit</title>
+    <title>Register</title>
     <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/register.css">
 </head>
 <body>
-    <div id="app">
-        <div id="topnav"></div>
-        <div id="navbar"></div>
-        <main id="content">
-            <h1>Welcome to the Bloggit!</h1>
-            <p>This is the register page. </p>
-        </main>
-        <div id="footer"></div>
-    </div>
+    <div id="navbar"></div>
+    <div id="topnav"></div>
+    <div id="content" class="center-content">
+        <div class="register-container">
+            <h1>Register</h1>
+            <form class="register-form" id="registerForm" novalidate>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                    <span class="error-message" id="usernameError"></span>
+                </div>
+            
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                    <span class="error-message" id="emailError"></span>
+                </div>
+            
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+            
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+                    <span class="error-message" id="confirmPasswordError"></span>
+                </div>
+            
+                <button type="submit" class="btn submit-btn">Register</button>
+            </form>
 
-    <script src="../scripts/router.js"></script>
+            <p class="login-link">Already have an account? <a href="login.html">Login here</a></p>
+        </div>
+    </div>
+    <div id="footer">© 2025 COSC360 Blogging Platform</div>
+    <script src="../scripts/router.js" defer></script>
+    <script src="../scripts/register.js"></script>
+
 </body>
 </html>
