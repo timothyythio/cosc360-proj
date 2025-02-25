@@ -12,12 +12,16 @@
         <div id="topnav"></div>
         <div id="navbar"></div>
         <div id="backbutton">
-            <!-- I NEED TO PLACE BACK BUTTON TOP LEFT CORNER -->
+        <img src="../assets/back-button.svg">
+        <p>Back</p>
         </div>
         <main id="content">
             <div id="post-content">
-                <h2>Matcha Cafe Rave!!</h2>
-                <!-- PFP -->
+                <h2>Matcha Cafe Rave!!
+                <div id="userspfp-post">
+                    <img src="../assets/profile-icon.png" alt="User Profile">
+                </div>
+            </h2>
                 <img src="../assets/matcha.jpg" alt="Users Photo">
                 <div id="like-count">
                     <img src="../assets/heart-circle-svgrepo-com.svg" alt="Likes">
@@ -53,7 +57,7 @@
                 <button class="share"> <img src="../assets/share.svg" alt="share"></button>
                 <button class="save"> <img src="../assets/bookmark.svg" alt="save"></button>
             </div>
-            <br>
+            <hr class="comment-divider">
             <div id="comment-section">
                 <div id="comment-container">
                     <img src="../assets/profile-icon.png">
@@ -61,8 +65,16 @@
                     <div id="comment-content">
                         <p>Comment left by user</p>
                     </div>
-                    <br>
                 </div>
+                <hr class="comment-divider">
+                <div id="comment-container">
+                    <img src="../assets/profile-icon.png">
+                    <h3>matchalovver2002</h3>
+                    <div id="comment-content">
+                        <p>this matcha looks delicious!! where is this</p>
+                    </div>
+                </div>
+                <hr class="comment-divider">
             </div>
         </main>
         <div id="footer"></div>
