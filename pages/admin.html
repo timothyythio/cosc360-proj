@@ -5,18 +5,154 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bloggit</title>
     <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        #dashboardChart {
+            max-width: 400px;
+            max-height: 300px;
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
     <div id="app">
         <div id="topnav"></div>
         <div id="navbar"></div>
         <main id="content">
-            <h1>Welcome to the Bloggit!</h1>
-            <p>This is the admin page. </p>
+            <div id="admin-board">
+                <div id="userspfp-post">
+                    <img src="../assets/profile-icon.png" alt="User Profile">
+                </div>
+                <h2>Admin Dashboard</h2>
+            </div>
+
+            <section class="admin-menu">
+                <div class="button-grid">
+                    <button class="tab-btn active" onclick="showTab('dashboard')">Dashboard</button>
+                    <button class="tab-btn" onclick="showTab('users')">Users</button>
+                    <button class="tab-btn" onclick="showTab('posts')">Posts</button>
+                    <button class="tab-btn" onclick="showTab('comments')">Comments</button>
+                    <button class="tab-btn" onclick="showTab('reports')">Reports</button>
+                    <button class="tab-btn" onclick="showTab('settings')">Settings</button>
+                </div>
+            </section>
+
+            <div id="dashboard" class="tab-content" style="display: none;">
+                <h2>Dashboard Overview</h2>
+                <div class="stat-box">Total Users: <strong>4</strong></div>
+                <div class="stat-box">Total Posts: <strong>10</strong></div>
+                <div class="stat-box">Total Comments: <strong>2</strong></div>
+                <canvas id="dashboardChart"></canvas>
+            </div>
+
+            <div id="users" class="tab-content" style="display: none;">
+                <h2>User Management</h2>
+                <div class="stat-box">Total Users: <strong>4</strong></div>
+                <div class="stat-box">New Signups: <strong>1</strong></div>
+                <div class="stat-box">Banned Users: <strong>0</strong></div>
+            </div>
+
+            <div id="posts" class="tab-content" style="display: none;">
+                <h2>Post Analytics</h2>
+                <div class="stat-box">Total Posts: <strong>10</strong></div>
+                <div class="stat-box">Posts Today: <strong>3</strong></div>
+                <div class="stat-box">Most Liked Post: <strong>1</strong></div>
+            </div>
+
+            <div id="comments" class="tab-content" style="display: none;">
+                <h2>Comment Moderation</h2>
+                <div class="stat-box">Total Comments: <strong>2</strong></div>
+                <div class="stat-box">New Comments: <strong>1,567</strong></div>
+                <div class="stat-box">Flagged Comments: <strong>13</strong></div>
+            </div>
+
+            <div id="reports" class="tab-content" style="display: none;">
+                <h2>Reports and Issues</h2>
+                <div class="stat-box">Total Reports: <strong>222</strong></div>
+                <div class="stat-box">Pending Reports: <strong>121</strong></div>
+                <div class="stat-box">Resolved Reports: <strong>6</strong></div>
+            </div>
+
+            <div id="settings" class="tab-content" style="display: none;">
+                <h2>Admin Settings</h2>
+                <div class="admin-info">
+                    <p><strong>Name:</strong> John Doe</p>
+                    <p><strong>Admin ID:</strong> #123456</p>
+                    <p><strong>Email:</strong> johndoe@example.com</p>
+                    <p><strong>Country:</strong> United States</p>
+                    <p><strong>City:</strong> New York</p>
+                    <p><strong>Password:</strong> ********</p>
+                    <button class="prof-btn">Edit Account Info</button>
+                </div>
+            </div>
+            
+
         </main>
         <div id="footer"></div>
     </div>
 
     <script src="../scripts/router.js"></script>
+    <script>
+        let dashboardChartInstance = null; 
+    
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+
+            const selectedTab = document.getElementById(tabId);
+            if (selectedTab) {
+                selectedTab.style.display = 'block';
+            }
+            const clickedButton = document.querySelector(`[onclick="showTab('${tabId}')"]`);
+            if (clickedButton) {
+                clickedButton.classList.add('active');
+            }
+
+            localStorage.setItem('adminActiveTab', tabId);
+
+            if (tabId === 'dashboard') {
+                renderDashboardChart();
+            }
+        }
+    
+        function renderDashboardChart() {
+            const ctx = document.getElementById('dashboardChart').getContext('2d');
+            if (dashboardChartInstance !== null) {
+                dashboardChartInstance.destroy();
+            }
+
+            dashboardChartInstance = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Users', 'Posts', 'Comments'], 
+                    datasets: [{
+                        label: 'Statistics',
+                        data: [4, 10, 2], 
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.7)', 
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(75, 192, 192, 1)', 
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
+                        ],
+                        borderWidth: 1 
+                    }]
+                },
+                options: {
+                    responsive: true, 
+                    maintainAspectRatio: false 
+                }
+            });
+        }
+    
+        window.onload = function() {
+            const activeTab = localStorage.getItem('adminActiveTab') || 'dashboard';
+            showTab(activeTab);
+        };
+    </script>
 </body>
 </html>
