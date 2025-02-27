@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="../styles/main.css">
+    <link rel="stylesheet" href="../styles/edit-profile.css">
+</head>
+<body>
+
+    <div id="navbar"></div>
+    <div id="content">
+        <div id="topnav"></div>
+
+        <div class="back-container">
+            <a href="profile.html" class="back-link">
+                <img src="../assets/back-button.svg" class="back-icon"> Back to Profile
+            </a>
+        </div>
+
+        <div class="edit-profile-container">
+            <h2>Edit Profile</h2>
+
+            <div class="profile-pic-container">
+                <label for="profile-pic" class="profile-pic-label">
+                    <img src="../assets/profile-icon.png" alt="Profile Picture" class="profile-pic">
+                    <div class="edit-icon">
+                        <img src="../assets/edit-icon.png" alt="Edit">
+                    </div>
+                </label>
+                <input type="file" id="profile-pic" name="profile-pic" accept="image/png, image/jpeg, image/jpg" hidden>
+                <span class="error-message" id="profilePicError"></span>
+            </div>
+
+            <form id="editProfileForm" class="profile-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="Enter your new username">
+                    <span class="error-message" id="usernameError"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your new email">
+                    <span class="error-message" id="emailError"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-password">New Password</label>
+                    <input type="password" id="new-password" placeholder="Enter your new password">
+                    <span class="error-message" id="passwordError"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm-password">Confirm Password</label>
+                    <input type="password" id="confirm-password" placeholder="Confirm your password">
+                    <span class="error-message" id="confirmPasswordError"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="text" id="phone" placeholder="Enter your new phone number (Optional)">
+                    <span class="error-message" id="phoneError"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bio">Bio</label>
+                    <textarea id="bio" placeholder="Tell us about yourself (Optional)"></textarea>
+                    <span class="error-message" id="bioError"></span>
+                </div>
+                
+
+                <div class="button-group">
+                    <button type="button" class="btn cancel-btn" onclick="window.location.href='profile.html'">Cancel</button>
+                    <button type="submit" class="btn save-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="footer"></div>
+
+    <script src="../scripts/router.js"></script>
+    <script src="../scripts/edit-profile.js"></script>
+</body>
+</html>
