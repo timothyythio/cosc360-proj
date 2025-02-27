@@ -12,6 +12,18 @@
     <div id="content" class="center-content">
         <div class="register-container">
             <h1>Register</h1>
+
+            <div class="profile-pic-container">
+                <label for="profile-pic" class="profile-pic-label">
+                    <img src="../assets/profile-icon.png" alt="Profile Picture" class="profile-pic">
+                    <div class="edit-icon">
+                        <img src="../assets/edit-icon.png" alt="Edit">
+                    </div>
+                </label>
+                <input type="file" id="profile-pic" name="profile-pic" accept="image/png, image/jpeg, image/jpg" hidden>
+                <span class="error-message" id="profilePicError"></span>
+            </div>
+
             <form class="register-form" id="registerForm" novalidate>
                 <div class="form-group">
                     <label for="username">Username</label>

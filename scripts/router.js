@@ -38,20 +38,23 @@ document.getElementById('navbar').innerHTML = `
             </div>
         </aside>
     `;
- document.getElementById('topnav').innerHTML = `
+document.getElementById('topnav').innerHTML = `
     <div class="topnav">
         <div class="topnav-left">
             <h1 id="page-label">${currentPageName}</h1>
         </div>
-            <div class="topnav-center">
+        <div class="topnav-center">
             <input type="text" class="search-bar" placeholder="Search Bloggit">
             <span class="search-icon">🔍</span>
         </div>
         <div class="topnav-right">
+            <a href="${pathPrefix}pages/register.html" class="nav-link">Register</a>
+            <a href="${pathPrefix}pages/login.html" class="nav-link">Sign In</a>
             <img src="${pathPrefix}assets/profile-icon.png" alt="User Icon" class="user-icon">
         </div>
     </div>
-    `;
+`;
+
 
 document.getElementById('footer').innerHTML = `
     <footer>

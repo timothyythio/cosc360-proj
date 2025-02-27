@@ -1,4 +1,16 @@
-// register.js
+document.getElementById("profile-pic").addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.querySelector(".profile-pic").src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+
+
 document.getElementById("registerForm").addEventListener("submit", function (e) {
     e.preventDefault();
     validateForm();
