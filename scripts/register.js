@@ -72,7 +72,8 @@ function validateForm() {
     //submit if all fields are valid. redirects user to feed
     if (isValid) {
         alert("Registration successful!");
+        usernameValue = username.value.trim();
         document.getElementById("registerForm").reset();
-        window.location.href = "feed.html"; 
+        loginUser(usernameValue);
     }
 }
