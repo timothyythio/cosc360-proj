@@ -11,6 +11,10 @@
     margin: 60px auto 80px auto; 
 }
 
+#app{
+    display: flex;
+    align-items: stretch;
+}
 
 #content {
     display: flex;
