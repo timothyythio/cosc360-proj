@@ -29,6 +29,18 @@ document.addEventListener("DOMContentLoaded", function () {
             confirmPassword: document.getElementById("confirm-password").value,
         };
 
+        if (
+            updatedAdminData.name === adminData.name &&
+            updatedAdminData.email === adminData.email &&
+            updatedAdminData.country === adminData.country &&
+            updatedAdminData.city === adminData.city &&
+            updatedAdminData.password === "" &&
+            updatedAdminData.confirmPassword === ""
+        ) {
+            alert("Can't Save - No new changes detected!");
+            return;
+        }
+
         if (!updatedAdminData.name || !updatedAdminData.email || !updatedAdminData.country || !updatedAdminData.city) {
             alert("All fields except password are required!");
             return;
