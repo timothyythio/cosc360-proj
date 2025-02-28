@@ -36,10 +36,17 @@ function validateLoginForm() {
 
     //goes to feed if valid
     if (isValid) {
-        alert("Login successful! Redirecting to the feed page...");
+        usernameValue = username.value.trim();
         document.getElementById("loginForm").reset();
         [username, password].forEach(input => input.classList.remove("valid"));
 
-        window.location.href = "feed.html"; 
+        if (usernameValue === "admin") {
+            alert("Admin login successful! Redirecting to the admin page...");
+            loginAdmin(usernameValue);
+        } else {
+            alert("Login successful! Redirecting to the feed page...");
+            loginUser(usernameValue);
+        }
+        
     }
 }
