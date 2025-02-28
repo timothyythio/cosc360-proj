@@ -44,11 +44,16 @@ document.getElementById('navbar').innerHTML = `
 document.getElementById('topnav').innerHTML = `
     <div class="topnav">
         <div class="topnav-left">
-            <h1 id="page-label">${currentPageName}</h1>
+            <a href="${pathPrefix}pages/home.html" class="site-button">
+                <img src="${pathPrefix}assets/siteicon.png" alt="Site Logo" class="site-icon">
+            </a>
         </div>
         <div class="topnav-center">
-            <input type="text" class="search-bar" placeholder="Search Bloggit">
-            <span class="search-icon">🔍</span>
+            <h1 id="page-label">${currentPageName}</h1>
+            <button
+            <div class="searchDiv">
+                <input type="text" class="search-bar" placeholder="Search Bloggit">
+            </div>
         </div>
         <div class="topnav-right">
             

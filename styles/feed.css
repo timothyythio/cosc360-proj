@@ -1,0 +1,55 @@
+#content{
+    display:flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding:0;
+    background-color: #333333;
+}
+
+.postCard{
+    display:flex;
+    flex-direction: column;
+    align-items:stretch;
+    background-color: #333333;
+    color:white;
+    height:200px;
+    width:100%;
+    max-width: 97.7%;
+    border: solid;
+    border-width: 1px;
+    border-color:black;
+    padding:20px;   
+}
+
+.postCard h1{
+    margin:0;
+}
+
+.cardTitle{
+    
+}
+
+.cardBody{
+    font-size: 24px;
+    text-wrap: nowrap;
+    overflow: clip;
+    text-overflow: ellipsis;
+}
+
+.cardFooter{
+    display:flex;
+    align-items: center;
+    font-size: 24px;
+    position: relative;
+    top: 20%;
+}
+
+#cardFooterText{
+    padding-left:15px;
+}
+
+.likesIcon{
+    width:35px;
+    height:35px;
+}
