@@ -1,6 +1,15 @@
 const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : './';
+
+//get current page name, separate each word by splitting "-", and capitalizing the first char
 let currentPageName = window.location.pathname.split('/').pop().split('.').shift();
-currentPageName = currentPageName.at(0).toUpperCase() + currentPageName.slice(1);
+currentPageName = currentPageName.split('-') 
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
+    .join(' '); 
+console.log("Is the user logged in?: ",localStorage.getItem("isLoggedIn")? "yes": "no");
+console.log("Username: ", localStorage.getItem("loggedInUser"));
+console.log("Is the user an admin?: " , localStorage.getItem("isAdmin")? "yes": "no");
+
+
 
 document.getElementById('navbar').innerHTML = `
         <aside class="navbar">
@@ -29,12 +38,6 @@ document.getElementById('navbar').innerHTML = `
                     </div>
                     <span class="nav-text">Topics</span>
                 </a>
-                <a href="${pathPrefix}pages/profile.html" class="nav-item">
-                    <div class="nav-icon-container">
-                        <img src="${pathPrefix}assets/profile-icon.png" alt="Profile Icon" class="nav-icon">
-                    </div>
-                    <span class="nav-text">Profile</span>
-                </a>
             </div>
         </aside>
     `;
@@ -48,9 +51,7 @@ document.getElementById('topnav').innerHTML = `
             <span class="search-icon">🔍</span>
         </div>
         <div class="topnav-right">
-            <a href="${pathPrefix}pages/register.html" class="nav-link">Register</a>
-            <a href="${pathPrefix}pages/login.html" class="nav-link">Sign In</a>
-            <img src="${pathPrefix}assets/profile-icon.png" alt="User Icon" class="user-icon">
+            
         </div>
     </div>
 `;
