@@ -5,7 +5,10 @@ let currentPageName = window.location.pathname.split('/').pop().split('.').shift
 currentPageName = currentPageName.split('-') 
     .map(word => word.charAt(0).toUpperCase() + word.slice(1)) 
     .join(' '); 
-console.log(localStorage.getItem("isLoggedIn"), localStorage.getItem("loggedInUser"), localStorage.getItem("isAdmin"));
+console.log("Is the user logged in?: ",localStorage.getItem("isLoggedIn")? "yes": "no");
+console.log("Username: ", localStorage.getItem("loggedInUser"));
+console.log("Is the user an admin?: " , localStorage.getItem("isAdmin")? "yes": "no");
+
 
 
 document.getElementById('navbar').innerHTML = `
