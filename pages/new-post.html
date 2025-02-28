@@ -21,17 +21,17 @@
                     <option value="Boba">Boba</option>
                     <option value="Music">Music</option>
                 </select>
-                <input type="text" placeholder="Title">
+                <input type="text" id="postTitle" placeholder="Title" required>
                 <h3>Add Photos...</h3>
                 <div class="img-upload">
                     <div class="upload-container">
                         <img src="../assets/plus-icon.png" alt="Upload Image">
                     </div>
                 </div>
-                <textarea placeholder="Caption..."></textarea>
+                <textarea id="postCaption" placeholder="Caption..." required></textarea>
                 <div class="button-cont">
-                    <button class="save">Save Draft</button>
-                    <button class="post">Post</button>
+                    <button class="save" id="save-draft">Save Draft</button>
+                    <button class="post" id="submit-post">Post</button>
                 </div>
             </div>
         </main>
@@ -39,6 +39,7 @@
     </div>
 
     <script src="../scripts/router.js"></script>
+    <script src="../scripts/new-post.js"></script>
     <script src="../scripts/auth.js" defer></script>
     <script>
         document.addEventListener("DOMContentLoaded", checkUserLogin); // redirects guests away from this page 

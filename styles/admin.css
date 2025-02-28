@@ -97,14 +97,14 @@ body, html {
 
 .prof-btn {
     background: #4FB0C6;
-    border-radius: 10px;
+    border-radius: 20px;
     border: none;
     cursor: pointer;
     font-size: 18px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
-    width: 25%;
-    height: 45px; 
+    width: 22%;
+    height: 35px; 
     align-items: center;
     justify-content: center;
     color: white;
