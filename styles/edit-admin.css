@@ -1,0 +1,133 @@
+body, html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+}
+
+#content {
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 100px;
+}
+
+.back-container {
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 20px;
+}
+
+.back-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.back-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+#editInfo-cont {
+    width: 100%;
+    max-width: 800px;
+}
+
+#editInfo-cont h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.form-group {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    box-sizing: border-box;
+    background: #f9f9f9;
+}
+
+.form-group input:focus {
+    border-color: #4FB0C6;
+    outline: none;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+    text-align: center;
+    width: 20%;
+    border: none;
+}
+
+.save-btn {
+    background: #4FB0C6;
+    color: white;
+}
+
+.save-btn:hover {
+    background: #3A8CA3;
+}
+
+.cancel-btn {
+    background: #ccc;
+    color: black;
+}
+
+.cancel-btn:hover {
+    background: #aaa;
+}
+
+.required {
+    color: red;
+    font-weight: bold;
+    margin-left: 3px;
+}
