@@ -1,5 +1,3 @@
-console.log("auth.js loaded!")
-
 function loginUser(username) {
     localStorage.setItem("loggedInUser", username);
     localStorage.setItem("isLoggedIn", "true");
@@ -21,12 +19,14 @@ function logoutUser() {
 
 function checkUserLogin() {
     if (!localStorage.getItem("isLoggedIn")) {
+        alert("You are not logged in! Redirecting to login page")
         window.location.href = "login.html";
 
     }
 }
 function checkAdmin() {
     if (!localStorage.getItem("isAdmin")) {
+        alert("You are not an admin! Redirecting to feed")
         window.location.href = "feed.html";
     }
 
