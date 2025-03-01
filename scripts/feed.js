@@ -6,7 +6,6 @@ var authorName;
 var post;
 var poster;
 
-
 //first post example
 title = "Matcha Cafe Rave!!";
 authorName = "CoffeeLover99";
@@ -34,9 +33,8 @@ A VERY VERY HANDSOME MAN (Cha Eun-Woo level I’m talkin here guys) WHO WATCHED 
 OFFERED TO BUY ME A NEW ONE??!!? He insisted, and wished me a good day.
 #LifeIsGood #ChaEunWooTalkedToMe #Fate #DoIPropose`;
 
-
 //second post example
-title2 = "This is a Test Post";
+title2 = "This is a Test Text-Only Post";
 authorName2 = localStorage.getItem("loggedInUser");
 post2 = "post2";
 poster2 = "profile";
@@ -46,8 +44,7 @@ bodyText2 = "lorem ipsum  blah blah The missile knows where it is at all times. 
 numLikes = 99999;
 timePosted = new Date().toString(); 
 
-
-function createCard(title, bodyText, numLikes, timePosted, authorName, post, poster, pictureFile) {
+function createTextCard(title, bodyText, numLikes, timePosted, authorName, post, poster) {
     let postCard = document.createElement("div");
     postCard.className = "postCard";
 
@@ -55,10 +52,7 @@ function createCard(title, bodyText, numLikes, timePosted, authorName, post, pos
         <div class="cardTitle">
             <h1><a href="${post}.html">${title}</a></h1>
         </div>
-        <div class="postPictureContainer">
-            <img src="../assets/${pictureFile}" class="postPicture" alt="Post Picture">
-        </div>
-        <div class="cardBody">
+        <div class="textCardBody">
             <p class="post-text">${bodyText.substring(0, 500)}...</p> 
             <span class="read-more-btn">Read More</span>
         </div>
@@ -87,10 +81,47 @@ function createCard(title, bodyText, numLikes, timePosted, authorName, post, pos
     document.getElementById("content").appendChild(postCard);
 }
 
+function createPhotoCard(title, bodyText, numLikes, timePosted, authorName, post, poster, pictureFile) {
+    let postCard = document.createElement("div");
+    postCard.className = "postCard";
 
+    postCard.innerHTML = `
+        <div class="cardTitle">
+            <h1><a href="${post}.html">${title}</a></h1>
+        </div>
+        <div class="postPictureContainer">
+            <img src="../assets/${pictureFile}" class="postPicture" alt="Post Picture">
+        </div>
+        <div class="photoCardBody">
+            <p class="post-text">${bodyText.substring(0, 500)}...</p> 
+            <span class="read-more-btn">Read More</span>
+        </div>
+        <div class="cardFooter">
+            <img src="../assets/like.png" alt="like icon" class="likesIcon">
+            <p>${numLikes} Likes - ${timePosted} posted by <a href="${poster}.html">${authorName}</a></p>
+        </div>
+    `;
 
-createCard(title, bodyText, numLikes, timePosted, authorName, post, poster, pictureFile);
-createCard(title2, bodyText2, numLikes, timePosted, authorName2, post2, poster2, pictureFile2);
-createCard(title2, bodyText2, numLikes, timePosted, authorName2, post2, poster2, pictureFile2);
-createCard(title2, bodyText2, numLikes, timePosted, authorName2, post2, poster2, pictureFile2);
+    let readMoreBtn = postCard.querySelector(".read-more-btn");
+    let postText = postCard.querySelector(".post-text");
+    let isExpanded = false; 
+
+    readMoreBtn.addEventListener("click", () => {
+        if (isExpanded) {
+            postText.innerText = bodyText.substring(0, 500) + "...";
+            readMoreBtn.innerText = "Read More";
+            isExpanded = false;
+        } else {
+            postText.innerText = bodyText;
+            readMoreBtn.innerText = "Show Less";
+            isExpanded = true;
+        }
+    });
+
+    document.getElementById("content").appendChild(postCard);
+}
+
+createPhotoCard(title, bodyText, numLikes, timePosted, authorName, post, poster, pictureFile);
+createTextCard(title2, bodyText2, numLikes, timePosted, authorName2, post2, poster2, pictureFile2);
+
 
