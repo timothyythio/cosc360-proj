@@ -50,10 +50,7 @@ document.getElementById('topnav').innerHTML = `
         </div>
         <div class="topnav-center">
             <h1 id="page-label">${currentPageName}</h1>
-            <button
-            <div class="searchDiv">
-                <input type="text" class="search-bar" placeholder="Search Bloggit">
-            </div>
+            <input type="text" class="search-bar" placeholder="Search Bloggit">
         </div>
         <div class="topnav-right">
             
@@ -62,8 +59,8 @@ document.getElementById('topnav').innerHTML = `
 `;
 
 
-document.getElementById('footer').innerHTML = `
-    <footer>
-        <p>&copy; 2025 COSC360 Blogging Platform</p>
-    </footer>
-`;
+// document.getElementById('footer').innerHTML = `
+//     <footer>
+//         <p>&copy; 2025 COSC360 Blogging Platform</p>
+//     </footer>
+// `;

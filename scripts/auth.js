@@ -1,3 +1,5 @@
+console.log("auth.js loaded");
+
 function loginUser(username) {
     localStorage.setItem("loggedInUser", username);
     localStorage.setItem("isLoggedIn", "true");
@@ -33,14 +35,19 @@ function checkAdmin() {
 }
 
 function updateNavLinks() {
+    console.log("updating nav...");
     const topNavRight = document.querySelector(".topnav-right");
     if (localStorage.getItem("isLoggedIn") && localStorage.getItem("isAdmin")) {
+        console.log("updating nav, admin logged in");
+
         topNavRight.innerHTML = `
             <a href="profile.html">Profile</a>
             <a href="admin.html">Admin</a>
             <a href="feed.html" onclick="logoutUser()" class="logout-btn">Logout</a>
         `;
     } else if (localStorage.getItem("isLoggedIn")) {
+        console.log("updating nav, logged in");
+
         // If logged in, show profile & logout
         topNavRight.innerHTML = `
             <a href="profile.html">Profile</a>
@@ -49,6 +56,8 @@ function updateNavLinks() {
     }
     
     else {
+        console.log("updating nav, not logged in");
+
         // If logged out, show Register & Login links
         topNavRight.innerHTML = `
             <a href="register.html" class="register-btn">Register</a>
