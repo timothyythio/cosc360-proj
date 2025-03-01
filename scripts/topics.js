@@ -7,33 +7,6 @@ var post;
 var poster;
 var topic;
 
-//first post example
-title = "Matcha Cafe Rave!!";
-authorName = "CoffeeLover99";
-post = "post";
-poster = "profile2";
-pictureFile = "matcha.jpg";
-bodyText = `GUUUUUUUYYYSSSSSSS
-
-I went to get boba at the place I always go to and get my usual order - my ankles break
-I literally ended up eating dirt and my drink splattered against everything in the shop.
-My hair lowkey got soaked and I legit just had to pick myself up and sit in my drink.
-I WAS SO TEMPTED TO LEAVE AND CRY but I felt so bad that every counter top, wall, and
-their mother fell victim to my clumsiness. What a waste of $9
-#CryingForEternity #SomeoneVenmoMe9Dollars #MyPoorBabyBoba
-
-TT
-
-I kept apologizing over and over, and I literally was about to get a mountain of paper towel
-from their bathroom to clean, but THANKFULLY a very kind angel of a human being that worked
-there told me it was okay and that they’ve had messier messes to clean (not sure how??) and
-that they will properly mop it up and such. BLESS and shout out to that worker
-(lets all collectively say “Thank you Jina~”).
-BUT THATS NOT ALL
-A VERY VERY HANDSOME MAN (Cha Eun-Woo level I’m talkin here guys) WHO WATCHED THE ENTIRE THING
-OFFERED TO BUY ME A NEW ONE??!!? He insisted, and wished me a good day.
-#LifeIsGood #ChaEunWooTalkedToMe #Fate #DoIPropose`;
-
 //second post example
 title2 = "This is a Test Text-Only Post";
 authorName2 = localStorage.getItem("loggedInUser");
@@ -96,6 +69,21 @@ function createLikeBtn(postCard, numLikes, timePosted, authorName, poster) {
         likeCountSpan.innerText = numLikes; // Update only the like count
     });
 }
+
+document.getElementById("sortbar").innerHTML = `
+        <input id="toggle1" type="checkbox" />
+            <label class="hamburger" for="toggle1">
+                <div class="top"></div>
+                <div class="meat"></div>
+                <div class="bottom"></div>
+            </label>
+
+        <nav class="burgerMenu">
+            <h2 id="mostPopSelect">Most Popular</h2>
+            <h2 id="hotSelecT">Hot</h2>
+            <h2 id="risingSelect">Rising</h2>
+            <h2 id="new">New</h2>
+        </nav>`;
 
 function createTextCard(title, bodyText, numLikes, timePosted, authorName, post, poster) {
     let postCard = document.createElement("div");
@@ -176,7 +164,6 @@ function createTopicCard(title, bodyText, numLikes, timePosted, authorName, post
     document.getElementById("content").appendChild(postCard);
 }
 
-createPhotoCard(title, bodyText, numLikes, timePosted, authorName, post, poster, pictureFile);
 createTextCard(title2, bodyText2, numLikes, timePosted, authorName2, post2, poster2, pictureFile2);
 createTopicCard(title3, bodyText3, numLikes, timePosted, authorName3, post2, poster3, pictureFile3, topic);
 
