@@ -3,7 +3,6 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    padding:0;
 }
 
 .postCard {
@@ -11,7 +10,7 @@
     flex-direction: column;
     position: relative;
     align-items: flex-start;
-    background-color: #FFFFFF; /* POST CARD COLOR*/
+    background-color: #faf4f4; /* POST CARD COLOR*/
     color: black;
     width: 80%; 
     max-width: 60%;
@@ -20,7 +19,7 @@
     padding-top: 50px; 
 
     border: solid 1px black;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
 
 }
