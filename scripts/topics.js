@@ -7,9 +7,9 @@ var topicImg;
 
 //third post example
 topicName = "Hololive";
-topicId = "1";
+topicId = "topic";
 topicImg = "foob.jpg";
-desc = "Hololive Production (Japanese: ホロライブプロダクション) is a virtual YouTuber agency owned by Japanese tech entertainment company Cover Corporation. In addition to acting as a multi-channel network, Hololive Production also handles licensing, merchandising, music production and concert organization. As of November 2024, the agency manages over 90 VTubers in three target languages (Japanese, Indonesian and English), totaling over 80 million subscribers, including several of the most subscribed VTubers on YouTube and some of the most watched female streamers in the world. ";
+desc = "Hololive Production (Japanese: ホロライブプロダクション) is a virtual YouTuber agency owned by Japanese tech entertainment company Cover Corporation. In addition to acting as a multi-channel network, Hololive Production also handles licensing, merchandising, music production and concert organization. As of November 2024, the agency manages over 90 VTubers in three target languages (Japanese, Indonesian and English), totaling over 80 million subscribers, including several of the most subscribed VTubers on YouTube and some of the most watched female streamers in the world.";
 numMembers = 99999;
 numPosts = 39183214125;
 
