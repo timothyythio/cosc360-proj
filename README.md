@@ -8,7 +8,6 @@ Welcome to Bloggit, a blogging platform that users can use to create posts, inte
 | Profile Page | Timothy |
 | Edit Profile Page | Timothy |
 | Register/Login Page | Timothy |
-| Register/Login Page | Timothy |
 | Admin Page | Nikola |
 | New Post Page | Nikola |
 | Post Example Page | Nikola |
