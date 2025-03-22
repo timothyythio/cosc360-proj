@@ -40,7 +40,7 @@
     -- Create posts table
     CREATE TABLE `Posts` (
         `post_id` INT NOT NULL AUTO_INCREMENT,
-        `post_name` VARCHAR(255) NOT NULL,
+        `title` VARCHAR(255) NOT NULL,
         `content` TEXT NOT NULL,
         `image` VARCHAR(255),
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
