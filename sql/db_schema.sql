@@ -72,7 +72,7 @@
     ('ExampleUser123', 'Example', 'User', 'user@example.com', 'User123', 'I am a 3rd year computer science student in UBC.', 'user');
 
     -- Create database user (run as admin)
-    DROP USER IF EXISTS 'bloggit_user'@'localhost';
-    CREATE USER 'bloggit_user'@'localhost' IDENTIFIED BY 'secure_password_here';
-    GRANT SELECT, INSERT, UPDATE, DELETE ON bloggit_db.* TO 'bloggit_user'@'localhost';
+    DROP USER IF EXISTS 'webuser'@'localhost';
+    CREATE USER 'webuser'@'localhost' IDENTIFIED BY 'P@ssw0rd';
+    GRANT ALL PRIVILEGES ON bloggit_db.* TO 'webuser'@'localhost';
     FLUSH PRIVILEGES;

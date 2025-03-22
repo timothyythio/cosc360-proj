@@ -60,8 +60,8 @@ function updateNavLinks() {
 
         // If logged out, show Register & Login links
         topNavRight.innerHTML = `
-            <a href="register.html" class="register-btn">Register</a>
-            <a href="login.html" class="login-btn">Login</a>
+            <a href="register.php" class="register-btn">Register</a>
+            <a href="login.php" class="login-btn">Login</a>
         `;
     }
 }
