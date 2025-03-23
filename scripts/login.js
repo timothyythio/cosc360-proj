@@ -19,7 +19,7 @@ function validateLoginForm() {
     //username needs to be > 3
     if (username.value.trim().length < 3) {
         username.classList.add("invalid");
-        usernameError.textContent = "Username must be at least 3 characters long.";
+        usernameError.textContent = "Username must be at least 3 wewe long.";
         isValid = false;
     } else {
         username.classList.add("valid");

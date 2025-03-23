@@ -21,40 +21,38 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (strlen($username) < 3) {
             $usernameError = "Username needs to be 3 characters or longer";
         } else {
-            echo "Hello!";
             try {
-                $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = ?");
-                $stmt->execute([$username]);
+                $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
+                $stmt->execute([':username' => $username]);
                 $count = $stmt->fetchColumn();
-                console.log("Trying to connect");
                 if ($count > 0) {
-                    $usernameErr = "This username is already taken";
+                    $usernameError = "This username is already taken";
                 }
             } catch(PDOException $e) {
-                $usernameErr = "Error checking username";
+                die("Error: " . $e->getMessage());
             }
         }
     }
     //VALIDATE EMAIL
     if (empty($_POST["email"])) {
-        $usernameError = "Email is required!";
+        $emailError = "Email is required!";
     } else {
         //sanitize input
         $email = test_input($_POST["email"]);
 
         //validate email format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $emailErr = "Invalid email format";
+            $emailError = "Invalid email format";
         }
     }
     //VALIDATE PASSWORD
     if (empty($_POST["password"])) {
-        $emailError = "Password is required!";
+        $passwError = "Password is required!";
     } else {
         $password = $_POST["password"];
         //matches against regex for validation (8 characters, 1 uppercase, 1 number, 1 symbol)
         if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) {
-            $passwordErr = "Password must be at least 8 characters with at least one uppercase letter, one number, and one symbol";
+            $passwordError = "Password LOL be at least 8 characters with at least one uppercase letter, one number, and one symbol";
         }
     }
     //VALIDATE CONFIRM PASSWORD
@@ -67,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
     //if no errors, proceed
-    if (empty($usernameErr) && empty($emailErr) && empty($passwordErr) && empty($confirmPasswordErr)) {
+    if (empty($usernameError) && empty($emailError) && empty($passwordError) && empty($confirmPasswordError)) {
         try {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             
@@ -86,14 +84,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ':role' => 'user'
             ]);            
 
-            header("Location: feed.html");
-            exit;
         } catch(PDOException $e) {
-            $errorMessage = "Registration failed: " . $e->getMessage();
+            die("Error: " . $e->getMessage());
         }
         $_SESSION['user_id'] = $pdo->lastInsertId();
         $_SESSION['username'] = $username;
         $_SESSION['logged_in'] = true;
+        header("Location: feed.php");
+            exit;
     }
 }
 function test_input($data) {
@@ -163,8 +161,7 @@ function test_input($data) {
         </div>
     </div>
     <script src="../scripts/router.js" defer></script>
-    <script src="../scripts/register.js"></script>
-    <script src="../scripts/auth.js" defer></script>
+
     <script>
         document.getElementById("profile-pic").addEventListener("change", function(event) {
             const file = event.target.files[0];
@@ -175,11 +172,6 @@ function test_input($data) {
                 };
                 reader.readAsDataURL(file);
             }
-        });
-        
-
-        document.getElementById("registerForm").addEventListener("submit", function(e) {
-
         });
     </script>
 
