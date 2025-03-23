@@ -4,7 +4,7 @@ require_once '../sql/db_connect.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? '';
     $caption = $_POST['caption'] ?? '';
-    $category = $_POST['category'] ?? ''; // topic name
+    $category = $_POST['category'] ?? '';
     $username = $_POST['username'] ?? '';
     $status = ($_POST['action'] === 'draft') ? 'draft' : 'posted';
 
@@ -20,6 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $topic_id = $topicRow['topic_id'];
             $imagePath = null;
+            //FOR IMG ONLY
             if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = '../uploads/';
                 $filename = basename($_FILES['image']['name']);
@@ -37,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $error = "Image upload failed.";
                 }
             }
-
+            //now everythingelse
             if (!isset($error)) {
                 try {
                     $stmt = $pdo->prepare("INSERT INTO posts (username, title, content, topic_id, status, image_path, created_at)

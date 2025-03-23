@@ -33,16 +33,16 @@
                     <button class="tab-btn" data-tab="users">Users</button>
                     <button class="tab-btn" data-tab="posts">Posts</button>
                     <button class="tab-btn" data-tab="comments">Comments</button>
-                    <button class="tab-btn" data-tab="reports">Reports</button>
+                    <button class="tab-btn" data-tab="topics">Topics</button>
                     <button class="tab-btn" data-tab="settings">Settings</button>
                 </div>
             </section>
 
             <div id="dashboard" class="tab-content">
                 <h2>Dashboard Overview</h2>
-                <div class="stat-box">Total Users: <strong>4</strong></div>
-                <div class="stat-box">Total Posts: <strong>10</strong></div>
-                <div class="stat-box">Total Comments: <strong>2</strong></div>
+                <div class="stat-box">Total Users: <strong><?= $usernum ?></strong></div>
+                <div class="stat-box">Total Posts: <strong><?= $postnum ?></strong></div>
+                <div class="stat-box">Total Comments: <strong><?= $commentnum ?></strong></div>
                 <div class="chart-container">
                     <canvas id="dashboardChart"></canvas>
                 </div>
@@ -50,9 +50,9 @@
 
             <div id="users" class="tab-content" style="display: none;">
                 <h2>User Management</h2>
-                <div class="stat-box">Total Users: <strong>4</strong></div>
-                <div class="stat-box">New Signups: <strong>1</strong></div>
-                <div class="stat-box">Banned Users: <strong>0</strong></div>
+                <div class="stat-box">Total Users: <strong><?= $userCount ?></strong></div>
+                <div class="stat-box">Usernames: <strong><?= $userCount ?></strong></div>
+                <div class="stat-box">Roles: <strong><?= $userCount ?></strong></div>
                 <div class="chart-container">
                     <canvas id="usersChart"></canvas>
                 </div>
