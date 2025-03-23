@@ -4,50 +4,58 @@ require_once '../sql/db_connect.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? '';
     $caption = $_POST['caption'] ?? '';
-    $category = $_POST['category'] ?? '';
+    $category = $_POST['category'] ?? ''; // topic name
     $username = $_POST['username'] ?? '';
     $status = ($_POST['action'] === 'draft') ? 'draft' : 'posted';
 
     if (empty($title) || empty($caption) || empty($category) || empty($username)) {
         $error = "All fields are required.";
     } else {
-        // Handle image upload
-        $imagePath = null;
-        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = '../uploads/';
-            $filename = basename($_FILES['image']['name']);
-            $ext = pathinfo($filename, PATHINFO_EXTENSION);
-            $safeName = uniqid('img_', true) . '.' . $ext;
-            $fullPath = $uploadDir . $safeName;
+        $topicQuery = $pdo->prepare("SELECT topic_id FROM Topics WHERE topic_name = :name");
+        $topicQuery->execute([':name' => $category]);
+        $topicRow = $topicQuery->fetch();
 
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0755, true);
+        if (!$topicRow) {
+            $error = "Selected topic not found.";
+        } else {
+            $topic_id = $topicRow['topic_id'];
+            $imagePath = null;
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = '../uploads/';
+                $filename = basename($_FILES['image']['name']);
+                $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                $safeName = uniqid('img_', true) . '.' . $ext;
+                $fullPath = $uploadDir . $safeName;
+
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $fullPath)) {
+                    $imagePath = $fullPath;
+                } else {
+                    $error = "Image upload failed.";
+                }
             }
 
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $fullPath)) {
-                $imagePath = $fullPath;
-            } else {
-                $error = "Image upload failed.";
-            }
-        }
+            if (!isset($error)) {
+                try {
+                    $stmt = $pdo->prepare("INSERT INTO posts (username, title, content, topic_id, status, image_path, created_at)
+                                           VALUES (:username, :title, :caption, :topic_id, :status, :image_path, NOW())");
 
-        if (!isset($error)) {
-            try {
-                $stmt = $pdo->prepare("INSERT INTO posts (username, title, caption, category, status, image_path, created_at)
-                                       VALUES (:username, :title, :caption, :category, :status, :image_path, NOW())");
+                    $stmt->execute([
+                        ':username' => $username,
+                        ':title' => $title,
+                        ':caption' => $caption,
+                        ':topic_id' => $topic_id,
+                        ':status' => $status,
+                        ':image_path' => $imagePath
+                    ]);
 
-                $stmt->execute([
-                    ':username' => $username,
-                    ':title' => $title,
-                    ':caption' => $caption,
-                    ':category' => $category,
-                    ':status' => $status,
-                    ':image_path' => $imagePath
-                ]);
-
-                $success = "Your post was " . ($status === 'draft' ? "saved as a draft" : "published") . " successfully!";
-            } catch (PDOException $e) {
-                $error = "Database error: " . htmlspecialchars($e->getMessage());
+                    $success = "Your post was " . ($status === 'draft' ? "saved as a draft" : "published") . " successfully!";
+                } catch (PDOException $e) {
+                    $error = "Database error: " . htmlspecialchars($e->getMessage());
+                }
             }
         }
     }
@@ -100,8 +108,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="file" name="image" accept="image/*" class="file-input" />
                         </label>
                     </div>
+
                     <textarea id="postCaption" name="caption" placeholder="Caption..." required></textarea>
                     <input type="hidden" name="username" id="loggedInUser" />
+
                     <div class="button-cont">
                         <button type="submit" name="action" value="draft" class="save">Save Draft</button>
                         <button type="submit" name="action" value="post" class="post">Post</button>
