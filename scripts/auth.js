@@ -3,14 +3,14 @@ console.log("auth.js loaded");
 function loginUser(username) {
     localStorage.setItem("loggedInUser", username);
     localStorage.setItem("isLoggedIn", "true");
-    window.location.href = "feed.html"; 
+    window.location.href = "feed.php"; 
 }
 
 function loginAdmin (username) {
     localStorage.setItem("loggedInUser", username);
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("isAdmin", "true");
-    window.location.href = "admin.html"; 
+    window.location.href = "admin.php"; 
 }
 
 function logoutUser() {
@@ -22,14 +22,14 @@ function logoutUser() {
 function checkUserLogin() {
     if (!localStorage.getItem("isLoggedIn")) {
         alert("You are not logged in! Redirecting to login page")
-        window.location.href = "login.html";
+        window.location.href = "login.php";
 
     }
 }
 function checkAdmin() {
     if (!localStorage.getItem("isAdmin")) {
         alert("You are not an admin! Redirecting to feed")
-        window.location.href = "feed.html";
+        window.location.href = "feed.php";
     }
 
 }
@@ -42,8 +42,8 @@ function updateNavLinks() {
 
         topNavRight.innerHTML = `
             <a href="profile.html">Profile</a>
-            <a href="admin.html">Admin</a>
-            <a href="feed.html" onclick="logoutUser()" class="logout-btn">Logout</a>
+            <a href="admin.php">Admin</a>
+            <a href="feed.php" onclick="logoutUser()" class="logout-btn">Logout</a>
         `;
     } else if (localStorage.getItem("isLoggedIn")) {
         console.log("updating nav, logged in");
@@ -51,7 +51,7 @@ function updateNavLinks() {
         // If logged in, show profile & logout
         topNavRight.innerHTML = `
             <a href="profile.html">Profile</a>
-            <a href="feed.html" onclick="logoutUser()" class="logout-btn">Logout</a>
+            <a href="feed.php" onclick="logoutUser()" class="logout-btn">Logout</a>
         `;
     }
     

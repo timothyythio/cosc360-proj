@@ -61,6 +61,7 @@
         `status` enum('draft','posted') DEFAULT 'posted',
         `image_path` varchar(255) DEFAULT NULL,
         `username` varchar(255) NOT NULL,
+        `likes` INT DEFAULT 0,
         PRIMARY KEY (`post_id`),
         FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE SET NULL,
         FOREIGN KEY (`topic_id`) REFERENCES `topics`(`topic_id`) ON DELETE SET NULL
