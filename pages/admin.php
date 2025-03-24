@@ -1,16 +1,35 @@
 <?php
 require_once '../sql/db_connect.php';
+
+session_start();
+$current_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 $postnum = $pdo->query("SELECT COUNT(*) FROM posts")->fetchColumn();
 $usernum = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
 $commentnum = $pdo->query("SELECT COUNT(*) FROM comments")->fetchColumn();
 $topicnum = $pdo->query("SELECT COUNT(*) FROM topics")->fetchColumn();
-
 
 $roles = $pdo->query("SELECT role, COUNT(*) AS count FROM users GROUP BY role")
               ->fetchAll(PDO::FETCH_KEY_PAIR);
 $userList = $pdo->query("SELECT username, role FROM users")->fetchAll();
 $topicList = $pdo->query("SELECT topic_name FROM topics")->fetchAll(PDO::FETCH_COLUMN);
 $commentData = $pdo->query("SELECT comment_id, user_id, post_id, created_at FROM comments ORDER BY created_at DESC LIMIT 10")->fetchAll();
+
+$adminInfo = null;
+if ($current_user_id) {
+    $stmt = $pdo->prepare("
+        SELECT u.user_id, u.username, u.email, u.role, a.country, a.city, u.created_at
+        FROM users u LEFT JOIN admin a ON u.user_id = a.user_id
+        WHERE u.user_id = :user_id AND u.role = 'admin'
+    ");
+    $stmt->execute(['user_id' => $current_user_id]);
+    $adminInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+// if (!$adminInfo) {
+//     //redirect to login page
+//     header("Location: ../login.php");
+//     exit;
+// }
 ?>
 
 <!DOCTYPE html>
@@ -157,6 +176,60 @@ $commentData = $pdo->query("SELECT comment_id, user_id, post_id, created_at FROM
       transform: translateY(-3px);
       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
     }
+    
+    .admin-info {
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-top: 20px;
+    }
+    
+    .admin-info p {
+      margin: 12px 0;
+      font-size: 1.05em;
+      color: #2d3748;
+    }
+    
+    .admin-info p strong {
+      display: inline-block;
+      width: 120px;
+      color: #4a5568;
+    }
+    
+    .admin-credentials-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .admin-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      margin-right: 15px;
+      object-fit: cover;
+      border: 3px solid #667eea;
+    }
+    
+    .admin-name {
+      font-size: 1.4em;
+      color: #2d3748;
+      margin: 0;
+    }
+    
+    .admin-role {
+      font-size: 0.9em;
+      color: #667eea;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .edit-admin-link {
+      display: block;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -290,17 +363,36 @@ $commentData = $pdo->query("SELECT comment_id, user_id, post_id, created_at FROM
 
       <div id="settings" class="tab-content" style="display: none;">
         <h2>Admin Settings</h2>
+        
+        <?php if ($adminInfo): ?>
         <div class="admin-info">
-          <p><strong>Name:</strong> John Doe</p>
-          <p><strong>Admin ID:</strong> #123456</p>
-          <p><strong>Email:</strong> johndoe@example.com</p>
-          <p><strong>Country:</strong> United States</p>
-          <p><strong>City:</strong> New York</p>
+          <div class="admin-credentials-header">
+            <img src="../assets/profile-icon.png" alt="Admin Avatar" class="admin-avatar">
+            <div>
+              <h3 class="admin-name"><?= htmlspecialchars($adminInfo['username']) ?></h3>
+              <p class="admin-role"><?= htmlspecialchars($adminInfo['role']) ?></p>
+            </div>
+          </div>
+          
+          <p><strong>Admin ID:</strong> #<?= htmlspecialchars($adminInfo['user_id']) ?></p>
+          <p><strong>Email:</strong> <?= htmlspecialchars($adminInfo['email']) ?></p>
+          <p><strong>Country:</strong> <?= htmlspecialchars($adminInfo['country'] ?? 'Not specified') ?></p>
+          <p><strong>City:</strong> <?= htmlspecialchars($adminInfo['city'] ?? 'Not specified') ?></p>
+          <p><strong>Member since:</strong> <?= htmlspecialchars(date('F j, Y', strtotime($adminInfo['created_at']))) ?></p>
           <p><strong>Password:</strong> ********</p>
-          <a href="edit-admin.html" class="edit-admin-link">
+          
+          <a href="edit-admin.php?id=<?= htmlspecialchars($adminInfo['user_id']) ?>" class="edit-admin-link">
             <button class="prof-btn">Edit Account Info</button>
           </a>
         </div>
+        <?php else: ?>
+        <div class="admin-info">
+          <p>You need to be logged in as an admin to view this information.</p>
+          <a href="../login.php" class="edit-admin-link">
+            <button class="prof-btn">Log In</button>
+          </a>
+        </div>
+        <?php endif; ?>
       </div>
     </main>
     <div id="footer"></div>
@@ -404,12 +496,6 @@ $commentData = $pdo->query("SELECT comment_id, user_id, post_id, created_at FROM
       const activeTab = localStorage.getItem('adminActiveTab') || 'dashboard';
       showTab(activeTab);
     };
-
-    document.addEventListener("DOMContentLoaded", function () {
-      if (typeof checkUserLogin === "function") {
-        checkAdmin();
-      }
-    });
   </script>
   <script src="../scripts/router.js"></script>
   <script src="../scripts/auth.js" defer></script>
