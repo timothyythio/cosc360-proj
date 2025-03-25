@@ -27,6 +27,9 @@ try {
 } catch (PDOException $e) {
     $bio = "Failed to load bio.";
 }
+
+include('header.php');
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $ext = pathinfo($filename, PATHINFO_EXTENSION);
                 $safeName = uniqid('img_', true) . '.' . $ext;
                 $fullPath = $uploadDir . $safeName;
-
+                
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0755, true);
                 }
@@ -61,6 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+include('header.php');
+
 ?>
 
 <!DOCTYPE html>

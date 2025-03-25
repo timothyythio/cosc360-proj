@@ -1,1 +1,1 @@
-<?php header("Location: pages/feed.html");?>
+<?php header("Location: pages/feed.php");?>
