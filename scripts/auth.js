@@ -3,7 +3,6 @@ console.log("AUTH: Is the user logged in?: ", isLoggedIn ? "yes" : "no");
 console.log("AUTH: Username: ", loggedInUser);
 console.log("AUTH: Is the user an admin: ", isAdmin === 'true' ? "yes" : "no");
 
-// No need for localStorage removal since sessions handle auth now
 function logoutUser() {
     window.location.href = "logout.php"; // Server-side logout destroys the session
 }
@@ -29,6 +28,10 @@ function updateNavLinks() {
     if (isLoggedIn && isAdmin === 'true') {
         console.log("Admin is logged in");
         topNavRight.innerHTML = `
+
+            <a href="profile.html">Profile</a>
+            <a href="admin.php">Admin</a>
+            <a href="feed.php" onclick="logoutUser()" class="logout-btn">Logout</a>
             <a href="profile.php">Profile</a>
             <a href="admin.php">Admin</a>
             <a href="#" onclick="logoutUser()" class="logout-btn">Logout</a>
@@ -36,6 +39,7 @@ function updateNavLinks() {
     } else if (isLoggedIn) {
         console.log("Regular user is logged in");
         topNavRight.innerHTML = `
+
             <a href="profile.php">Profile</a>
             <a href="#" onclick="logoutUser()" class="logout-btn">Logout</a>
         `;

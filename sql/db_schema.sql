@@ -25,6 +25,17 @@
         UNIQUE KEY `email` (`email`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+    -- admin table
+    CREATE TABLE `Admin` (
+        `admin_id` INT NOT NULL AUTO_INCREMENT,
+        `user_id` INT NOT NULL,
+        `country` VARCHAR(100),
+        `city` VARCHAR(100),
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (`admin_id`),
+        FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE,
+        UNIQUE KEY `user_id` (`user_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
     -- Create topics table
     CREATE TABLE `Topics` (
@@ -47,6 +58,10 @@
         `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         `user_id` INT,
         `topic_id` INT,
+        `status` enum('draft','posted') DEFAULT 'posted',
+        `image_path` varchar(255) DEFAULT NULL,
+        `username` varchar(255) NOT NULL,
+        `likes` INT DEFAULT 0,
         PRIMARY KEY (`post_id`),
         FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE SET NULL,
         FOREIGN KEY (`topic_id`) REFERENCES `topics`(`topic_id`) ON DELETE SET NULL
@@ -70,6 +85,22 @@
     INSERT INTO `users` (`username`, `first_name`, `last_name`, `email`, `password`, `bio`, `role`) VALUES
     ('admin', 'Admin', 'User', 'admin@bloggit.com', '$2y$10$gFQ1xKnrUJ..c.xx8LY8bOeDBVAPYgU6zqnVnXA4Jc7ugXD7pD2jq', 'Administrator', 'admin'),
     ('ExampleUser123', 'Example', 'User', 'user@example.com', '$2y$10$rbq/gVN.5bnKDLmpWco7/.GG3qtu6y/2qS2mYld9IdfRgdXxCxCzC', 'I am a 3rd year computer science student in UBC.', 'user');
+
+
+    -- insert admin 
+    INSERT INTO `Admin` (`user_id`, `country`, `city`)
+    VALUES (
+        (SELECT user_id FROM users WHERE username = 'admin'),
+        'United States',
+        'New York'
+    );
+
+    INSERT INTO `topics` (`topic_id`, `topic_name`) VALUES
+    (1, 'Programming'),
+    (2, 'Boba'),
+    (3, 'Gaming'),
+    (4, 'Music');
+
 
     -- Create database user (run as admin)
     DROP USER IF EXISTS 'webuser'@'localhost';

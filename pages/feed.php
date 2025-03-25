@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <?php 
 session_start();
 require_once '../sql/db_connect.php';

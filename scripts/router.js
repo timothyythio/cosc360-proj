@@ -1,4 +1,5 @@
-const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : './';
+(function () {
+    const pathPrefix = window.location.pathname.includes('/pages/') ? '../' : './';
 
 // Get current page name, separate each word, capitalize
 let currentPageName = window.location.pathname.split('/').pop().split('.').shift();
