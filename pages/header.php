@@ -48,7 +48,7 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
             </div>
             <div class="topnav-right">
                 <?php if ($isLoggedIn): ?>
-                    <a href="../pages/profile.php" class="profile-link"><?php echo htmlspecialchars($loggedInUser); ?></a>
+                    <a href="../pages/profile.php" class="profile-link">Profile</a>
                     <?php if ($isAdmin): ?>
                         <a href="../pages/admin.php" class="admin-btn">Admin Panel</a>
                     <?php endif; ?>
