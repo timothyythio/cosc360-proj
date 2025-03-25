@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = $_POST["password"];
         //matches against regex for validation (8 characters, 1 uppercase, 1 number, 1 symbol)
         if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password)) {
-            $passwordError = "Password LOL be at least 8 characters with at least one uppercase letter, one number, and one symbol";
+            $passwordError = "Password should be at least 8 characters with at least one uppercase letter, one number, and one symbol";
         }
     }
     //VALIDATE CONFIRM PASSWORD

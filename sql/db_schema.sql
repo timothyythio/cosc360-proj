@@ -68,8 +68,8 @@
 
     -- Insert sample data
     INSERT INTO `users` (`username`, `first_name`, `last_name`, `email`, `password`, `bio`, `role`) VALUES
-    ('admin', 'Admin', 'User', 'admin@bloggit.com', 'Admin123', 'Administrator', 'admin'),
-    ('ExampleUser123', 'Example', 'User', 'user@example.com', 'User123', 'I am a 3rd year computer science student in UBC.', 'user');
+    ('admin', 'Admin', 'User', 'admin@bloggit.com', '$2y$10$gFQ1xKnrUJ..c.xx8LY8bOeDBVAPYgU6zqnVnXA4Jc7ugXD7pD2jq', 'Administrator', 'admin'),
+    ('ExampleUser123', 'Example', 'User', 'user@example.com', '$2y$10$rbq/gVN.5bnKDLmpWco7/.GG3qtu6y/2qS2mYld9IdfRgdXxCxCzC', 'I am a 3rd year computer science student in UBC.', 'user');
 
     -- Create database user (run as admin)
     DROP USER IF EXISTS 'webuser'@'localhost';
