@@ -15,8 +15,8 @@ body {
 }
 
 #content {
-    margin-top: 60px;
-    margin-left: 100px;
+    margin-top: 30px;
+    margin-left: 50px;
     padding: 20px;
     padding-bottom: 100px;
     width: calc(100% - 100px);
@@ -24,7 +24,7 @@ body {
     display: flex;
     justify-content: center; 
     align-items: center;
-    flex-grow: 1
+    flex-grow: 1;
 }
 
 footer {
