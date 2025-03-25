@@ -1,11 +1,17 @@
 <?php
+session_start();
 require_once '../sql/db_connect.php';
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: ../login.php");
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? '';
     $caption = $_POST['caption'] ?? '';
     $category = $_POST['category'] ?? '';
-    $username = $_POST['username'] ?? '';
+    $username = $_SESSION['username'] ?? '';
     $status = ($_POST['action'] === 'draft') ? 'draft' : 'posted';
 
     if (empty($title) || empty($caption) || empty($category) || empty($username)) {
@@ -53,7 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ':image_path' => $imagePath
                     ]);
 
-                    $success = "Your post was " . ($status === 'draft' ? "saved as a draft" : "published") . " successfully!";
+                    header("Location: feed.php");
+                
+                    exit;
                 } catch (PDOException $e) {
                     $error = "Database error: " . htmlspecialchars($e->getMessage());
                 }
@@ -83,9 +91,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <?php if (isset($error)): ?>
                     <p style="color: red;"><?= $error ?></p>
-                <?php elseif (isset($success)): ?>
-                    <p style="color: green;"><?= $success ?></p>
-                    <a href="../pages/feed.html">Go to Feed</a>
                 <?php endif; ?>
 
                 <form action="new-post.php" method="POST" id="postForm" enctype="multipart/form-data">
@@ -111,7 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <textarea id="postCaption" name="caption" placeholder="Caption..." required></textarea>
-                    <input type="hidden" name="username" id="loggedInUser" />
 
                     <div class="button-cont">
                         <button type="submit" name="action" value="draft" class="save">Save Draft</button>
@@ -129,8 +133,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             checkUserLogin(); // redirect guests
-            const loggedInUser = localStorage.getItem("loggedInUser");
-            document.getElementById("loggedInUser").value = loggedInUser;
         });
     </script>
 </body>
