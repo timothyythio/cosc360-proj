@@ -5,6 +5,8 @@
 session_start();
 require_once '../sql/db_connect.php';
 
+$pageStyles = ["../styles/feed.css"]; // Make sure this is correct path
+
 // grab posts from db
 $stmt = $pdo->prepare("
     SELECT p.*, t.topic_name 
@@ -15,13 +17,11 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute();
 $posts = $stmt->fetchAll();
+
+include('header.php');
 ?>
 
 <script>
-    const isLoggedIn = <?php echo isset($_SESSION['logged_in']) && $_SESSION['logged_in'] ? 'true' : 'false'; ?>;
-    const loggedInUser = "<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ''; ?>";
-    const isAdmin = <?php echo (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') ? 'true' : 'false'; ?>;
-    
     // send post data to JS
     const postsData = <?php echo json_encode($posts); ?>;
 </script>
@@ -30,8 +30,8 @@ $posts = $stmt->fetchAll();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bloggit</title>
-    <link rel="stylesheet" href="../styles/main.css">
-    <link rel="stylesheet" href="../styles/feed.css">
+    <link rel="stylesheet" href="<?php echo $pathPrefix; ?>styles/main.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="<?php echo $pathPrefix; ?>styles/feed.css?v=<?php echo time(); ?>">
 </head>
 
 <body>

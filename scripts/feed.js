@@ -158,7 +158,7 @@ function displayPosts() {
             <div class="no-posts">
                 <h2>No posts available</h2>
                 <p>Be the first to create a post!</p>
-                <a href="new-post.html" class="create-post-btn">Create Post</a>
+                <a href="new-post.php" class="create-post-btn">Create Post</a>
             </div>
         `;
     }
