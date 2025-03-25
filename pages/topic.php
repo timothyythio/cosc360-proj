@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+    <?php session_start(); ?>
+<script>
+    const isLoggedIn = <?php echo isset($_SESSION['logged_in']) && $_SESSION['logged_in'] ? 'true' : 'false'; ?>;
+    const loggedInUser = "<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ''; ?>";
+    const isAdmin = "<?php echo (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') ? 'true' : 'false'; ?>";
+</script>
 
 <head>
     <meta charset="UTF-8">

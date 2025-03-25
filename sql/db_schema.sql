@@ -86,6 +86,7 @@
     ('admin', 'Admin', 'User', 'admin@bloggit.com', '$2y$10$gFQ1xKnrUJ..c.xx8LY8bOeDBVAPYgU6zqnVnXA4Jc7ugXD7pD2jq', 'Administrator', 'admin'),
     ('ExampleUser123', 'Example', 'User', 'user@example.com', '$2y$10$rbq/gVN.5bnKDLmpWco7/.GG3qtu6y/2qS2mYld9IdfRgdXxCxCzC', 'I am a 3rd year computer science student in UBC.', 'user');
 
+
     -- insert admin 
     INSERT INTO `Admin` (`user_id`, `country`, `city`)
     VALUES (
@@ -99,6 +100,7 @@
     (2, 'Boba'),
     (3, 'Gaming'),
     (4, 'Music');
+
 
     -- Create database user (run as admin)
     DROP USER IF EXISTS 'webuser'@'localhost';
