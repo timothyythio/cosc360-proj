@@ -84,19 +84,21 @@ function createPhotoCard(post) {
     const imagePath = post.image_path || "../assets/default-post-image.jpg";
 
     postCard.innerHTML = `
-        <div class="cardTitle">
-            <h1><a href="post.php?id=${post.post_id}">${post.title}</a></h1>
+        <div class="postCardContent">
+            <div class="cardTitle">
+                <h1><a href="post.php?id=${post.post_id}">${post.title}</a></h1>
+            </div>
+            <div class="photoCardBody">
+                <p class="post-text">${post.content.substring(0, 500)}...</p> 
+                <span class="read-more-btn">Read More</span>
+            </div>
+            <div class="cardFooter">
+                <img src="../assets/like.png" alt="like icon" class="likesIcon">
+                <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?username=${post.username}">${post.username}</a></p>
+            </div>
         </div>
         <div class="postPictureContainer">
             <img src="${imagePath}" class="postPicture" alt="Post Picture">
-        </div>
-        <div class="photoCardBody">
-            <p class="post-text">${post.content.substring(0, 500)}...</p> 
-            <span class="read-more-btn">Read More</span>
-        </div>
-        <div class="cardFooter">
-            <img src="../assets/like.png" alt="like icon" class="likesIcon">
-            <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?username=${post.username}">${post.username}</a></p>
         </div>
     `;
 
@@ -117,8 +119,9 @@ function createTopicCard(post) {
 
     postCard.innerHTML = `
         <div class="cardTitle">
-            <h1><a href="post.php?id=${post.post_id}">${post.title}</a></h1>
-            <h2 class="topicName"><a href="topic.php?name=${topicName}">Topic: ${topicName}</a></h2>
+            <h1><a href="post.php?id=${post.post_id}">${post.title}</a> 
+                <span class="topicName"><a href="topic.php?name=${topicName}">Topic: ${topicName}</a></span>
+            </h1>
         </div>
         <div class="topicPostPictureContainer">
             <img src="${imagePath}" class="postPicture" alt="Post Picture">

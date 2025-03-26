@@ -5,7 +5,12 @@
 session_start();
 require_once '../sql/db_connect.php';
 
-$pageStyles = ["../styles/feed.css"]; // Make sure this is correct path
+//$pageStyles = ["../styles/feed.css"];  Make sure this is correct path
+$pageStyles = [
+    "../styles/main.css",
+    "../styles/feed.css"
+];
+
 
 // grab posts from db
 $stmt = $pdo->prepare("
