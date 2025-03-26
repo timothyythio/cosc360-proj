@@ -79,10 +79,13 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
                 <img src="<?= htmlspecialchars($post['image_path']) ?>" alt="Post Image">
             <?php endif; ?>
             <div id="like-count">
-                <img src="../assets/heart-circle-svgrepo-com.svg" alt="Likes">
-                <p><?= intval($post['likes']) ?> likes</p>
+                <button id="like-button" data-post-id="<?= $postId ?>" style="background:none; border:none;">
+                    <img id="like-icon" src="../assets/heart-circle-svgrepo-com.svg" alt="Like Button">
+                </button>
+                <p id="like-count-number"><?= intval($post['likes']) ?> likes</p>
                 <p>• Posted on <?= date('F j, Y \a\t g:i A', strtotime($post['created_at'])) ?></p>
             </div>
+
         </div>
 
         <div id="text-content">
@@ -165,5 +168,6 @@ document.getElementById('comment-form')?.addEventListener('submit', function(e) 
 </script>
 <script src="../scripts/router.js"></script>
 <script src="../scripts/auth.js" defer></script>
+<script src="../scripts/post-likes.js"></script>
 </body>
 </html>
