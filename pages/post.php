@@ -1,6 +1,8 @@
 <?php
+session_start();
 require_once '../sql/db_connect.php';
 include("header.php");
+
 if (!isset($_GET['id'])) {
     echo "Post not found.";
     exit;
@@ -9,7 +11,15 @@ if (!isset($_GET['id'])) {
 $postId = intval($_GET['id']);
 $commentError = '';
 
-//for comments
+// Check if post is already saved
+$isSaved = false;
+if (isset($_SESSION['user_id'])) {
+    $checkSaved = $pdo->prepare("SELECT 1 FROM saved WHERE user_id = ? AND post_id = ?");
+    $checkSaved->execute([$_SESSION['user_id'], $postId]);
+    $isSaved = $checkSaved->fetchColumn() ? true : false;
+}
+
+// For comments
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
     if (!isset($_SESSION['user_id'])) {
         $commentError = "You must be logged in to comment.";
@@ -29,7 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
         }
     }
 }
-//for post
+
+// Get post
 $stmt = $pdo->prepare("SELECT * FROM posts WHERE post_id = :id");
 $stmt->execute(['id' => $postId]);
 $post = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -39,7 +50,7 @@ if (!$post) {
     exit;
 }
 
-//getting comments
+// Get comments
 $commentStmt = $pdo->prepare("
     SELECT c.comment_id, c.content, c.created_at, u.username, u.pfp 
     FROM comments c 
@@ -68,7 +79,10 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
         <a href="feed.php"><img src="../assets/back-button.svg"></a>
         <p>Back</p>
     </div>
+
     <main id="content">
+    <div id="post-container" data-post-id="<?= htmlspecialchars($postId) ?>">
+
         <div id="post-content">
             <h2><?= htmlspecialchars($post['title']) ?>
                 <div id="userspfp-post">
@@ -85,7 +99,6 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
                 <p id="like-count-number"><?= intval($post['likes']) ?> likes</p>
                 <p>• Posted on <?= date('F j, Y \a\t g:i A', strtotime($post['created_at'])) ?></p>
             </div>
-
         </div>
 
         <div id="text-content">
@@ -96,8 +109,13 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
             <button class="share" onclick="copyLink()">
                 <img src="../assets/share.svg" alt="share">
             </button>
-            <button class="save">
-                <img src="../assets/bookmark.svg" alt="save">
+            <button class="save" id="save-btn">
+                <img 
+                    src="<?= $isSaved ? '../assets/bookmark-coloured.svg' : '../assets/bookmark.svg' ?>" 
+                    alt="save" 
+                    id="save-icon" 
+                    width="24" height="24"
+                >
             </button>
         </div>
 
@@ -120,6 +138,7 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
+
         <div id="comment-input-section">
             <?php if (isset($_SESSION['user_id'])): ?>
                 <form id="comment-form" method="POST" action="">
@@ -146,6 +165,7 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
                 </p>
             <?php endif; ?>
         </div>
+    </div>
     </main>
     <div id="footer"></div>
 </div>
@@ -166,8 +186,10 @@ document.getElementById('comment-form')?.addEventListener('submit', function(e) 
     }
 });
 </script>
-<script src="../scripts/router.js"></script>
-<script src="../scripts/auth.js" defer></script>
-<script src="../scripts/post-likes.js"></script>
+<!-- <script src="../scripts/router.js"></script>
+<script src="../scripts/auth.js" defer></script> -->
+<script src="../scripts/post-likes.js" defer></script>
+<script src="../scripts/save-post.js" defer></script>
+
 </body>
 </html>

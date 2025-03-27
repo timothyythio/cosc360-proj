@@ -67,6 +67,35 @@
         FOREIGN KEY (`topic_id`) REFERENCES `topics`(`topic_id`) ON DELETE SET NULL
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+    CREATE TABLE `Drafts` (
+        `draft_id` INT NOT NULL AUTO_INCREMENT,
+        `user_id` INT NOT NULL,
+        `username` VARCHAR(255) NOT NULL,
+        `title` VARCHAR(255) NOT NULL,
+        `content` TEXT,
+        `saved_content` TEXT,
+        `image_path` VARCHAR(255),
+        `topic_id` INT,
+        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (`draft_id`),
+        FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE,
+        FOREIGN KEY (`topic_id`) REFERENCES `topics`(`topic_id`) ON DELETE SET NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+    CREATE TABLE `Saved` (
+        `save_id` INT NOT NULL AUTO_INCREMENT,
+        `user_id` INT NOT NULL,
+        `post_id` INT NOT NULL,
+        `saved_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (`save_id`),
+        FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE,
+        FOREIGN KEY (`post_id`) REFERENCES `Posts`(`post_id`) ON DELETE CASCADE,
+        UNIQUE KEY `user_post_unique` (`user_id`, `post_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
     CREATE TABLE `comments` (
         `comment_id` INT NOT NULL AUTO_INCREMENT,
         `content` TEXT NOT NULL,
@@ -99,7 +128,10 @@
     (1, 'Programming'),
     (2, 'Boba'),
     (3, 'Gaming'),
-    (4, 'Music');
+    (4, 'Music'),
+    (5, 'Cats'),
+    (6, 'Drawing'),
+    (7, 'Spoons');
 
 
     -- Create database user (run as admin)
