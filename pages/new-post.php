@@ -6,6 +6,31 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: ../login.php");
     exit;
 }
+$draftTitle = '';
+$draftContent = '';
+$draftTopic = '';
+$draftImagePath = '';
+$draftId = null;
+
+if (isset($_GET['draft_id'])) {
+    $draftId = $_GET['draft_id'];
+    $stmt = $pdo->prepare("SELECT d.*, t.topic_name FROM Drafts d 
+                           LEFT JOIN Topics t ON d.topic_id = t.topic_id 
+                           WHERE d.draft_id = ? AND d.user_id = ?");
+    $stmt->execute([$draftId, $_SESSION['user_id']]);
+    $draft = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($draft) {
+        $draftTitle = htmlspecialchars($draft['title']);
+        $draftContent = htmlspecialchars($draft['content']);
+        $draftTopic = htmlspecialchars($draft['topic_name']);
+        $draftImagePath = $draft['image_path'];
+    }
+        $draftTitle = htmlspecialchars($draft['title']);
+        $draftContent = htmlspecialchars($draft['content']);
+        $draftTopic = htmlspecialchars($draft['topic_name']);
+    
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = $_POST['title'] ?? '';
@@ -26,42 +51,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             $topic_id = $topicRow['topic_id'];
             $imagePath = null;
-            //FOR IMG ONLY
-            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-                $uploadDir = '../uploads/';
-                $filename = basename($_FILES['image']['name']);
-                $ext = pathinfo($filename, PATHINFO_EXTENSION);
-                $safeName = uniqid('img_', true) . '.' . $ext;
-                $fullPath = $uploadDir . $safeName;
-                
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0755, true);
-                }
 
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $fullPath)) {
-                    $imagePath = $fullPath;
-                } else {
-                    $error = "Image upload failed.";
-                }
-            }
-            //now everythingelse
+if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+    $uploadDir = '../uploads/';
+    $filename = basename($_FILES['image']['name']);
+    $ext = pathinfo($filename, PATHINFO_EXTENSION);
+    $safeName = uniqid('img_', true) . '.' . $ext;
+    $fullPath = $uploadDir . $safeName;
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    if (move_uploaded_file($_FILES['image']['tmp_name'], $fullPath)) {
+        $imagePath = $fullPath;
+    } else {
+        $error = "Image upload failed.";
+    }
+} else if (!empty($_POST['existing_image_path'])) {
+    $imagePath = $_POST['existing_image_path'];
+}
+
+
             if (!isset($error)) {
                 try {
-                    $stmt = $pdo->prepare("INSERT INTO posts (username, title, content, topic_id, status, image_path, created_at)
-                                           VALUES (:username, :title, :caption, :topic_id, :status, :image_path, NOW())");
+                    if ($status === 'draft') {
+                        $stmt = $pdo->prepare("INSERT INTO drafts (user_id, username, title, content, image_path, topic_id, created_at, updated_at)
+                                               VALUES (:user_id, :username, :title, :content, :image_path, :topic_id, NOW(), NOW())");
 
-                    $stmt->execute([
-                        ':username' => $username,
-                        ':title' => $title,
-                        ':caption' => $caption,
-                        ':topic_id' => $topic_id,
-                        ':status' => $status,
-                        ':image_path' => $imagePath
-                    ]);
+                        $stmt->execute([
+                            ':user_id' => $_SESSION['user_id'],
+                            ':username' => $username,
+                            ':title' => $title,
+                            ':content' => $caption,
+                            ':image_path' => $imagePath,
+                            ':topic_id' => $topic_id
+                        ]);
 
-                    header("Location: feed.php");
-                
-                    exit;
+                        header("Location: draft.php");
+                        exit;
+                    } else {
+                        if ($draftId) {
+                            $deleteStmt = $pdo->prepare("DELETE FROM Drafts WHERE draft_id = ? AND user_id = ?");
+                            $deleteStmt->execute([$draftId, $_SESSION['user_id']]);
+                        }
+
+                        $stmt = $pdo->prepare("INSERT INTO posts (username, title, content, topic_id, status, image_path, created_at)
+                                               VALUES (:username, :title, :caption, :topic_id, :status, :image_path, NOW())");
+
+                        $stmt->execute([
+                            ':username' => $username,
+                            ':title' => $title,
+                            ':caption' => $caption,
+                            ':topic_id' => $topic_id,
+                            ':status' => $status,
+                            ':image_path' => $imagePath
+                        ]);
+
+                        header("Location: feed.php");
+                        exit;
+                    }
                 } catch (PDOException $e) {
                     $error = "Database error: " . htmlspecialchars($e->getMessage());
                 }
@@ -69,8 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-include('header.php');
 
+include('header.php');
 ?>
 
 <!DOCTYPE html>
@@ -91,23 +140,28 @@ include('header.php');
                 <img src="../assets/profile-icon.png" alt="Profile Image" class="profile-pic" />
                 <h2>Create Post</h2>
 
+                <div class="drafts-nav">
+                    <a href="draft.php" class="drafts-tab">My Drafts</a>
+                </div>
+
                 <?php if (isset($error)): ?>
                     <p style="color: red;"><?= $error ?></p>
                 <?php endif; ?>
 
-                <form action="new-post.php" method="POST" id="postForm" enctype="multipart/form-data">
+                <form action="new-post.php<?= $draftId ? '?draft_id=' . $draftId : '' ?>" method="POST" id="postForm" enctype="multipart/form-data">
                     <select name="category" required>
                         <option value="">Select a Topic</option>
                         <?php
                         $topics = $pdo->query("SELECT topic_name FROM Topics");
                         while ($row = $topics->fetch()) {
                             $topic = htmlspecialchars($row['topic_name']);
-                            echo "<option value=\"$topic\">$topic</option>";
+                            $selected = ($topic === $draftTopic) ? 'selected' : '';
+                            echo "<option value=\"$topic\" $selected>$topic</option>";
                         }
                         ?>
                     </select>
 
-                    <input type="text" id="postTitle" name="title" placeholder="Title" required />
+                    <input type="text" id="postTitle" name="title" placeholder="Title" required value="<?= $draftTitle ?>" />
 
                     <h3>Add Photos...</h3>
                     <div class="img-upload">
@@ -116,8 +170,15 @@ include('header.php');
                             <input type="file" name="image" accept="image/*" class="file-input" />
                         </label>
                     </div>
+<?php if ($draftImagePath): ?>
+                    <div class="existing-image-preview">
+                        <p>Draft Image Preview:</p>
+                        <img src="<?= htmlspecialchars($draftImagePath) ?>" alt="Draft Image" style="max-width: 100%; height: auto;">
+                        <input type="hidden" name="existing_image_path" value="<?= htmlspecialchars($draftImagePath) ?>">
+                    </div>
+                <?php endif; ?>
 
-                    <textarea id="postCaption" name="caption" placeholder="Caption..." required></textarea>
+                    <textarea id="postCaption" name="caption" placeholder="Caption..." required><?= $draftContent ?></textarea>
 
                     <div class="button-cont">
                         <button type="submit" name="action" value="draft" class="save">Save Draft</button>
@@ -134,7 +195,7 @@ include('header.php');
     <script src="../scripts/auth.js" defer></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            checkUserLogin(); // redirect guests
+            checkUserLogin();
         });
     </script>
 </body>
