@@ -11,7 +11,7 @@ body {
 #app{
     display: flex;
     align-items: stretch;
-    background-color: #fffefb; /*MAIN BACKGROUND COLOR*/
+    background-color: #F5F5F5; /*MAIN BACKGROUND COLOR #fffefb*/
 }
 
 #content {
@@ -44,12 +44,12 @@ footer p{
 }
 
 .navbar {
-    width: 100px;
+    width: 80px;
     height: calc(100vh - 60px);  
     position: fixed;
     left: 0;
     top: 60px; 
-    background-color: #eaeaea; /*SIDEBAR COLOR*/
+    background-color: #5c5b5b; /*SIDEBAR COLOR#eaeaea*/
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -63,7 +63,7 @@ footer p{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #e1e1e1; /*NAV ITEM COLOR*/
+    background-color: #F5F5F5; /*NAV ITEM COLOR#e1e1e1*/
     color: #4e4e4e;
     text-decoration: none;
     border-radius: 10px;
@@ -101,7 +101,7 @@ footer p{
     left: 0;
     width: 100%;
     height: 60px;
-    background-color: #eaeaea; /*TOPNAV BAR COLOR*/
+    background-color: #5c5b5b; /*TOPNAV BAR COLOR*/
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -132,11 +132,11 @@ footer p{
     align-items: center;
     justify-content: center;
     height: 60px;
-    width: 60px;
+    width: 45px;
 }
 
 .topnav-right a {
-    color: black; 
+    color: #242424; 
     text-decoration: none;
     font-size: 16px;
     font-weight: bold;
@@ -172,11 +172,11 @@ footer p{
 }
 
 .site-icon{
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     cursor: pointer;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 .search-bar {
@@ -184,7 +184,7 @@ footer p{
     max-width: 60%; 
     padding: 10px 40px 10px 15px;
     border: none;
-    border-radius: 10px;
+    border-radius: 20px;
     background-color: #F5F5F5;
     font-size: 14px;
     color: #333;
