@@ -12,8 +12,8 @@ document.getElementById("profile-pic").addEventListener("change", function (even
 
 
 document.getElementById("registerForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    validateForm();
+    // e.preventDefault();
+    return validateForm();
 });
 
 function validateForm() {

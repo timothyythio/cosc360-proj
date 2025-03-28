@@ -86,3 +86,25 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
 });
+const imageInput = document.getElementById('new-post-image');
+const previewImage = document.getElementById('new-post-preview');
+const uploadIcon = document.getElementById('upload-icon');
+
+if (imageInput && previewImage && uploadIcon) {
+    imageInput.addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+                uploadIcon.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewImage.src = '#';
+            previewImage.style.display = 'none';
+            uploadIcon.style.display = 'block';
+        }
+    });
+}

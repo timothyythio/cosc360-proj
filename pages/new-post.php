@@ -166,17 +166,19 @@ include('header.php');
                     <h3>Add Photos...</h3>
                     <div class="img-upload">
                         <label class="upload-container">
-                            <img src="../assets/plus-icon.png" alt="Upload Image" />
-                            <input type="file" name="image" accept="image/*" class="file-input" />
+                            <img src="../assets/plus-icon.png" alt="Upload Icon" class="upload-icon" id="upload-icon">
+                            <input type="file" name="image" accept="image/*" class="file-input" id="new-post-image">
+                            <img id="new-post-preview" src="#" alt="Preview" class="image-preview" style="display: none;">
                         </label>
                     </div>
-<?php if ($draftImagePath): ?>
+
+                    <?php if ($draftImagePath): ?>
                     <div class="existing-image-preview">
                         <p>Draft Image Preview:</p>
                         <img src="<?= htmlspecialchars($draftImagePath) ?>" alt="Draft Image" style="max-width: 100%; height: auto;">
                         <input type="hidden" name="existing_image_path" value="<?= htmlspecialchars($draftImagePath) ?>">
                     </div>
-                <?php endif; ?>
+                    <?php endif; ?>
 
                     <textarea id="postCaption" name="caption" placeholder="Caption..." required><?= $draftContent ?></textarea>
 

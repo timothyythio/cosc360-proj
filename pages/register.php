@@ -69,6 +69,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         try {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             
+            //actually inserting pfp into db
+            $pfpPath = 'default-profile.png';
+            if (isset($_FILES['profile-pic']) && $_FILES['profile-pic']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = '../uploads/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+                $fileTmp = $_FILES['profile-pic']['tmp_name'];
+                $fileName = basename($_FILES['profile-pic']['name']);
+                $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
+                $safeName = uniqid('pfp_', true) . '.' . $fileExt;
+                $uploadPath = $uploadDir . $safeName;
+
+                if (move_uploaded_file($fileTmp, $uploadPath)) {
+                    $pfpPath = $uploadPath;
+                }
+            }
             $stmt = $pdo->prepare(
                 "INSERT INTO users (username, first_name, last_name, email, password, bio, pfp, role) 
                  VALUES (:username, :first_name, :last_name, :email, :password, :bio, :pfp, :role)"
@@ -80,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ':email' => $email,
                 ':password' => $hashedPassword,
                 ':bio' => '',
-                ':pfp' => '',
+                ':pfp' => $pfpPath,
                 ':role' => 'user'
             ]);            
 
@@ -90,6 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['user_id'] = $pdo->lastInsertId();
         $_SESSION['username'] = $username;
         $_SESSION['logged_in'] = true;
+        $_SESSION['user_pfp'] = $pfpPath;
         header("Location: feed.php");
             exit;
     }
@@ -117,7 +135,9 @@ function test_input($data) {
     <div id="content" class="center-content">
         <div class="register-container">
             <h1>Register</h1>
-
+            
+            <form class="register-form" id="registerForm" method="POST" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" novalidate>
+            
             <div class="profile-pic-container">
                 <label for="profile-pic" class="profile-pic-label">
                     <img src="../assets/profile-icon.png" alt="Profile Picture" class="profile-pic">
@@ -129,7 +149,6 @@ function test_input($data) {
                 <span class="error-message" id="profilePicError"></span>
             </div>
 
-            <form class="register-form" id="registerForm" method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" novalidate>
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" id="username" name="username" placeholder="Enter your username" value="<?php echo $username; ?>" required>

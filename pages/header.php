@@ -61,7 +61,9 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
                         $breadcrumbs[] = ['label' => 'Search', 'link' => ''];
                     } elseif ($currentPage === 'feed.php') {
                         $breadcrumbs[] = ['label' => 'Home', 'link' => ''];
-                    } else {
+                    } elseif ($currentPage === 'profile.php') {
+                        $breadcrumbs[] = ['label' => 'Profile', 'link' => ''];
+                    }else {
                         $breadcrumbs[] = ['label' => 'Home', 'link' => '/cosc360-proj/pages/feed.php'];
                     }
 
@@ -90,16 +92,18 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
 
             <div class="topnav-right">
                 <?php if ($isLoggedIn): ?>
-                    <a href="../pages/profile.php" class="profile-link">Profile</a>
-                    <?php if ($isAdmin): ?>
-                        <a href="../pages/admin.php" class="admin-btn">Admin Panel</a>
-                    <?php endif; ?>
-                    <a href="logout.php" class="logout-btn">Logout</a>
+                    <a href="../pages/profile.php" class="profile-icon-link">
+                        <img src="../uploads/<?= htmlspecialchars($_SESSION['user_pfp'] ?? 'default-profile.png') ?>" class="user-icon" alt="Profile">
+                    </a>
+                    <a href="logout.php" class="logout-icon-link">
+                        <img src="../assets/logout-icon.svg" class="logout-icon" alt="Logout">
+                    </a>
                 <?php else: ?>
-                    <a href="login.php" class="login-btn">Login</a>
-                    <a href="register.php" class="register-btn">Register</a>
+                <a href="login.php" class="login-btn">Login</a>
+                <a href="register.php" class="register-btn">Register</a>
                 <?php endif; ?>
             </div>
+
         </div>
         
         <!-- Side Navigation Bar -->
