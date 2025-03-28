@@ -193,6 +193,7 @@ footer p {
     font-size: 18px;         
     font-weight: bold;       
     color: #242424; /*#F5F5F5*/
+    margin-left: 65px;
 }
 
 .breadcrumbs-inline a {
@@ -209,4 +210,5 @@ footer p {
 .breadcrumbs-inline span {
     color: #242424; /*#333*/
     font-weight: bold;
+    margin-left: 65px;
 }

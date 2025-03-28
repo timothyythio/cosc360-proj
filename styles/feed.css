@@ -7,6 +7,7 @@
     padding: 20px; 
     min-height: calc(100vh - 160px); 
     box-sizing: border-box; 
+    background-color: #F5F5F5;
 }
 
 .postCard {
@@ -15,16 +16,17 @@
     position: relative;
     align-items: flex-start;
     background-color: #FFFFFF; 
-    color: black;
+    color: #242424;
 
     width: 80%; 
     max-width: 60%;
     margin: 15px auto; 
     padding: 20px;
 
-    border: solid 1px black;
+    border: solid 1px #E0E0E0;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
+    transition: box-shadow 0.2s ease-in-out;
 }
 
 .postPictureContainer {
@@ -35,7 +37,12 @@
     height: 240px;
     overflow: hidden;
     border-radius: 5px; 
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/*maybe?*/
+.postCard:hover {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .topicPostPictureContainer {
@@ -46,7 +53,7 @@
     height: 75%;
     overflow: hidden;
     border-radius: 5px; 
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .postPicture {
@@ -59,6 +66,7 @@
 .postCard h1{
     margin:0;
     flex-grow:1;
+    color: #4A4A4A;
 }
 
 .cardTitle {
@@ -74,15 +82,25 @@
     margin: 0;
 }
 
+.postCard a {
+    text-decoration: none;
+    color: #6A5ACD;
+    transition: color 0.2s ease;
+}
+.postCard a:hover {
+    color: #4A3AA9;
+}
+
 .topicName {
-    background-color: #eaeaea;
+    background-color: #F0EFF6;
     border-radius: 5px;
     padding: 5px 10px;
     font-size: 0.6em;
     margin-left: 10px;
+    color: #6A5ACD;
 }
 
-.photoCardBody {
+/* .photoCardBody {
     max-height: 200px; 
     overflow-y: auto; 
     padding-right: 270px;
@@ -97,14 +115,35 @@
     max-height: 200px; 
     overflow-y: auto; 
     padding-right: 270px;
+} */
+
+.photoCardBody, .textCardBody, .topicCardBody {
+    max-height: 200px; 
+    overflow-y: auto;
+    
+    /* hiding scrollbar */
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
+}
+
+.photoCardBody {
+    padding-right: 270px;
+}
+
+.topicCardBody {
+    padding-right: 270px;
 }
 
 .cardFooter{
     display:flex;
     align-items: center;
-    font-size: 24px;
     position: relative;
     font-size: 14px;
+    margin-top: 15px;
+    color: #666666;
 }
 
 .cardFooterText{
@@ -119,16 +158,24 @@
 }
 
 .read-more-btn {
-    color: #4A6EF2; 
+    color: #6A5ACD; 
     cursor: pointer;
     font-size: 16px;
     margin-top: 5px;
     display: inline-block;
     text-decoration: underline; 
     font-weight: bold; 
+    transition: color 0.2s ease;
 }
 
 .read-more-btn:hover {
-    color: #1647f7; 
+    color: #4A3AA9; 
     text-decoration: none; 
+    
+}
+
+.no-posts {
+    text-align: center;
+    margin: 40px auto;
+    color: #4A4A4A;
 }

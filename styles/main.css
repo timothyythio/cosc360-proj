@@ -119,26 +119,28 @@ footer p{
     gap: 15px; 
 }
 
-.topnav-center h1 {
-    font-size: 20px;
-    color: black;
-    font-weight: bold;
-    margin: 0;
-    white-space: nowrap; 
+.topnav-center {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;  
+    gap: 15px;
+    padding-left: 105px;           
 }
+
 
 .topnav-left {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 60px;
-    width: 45px;
+    width: 40px;
 }
 
 .topnav-right a {
     color: #242424; 
     text-decoration: none;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: bold;
     padding: 10px 15px;
     margin: 0 8px;
@@ -165,6 +167,7 @@ footer p{
 .topnav-right .logout-btn {
     background-color: red;
     color: white;
+    border-radius: 20px;
 }
 
 .topnav-right .logout-btn:hover {
