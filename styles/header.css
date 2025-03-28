@@ -186,3 +186,27 @@ footer {
 footer p {
     margin: 10px;
 }
+.breadcrumbs-inline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 18px;         
+    font-weight: bold;       
+    color: #333;
+}
+
+.breadcrumbs-inline a {
+    color: #0077cc;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* can remove if we want  */
+.breadcrumbs-inline a:hover {
+    text-decoration: underline; 
+}
+
+.breadcrumbs-inline span {
+    color: #333;
+    font-weight: bold;
+}

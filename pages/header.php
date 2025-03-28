@@ -42,10 +42,52 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
                     <img src="../assets/siteicon.png" alt="Site Logo" class="site-icon">
                 </a>
             </div>
+            
+            <!-- breadcrumbs here -->
             <div class="topnav-center">
-                <h1 id="page-label"><?php echo $pageTitle; ?></h1>
+                <nav class="breadcrumbs-inline">
+                    <?php
+                    $breadcrumbs = [];
+                    $uri = $_SERVER['REQUEST_URI'];
+                    $path = parse_url($uri, PHP_URL_PATH);
+                    $segments = explode('/', trim($path, '/'));
+
+                    $currentPage = end($segments);
+                    if ($currentPage === 'new-post.php') {
+                        $breadcrumbs[] = ['label' => 'Create Post', 'link' => ''];
+                    } elseif ($currentPage === 'topics.php') {
+                        $breadcrumbs[] = ['label' => 'Topics', 'link' => ''];
+                    } elseif ($currentPage === 'search.php') {
+                        $breadcrumbs[] = ['label' => 'Search', 'link' => ''];
+                    } elseif ($currentPage === 'feed.php') {
+                        $breadcrumbs[] = ['label' => 'Home', 'link' => ''];
+                    } else {
+                        $breadcrumbs[] = ['label' => 'Home', 'link' => '/cosc360-proj/pages/feed.php'];
+                    }
+
+                    
+                    if (in_array('post.php', $segments)) {
+                        $breadcrumbs[] = ['label' => 'Post', 'link' => ''];
+                    } elseif (in_array('draft.php', $segments)) {
+                        $breadcrumbs[] = ['label' => 'My Drafts', 'link' => ''];
+                    } 
+                    // elseif (in_array('new-post.php', $segments)) {
+                    //     $breadcrumbs[] = ['label' => 'Create Post', 'link' => ''];
+                    // }
+
+                    $last = count($breadcrumbs) - 1;
+                    foreach ($breadcrumbs as $i => $crumb) {
+                        if ($i !== $last) {
+                            echo '<a href="' . $crumb['link'] . '">' . $crumb['label'] . '</a> &gt; ';
+                        } else {
+                            echo '<span>' . $crumb['label'] . '</span>';
+                        }
+                    }
+                    ?>
+                </nav>
                 <input type="text" class="search-bar" placeholder="Search Bloggit">
             </div>
+
             <div class="topnav-right">
                 <?php if ($isLoggedIn): ?>
                     <a href="../pages/profile.php" class="profile-link">Profile</a>
