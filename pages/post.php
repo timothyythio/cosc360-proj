@@ -11,7 +11,6 @@ if (!isset($_GET['id'])) {
 $postId = intval($_GET['id']);
 $commentError = '';
 
-// Check if post is already saved
 $isSaved = false;
 if (isset($_SESSION['user_id'])) {
     $checkSaved = $pdo->prepare("SELECT 1 FROM saved WHERE user_id = ? AND post_id = ?");
@@ -19,7 +18,6 @@ if (isset($_SESSION['user_id'])) {
     $isSaved = $checkSaved->fetchColumn() ? true : false;
 }
 
-// For comments
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
     if (!isset($_SESSION['user_id'])) {
         $commentError = "You must be logged in to comment.";
@@ -39,9 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
         }
     }
 }
-
-// Get post
-$stmt = $pdo->prepare("SELECT * FROM posts WHERE post_id = :id");
+$stmt = $pdo->prepare("
+    SELECT p.*, u.username, u.pfp, u.user_id AS author_id
+    FROM posts p
+    LEFT JOIN users u ON p.username = u.username
+    WHERE p.post_id = :id
+");
 $stmt->execute(['id' => $postId]);
 $post = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -50,9 +51,8 @@ if (!$post) {
     exit;
 }
 
-// Get comments
 $commentStmt = $pdo->prepare("
-    SELECT c.comment_id, c.content, c.created_at, u.username, u.pfp 
+    SELECT c.comment_id, c.content, c.created_at, u.username, u.pfp, u.user_id
     FROM comments c 
     LEFT JOIN users u ON c.user_id = u.user_id 
     WHERE c.post_id = :post_id 
@@ -86,7 +86,9 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
         <div id="post-content">
             <h2><?= htmlspecialchars($post['title']) ?>
                 <div id="userspfp-post">
-                    <img src="../assets/profile-icon.png" alt="User Profile">
+                    <a href="profile.php?user_id=<?= htmlspecialchars($post['author_id'] ?? '') ?>">
+                        <img src="<?= htmlspecialchars($post['pfp'] ?? '../assets/profile-icon.png') ?>" alt="Author Profile">
+                    </a>
                 </div>
             </h2>
             <?php if ($post['image_path']): ?>
@@ -127,7 +129,9 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
             <?php else: ?>
                 <?php foreach ($comments as $comment): ?>
                     <div id="comment-container">
-                        <img src="<?= htmlspecialchars($comment['pfp'] ?? '../assets/profile-icon.png') ?>" alt="Profile Picture">
+                        <a href="profile.php?user_id=<?= htmlspecialchars($comment['user_id'] ?? '') ?>">
+                            <img src="<?= htmlspecialchars($comment['pfp'] ?? '../assets/profile-icon.png') ?>" alt="Profile Picture">
+                        </a>
                         <h3><?= htmlspecialchars($comment['username'] ?? 'Anonymous') ?></h3>
                         <div id="comment-content">
                             <p><?= nl2br(htmlspecialchars($comment['content'])) ?></p>

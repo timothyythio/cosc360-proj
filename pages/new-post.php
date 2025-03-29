@@ -26,10 +26,6 @@ if (isset($_GET['draft_id'])) {
         $draftTopic = htmlspecialchars($draft['topic_name']);
         $draftImagePath = $draft['image_path'];
     }
-        $draftTitle = htmlspecialchars($draft['title']);
-        $draftContent = htmlspecialchars($draft['content']);
-        $draftTopic = htmlspecialchars($draft['topic_name']);
-    
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -52,26 +48,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $topic_id = $topicRow['topic_id'];
             $imagePath = null;
 
-if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-    $uploadDir = '../uploads/';
-    $filename = basename($_FILES['image']['name']);
-    $ext = pathinfo($filename, PATHINFO_EXTENSION);
-    $safeName = uniqid('img_', true) . '.' . $ext;
-    $fullPath = $uploadDir . $safeName;
+            if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+                $uploadDir = '../uploads/';
+                $filename = basename($_FILES['image']['name']);
+                $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                $safeName = uniqid('img_', true) . '.' . $ext;
+                $fullPath = $uploadDir . $safeName;
 
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
-    }
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
 
-    if (move_uploaded_file($_FILES['image']['tmp_name'], $fullPath)) {
-        $imagePath = $fullPath;
-    } else {
-        $error = "Image upload failed.";
-    }
-} else if (!empty($_POST['existing_image_path'])) {
-    $imagePath = $_POST['existing_image_path'];
-}
-
+                if (move_uploaded_file($_FILES['image']['tmp_name'], $fullPath)) {
+                    $imagePath = $fullPath;
+                } else {
+                    $error = "Image upload failed.";
+                }
+            } else if (!empty($_POST['existing_image_path'])) {
+                $imagePath = $_POST['existing_image_path'];
+            }
 
             if (!isset($error)) {
                 try {
@@ -96,10 +91,12 @@ if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
                             $deleteStmt->execute([$draftId, $_SESSION['user_id']]);
                         }
 
-                        $stmt = $pdo->prepare("INSERT INTO posts (username, title, content, topic_id, status, image_path, created_at)
-                                               VALUES (:username, :title, :caption, :topic_id, :status, :image_path, NOW())");
+                        // Important change: Added user_id to the INSERT statement
+                        $stmt = $pdo->prepare("INSERT INTO posts (user_id, username, title, content, topic_id, status, image_path, created_at)
+                                               VALUES (:user_id, :username, :title, :caption, :topic_id, :status, :image_path, NOW())");
 
                         $stmt->execute([
+                            ':user_id' => $_SESSION['user_id'],
                             ':username' => $username,
                             ':title' => $title,
                             ':caption' => $caption,
@@ -137,7 +134,7 @@ include('header.php');
         <div id="navbar"></div>
         <main id="content">
             <div id="create-container">
-                <img src="../assets/profile-icon.png" alt="Profile Image" class="profile-pic" />
+                <img src="<?= htmlspecialchars($_SESSION['user_pfp'] ?? '../assets/profile-icon.png') ?>" alt="Profile Image" class="profile-pic" />
                 <h2>Create Post</h2>
 
                 <div class="drafts-nav">
