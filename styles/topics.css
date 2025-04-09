@@ -3,12 +3,13 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    padding: 0;
-    margin-top: 150px;
+    margin-top: 0px;
+    padding: 0px;
 }
 
 #app {
     flex-direction: column;
+    width: 100%;
 }
 
 #sortbar {
@@ -100,6 +101,12 @@
     cursor: pointer;
 }
 
+#topicContent{
+    margin-left: 30px;
+    margin-top: 125px;
+    width: 100%;
+}
+
 .postCard {
     display: flex;
     flex-direction: column;
@@ -117,6 +124,8 @@
     border: solid 1px black;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
     border-radius: 8px;
+
+    height: 225px;
 }
 
 .postPictureContainer {

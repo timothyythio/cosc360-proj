@@ -1,35 +1,39 @@
+<?php
+// Start session and include necessary files
+session_start();
+require_once '../sql/db_connect.php';
+
+// Set page title for header
+$pageTitle = 'Topics - Bloggit';
+$pageStyles = ['main.css', 'topics.css'];
+
+// Include header
+include('header.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
-    <?php session_start(); ?>
-<script>
-    const isLoggedIn = <?php echo isset($_SESSION['logged_in']) && $_SESSION['logged_in'] ? 'true' : 'false'; ?>;
-    const loggedInUser = "<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ''; ?>";
-    const isAdmin = "<?php echo (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') ? 'true' : 'false'; ?>";
-</script>
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bloggit</title>
-    <link rel="stylesheet" href="../styles/main.css">
-    <link rel="stylesheet" href="../styles/topics.css">
+    <title><?php echo $pageTitle; ?></title>
+    <!-- CSS files are included in header.php -->
 </head>
 
 <body>
     <div id="app">
-        <div id="topnav"></div>
-        <div id="navbar"></div>
+        <!-- Navigation elements are included in header.php -->
         <div id="sortbar">
+            <!-- Sort bar will be populated by JavaScript -->
         </div>
-        <main id="content">
+        <main id="topicContent">
+            <!-- Topics will be loaded here dynamically -->
+            <div class="loading">Loading topics...</div>
         </main>
-        <div id="footer"></div>
+        <div id="footer">
+            <!-- Footer content -->
+        </div>
     </div>
 
-    <script src="../scripts/router.js"></script>
-    <script src="../scripts/auth.js" defer></script>
-    <script src="../scripts/topics.js" defer></script>
-
+    <script src="../scripts/topics.js?v=<?php echo time(); ?>"></script>
 </body>
-
 </html>

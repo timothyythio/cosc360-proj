@@ -11,7 +11,6 @@ $pageStyles = [
     "../styles/feed.css"
 ];
 
-
 // grab posts from db
 $stmt = $pdo->prepare("
     SELECT p.*, t.topic_name 
@@ -49,9 +48,7 @@ include('header.php');
         <div id="footer"></div>
     </div>
 
-    <script src="../scripts/router.js?v=<?php echo time(); ?>" defer></script>
     <script src="../scripts/feed.js?v=<?php echo time(); ?>"></script>
-    <script src="../scripts/auth.js?v=<?php echo time(); ?>" defer></script>
 </body>
 
 </html>
