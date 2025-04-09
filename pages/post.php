@@ -128,18 +128,21 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
                 <p style="text-align:center; color: #555;">No comments yet. Be the first to comment!</p>
             <?php else: ?>
                 <?php foreach ($comments as $comment): ?>
-                    <div id="comment-container">
-                        <a href="profile.php?user_id=<?= htmlspecialchars($comment['user_id'] ?? '') ?>">
-                            <img src="<?= htmlspecialchars($comment['pfp'] ?? '../assets/profile-icon.png') ?>" alt="Profile Picture">
-                        </a>
-                        <h3><?= htmlspecialchars($comment['username'] ?? 'Anonymous') ?></h3>
-                        <div id="comment-content">
-                            <p><?= nl2br(htmlspecialchars($comment['content'])) ?></p>
-                            <small><?= date('F j, Y \a\t g:i A', strtotime($comment['created_at'])) ?></small>
-                        </div>
-                    </div>
-                    <hr class="comment-divider">
-                <?php endforeach; ?>
+    <a href="commented_user.php?user_id=<?php echo $comment['user_id']; ?>">
+        <div class="comment">
+            <div class="comment-header">
+                <div id="userspfp-post">
+                    <img src="<?php echo $comment['profile_picture']; ?>" alt="User Profile Picture">
+                </div>
+                <span><?php echo htmlspecialchars($comment['username']); ?></span>
+            </div>
+            <div class="comment-text">
+                <?php echo htmlspecialchars($comment['content']); ?>
+            </div>
+        </div>
+    </a>
+<?php endforeach; ?>
+
             <?php endif; ?>
         </div>
 
