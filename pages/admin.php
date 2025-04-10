@@ -1,7 +1,9 @@
 <?php
 require_once '../sql/db_connect.php';
+include('header.php'); 
 
-session_start();
+
+//session_start();
 $current_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 $postnum = $pdo->query("SELECT COUNT(*) FROM posts")->fetchColumn();
 $usernum = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
@@ -38,6 +40,7 @@ if ($current_user_id) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Bloggit</title>
+  <link rel="stylesheet" href="../styles/header.css" />
   <link rel="stylesheet" href="../styles/main.css" />
   <link rel="stylesheet" href="../styles/admin.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
