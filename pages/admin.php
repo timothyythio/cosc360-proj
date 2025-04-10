@@ -40,7 +40,7 @@ $commentData = $pdo->query("SELECT comment_id, user_id, post_id, created_at FROM
 $adminInfo = null;
 $stmt = $pdo->prepare("
     SELECT u.user_id, u.username, u.email, u.role, a.country, a.city, u.created_at
-    FROM Users u LEFT JOIN admin a ON u.user_id = a.user_id
+    FROM Users u LEFT JOIN Admin a ON u.user_id = a.user_id
     WHERE u.user_id = :user_id AND u.role = 'admin'
 ");
 $stmt->execute(['user_id' => $current_user_id]);
