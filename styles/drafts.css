@@ -1,3 +1,6 @@
+body{
+    background-color: #F5F5F5;
+}
 .drafts-container {
     width: 100%;
     display: flex;

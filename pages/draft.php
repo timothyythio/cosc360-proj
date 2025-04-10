@@ -6,6 +6,38 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+if (isset($_GET['action']) && $_GET['action'] === 'delete') {
+    header('Content-Type: application/json');
+    
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        echo json_encode(['success' => false, 'message' => 'Invalid request method']);
+        exit;
+    }
+    
+    if (!isset($_POST['draft_id']) || empty($_POST['draft_id'])) {
+        echo json_encode(['success' => false, 'message' => 'No draft ID provided']);
+        exit;
+    }
+    
+    $draftId = $_POST['draft_id'];
+    $userId = $_SESSION['user_id']; 
+    
+    try {
+        $deleteStmt = $pdo->prepare("DELETE FROM Drafts WHERE draft_id = ? AND user_id = ?");
+        $result = $deleteStmt->execute([$draftId, $userId]);
+        
+        if ($result && $deleteStmt->rowCount() > 0) {
+            echo json_encode(['success' => true, 'message' => 'Draft deleted successfully']);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Draft not found or already deleted']);
+        }
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
+    }
+    
+    exit;
+}
+
 $userId = $_SESSION['user_id'];
 $username = $_SESSION['username'] ?? '';
 $stmt = $pdo->prepare("SELECT d.*, t.topic_name FROM Drafts d 
