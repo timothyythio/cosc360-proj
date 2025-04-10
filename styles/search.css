@@ -340,6 +340,23 @@
     text-decoration: none;
     color: #3b82f6;
 }
+
+.result-container {
+    display: flex;
+}
+
+.image-small {
+    width: 30px;
+    height: 30px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+.post-image {
+    width: 70px;
+    height: 70px;
+    margin-left: 10px;
+    object-fit: cover;
+}
   
 .hot-topics-list li a:hover {
     text-decoration: underline;

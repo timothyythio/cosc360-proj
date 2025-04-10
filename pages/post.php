@@ -97,7 +97,7 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
         <div id="post-content">
             <h2><?= htmlspecialchars($post['title']) ?>
                 <div id="userspfp-post">
-                    <a href="profile.php?user_id=<?= htmlspecialchars($post['author_id'] ?? '') ?>">
+                    <a href="profile.php?user=<?= htmlspecialchars($post['author_id'] ?? '') ?>">
                         <img src="<?= htmlspecialchars($post['pfp'] ?? '../assets/profile-icon.png') ?>" alt="Author Profile">
                     </a>
                 </div>
@@ -144,7 +144,7 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
             <?php else: ?>
                 <?php foreach ($comments as $comment): ?>
                     <div id="comment-container">
-                        <a href="profile.php?user_id=<?= htmlspecialchars($comment['user_id'] ?? '') ?>">
+                        <a href="profile.php?user=<?= htmlspecialchars($comment['user_id'] ?? '') ?>">
                             <img src="<?= htmlspecialchars($comment['pfp'] ?? '../assets/profile-icon.png') ?>" alt="Profile Picture">
                         </a>
                         <h3><?= htmlspecialchars($comment['username'] ?? 'Anonymous') ?></h3>

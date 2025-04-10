@@ -81,7 +81,7 @@ function createTextCard(post) {
         </div>
         <div class="cardFooter">
             <img src="../assets/like.png" alt="like icon" class="likesIcon">
-            <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?username=${post.username}">${post.username}</a></p>
+                <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?user=${post.user_id}">${post.username}</a> </p>
         </div>
     `;
 
@@ -110,7 +110,7 @@ function createPhotoCard(post) {
             </div>
             <div class="cardFooter">
                 <img src="../assets/like.png" alt="like icon" class="likesIcon">
-                <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?username=${post.username}">${post.username}</a></p>
+                <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?user=${post.user_id}">${post.username}</a> </p>
             </div>
         </div>
         <div class="postPictureContainer">
@@ -148,7 +148,7 @@ function createTopicCard(post) {
         </div>
         <div class="cardFooter">
             <img src="../assets/like.png" alt="like icon" class="likesIcon">
-            <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?username=${post.username}">${post.username}</a></p>
+                <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?user=${post.user_id}">${post.username}</a> </p>
         </div>
     `;
 

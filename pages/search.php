@@ -39,6 +39,7 @@ if (!empty($searchQuery) || $author || $topic || $dateFrom || $dateTo || $hasIma
                 p.image_path,
                 p.username as author_username,
                 u.pfp,
+                u.user_id,
                 t.topic_name,
                 (SELECT COUNT(*) FROM likes WHERE post_id = p.post_id) AS like_count
             FROM posts p 
@@ -103,12 +104,17 @@ if (!empty($searchQuery) || $author || $topic || $dateFrom || $dateTo || $hasIma
     }
 } else {
     // Default content when no search term is provided
-    $stmt = $pdo->prepare("SELECT posts.*, users.username
-                       FROM posts
-                       JOIN users ON posts.user_id = users.user_id
-                       WHERE posts.status = 'posted' AND posts.created_at >= NOW() - INTERVAL 7 DAY
-                       ORDER BY posts.likes DESC
-                       LIMIT 3");
+    $stmt = $pdo->prepare(" SELECT 
+                            posts.*, 
+                            users.username,
+                            users.pfp,
+                            (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.post_id) AS like_count
+                        FROM posts
+                        JOIN users ON posts.user_id = users.user_id
+                        WHERE posts.status = 'posted' AND posts.created_at >= NOW() - INTERVAL 7 DAY
+                        ORDER BY like_count DESC
+                        LIMIT 3
+                       ");
     $stmt->execute();
     $topicStmt = $pdo->prepare(" SELECT topics.topic_name, COUNT(*) AS post_count
                     FROM posts
@@ -273,11 +279,17 @@ include("header.php");
                                     <?php endif; ?>
                                 </h3>
                             </div>
-                            <p class="result-excerpt"><?= nl2br(htmlspecialchars(createExcerpt($post['content']))) ?></p>
+
+                            <div class="result-container">
+                                <p class="result-excerpt"><?= nl2br(htmlspecialchars(createExcerpt($post['content']))) ?></p>
+                                <?php if (!empty($post['image_path'])) : ?>
+                                    <img src="<?= htmlspecialchars($post['image_path']) ?>" alt="Image" class="post-image">
+                                <?php endif; ?>
+                            </div>
                             <div class="result-meta">
-                                <img src="<?= htmlspecialchars($post['image_path'] ?? 'default-profile.png') ?>" alt="Author">
-                                <span>Posted by <a href="#"><?= htmlspecialchars($post['username']) ?></a> on <?= date('M j, Y', strtotime($post['created_at'])) ?></span>
-                                <span><?= $post['likes'] ?> 👍</span>
+                                <img src="<?= htmlspecialchars($post['pfp'] ?? 'default-profile.png') ?>" alt="Author" class="image-small">
+                                <span>Posted by <a href="profile.php?user=<?= htmlspecialchars($post['user_id'])?>"><?= htmlspecialchars($post['username']) ?></a> on <?= date('M j, Y', strtotime($post['created_at'])) ?></span>
+                                <span><?= $post['like_count'] ?> 👍</span>
                             </div>
                         </article>
                     <?php endforeach; ?>
@@ -290,7 +302,7 @@ include("header.php");
                         <ul class="hot-topics-list">
                             <?php foreach ($hotTopics as $topics): ?>
                             <li>
-                                <a href="search.php?topic=<?= urlencode($topics['topic_name']) ?>">
+                                <a href="topic.php?topic=<?= urlencode($topics['topic_name']) ?>">
                                 <?= htmlspecialchars($topics['topic_name']) ?>
                                 </a>
                                 (<?= $topics['post_count'] ?> post<?= $topics['post_count'] > 1 ? 's' : '' ?>)
@@ -348,7 +360,7 @@ include("header.php");
                                     class="user-avatar"
                                 >
                                 <div class="user-info">
-                                    Posted by <a href="profile.php?username=<?= urlencode($post['author_username']) ?>"><?= htmlspecialchars($post['author_username']) ?></a> 
+                                    Posted by <a href="profile.php?user=<?= urlencode($post['user_id']) ?>"><?= htmlspecialchars($post['author_username']) ?></a> 
                                     on <?= formatDate($post['created_at']) ?>
                                 </div>
                                 
