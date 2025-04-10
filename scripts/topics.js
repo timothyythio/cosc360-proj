@@ -1,54 +1,114 @@
-var topicName;
-var desc;
-var topicId;
-var numMembers;
-var numPosts;
-var topicImg;
+document.addEventListener('DOMContentLoaded', function() {
+    fetchTopics();
+});
 
-//third post example
-topicName = "Hololive";
-topicId = "topic";
-topicImg = "foob.jpg";
-desc = "Hololive Production (Japanese: ホロライブプロダクション) is a virtual YouTuber agency owned by Japanese tech entertainment company Cover Corporation. In addition to acting as a multi-channel network, Hololive Production also handles licensing, merchandising, music production and concert organization. As of November 2024, the agency manages over 90 VTubers in three target languages (Japanese, Indonesian and English), totaling over 80 million subscribers, including several of the most subscribed VTubers on YouTube and some of the most watched female streamers in the world.";
-numMembers = 99999;
-numPosts = 39183214125;
+function fetchTopics() {
+    fetch('../php/get_topics.php')
+        .then(response => response.json())
+        .then(topics => {
+            const topicContent = document.querySelector("#topicContent");
+            topicContent.innerHTML = '';
+            
+            if (topics.length === 0) {
+                topicContent.innerHTML = '<div class="no-topics">No topics found</div>';
+                return;
+            }
+            
+            topics.forEach(topic => {
+                createTopicCard(
+                    topic.name,
+                    topic.description || 'No description available',
+                    topic.id,
+                    topic.follower_count || 0,
+                    topic.post_count || 0,
+                    topic.image_path
+                );
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching topics:', error);
+            document.querySelector("#topicContent").innerHTML = 
+                '<div class="error-message">Failed to load topics. Please try again later.</div>';
+        });
+}
 
-function createReadMoreBtn(postCard, desc) {
-    let readMoreBtn = postCard.querySelector(".read-more-btn");
-    let postText = postCard.querySelector(".post-text");
+function createReadMoreBtn(topicCard, desc) {
+    let readMoreBtn = topicCard.querySelector(".read-more-btn");
+    let topicText = topicCard.querySelector(".post-text");
     let isExpanded = false;
 
     readMoreBtn.addEventListener("click", () => {
         if (isExpanded) {
-            postText.innerText = desc.substring(0, 500) + "...";
+            topicText.innerText = desc.substring(0, 200) + "...";
             readMoreBtn.innerText = "Read More";
             isExpanded = false;
         } else {
-            postText.innerText = desc;
+            topicText.innerText = desc;
             readMoreBtn.innerText = "Show Less";
             isExpanded = true;
         }
     });
 }
 
-function createFollowBtn(postCard, numMembers, numPosts) {
-    let isFollowed = false;
-    let followIcon = postCard.querySelector(".likesIcon");
-    let followCountSpan = postCard.querySelector(".like-count");
-
-    followIcon.addEventListener("click", function () {
-        if (!isFollowed) {
-            numMembers++;
-            followIcon.src = "../assets/liked.png";
-            isFollowed = true;
-        } else {
-            numMembers--;
-            followIcon.src = "../assets/like.png"; 
-            isFollowed = false;
+function createFollowBtn(topicCard, topicId, numMembers) {
+    if (typeof isLoggedIn === 'undefined' || !isLoggedIn) {
+        // redirect to login if not logged in
+        let followIcon = topicCard.querySelector(".likesIcon");
+        if (followIcon) {
+            followIcon.addEventListener("click", function() {
+                window.location.href = '../pages/login.php';
+            });
         }
-        followCountSpan.innerText = numMembers;
-    });
+        return;
+    }
+
+    let followIcon = topicCard.querySelector(".likesIcon");
+    let followCountSpan = topicCard.querySelector(".like-count");
+    
+    if (!followIcon || !followCountSpan) return;
+
+    // check if user already follows this topic
+    fetch(`../php/check_topic_follow.php?topic_id=${topicId}`)
+        .then(response => response.json())
+        .then(data => {
+            let isFollowed = data.follows;
+            
+            if (isFollowed) {
+                followIcon.src = "../assets/liked.png";
+            }
+            
+            followIcon.addEventListener("click", function() {
+                const formData = new FormData();
+                formData.append('topic_id', topicId);
+                
+                fetch('../php/follow_topic.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error('Error:', data.error);
+                        return;
+                    }
+                    
+                    // update UI with new follow status and count
+                    isFollowed = data.status === 'followed';
+                    followIcon.src = isFollowed ? "../assets/liked.png" : "../assets/like.png";
+                    followCountSpan.innerText = data.followers;
+                })
+                .catch(error => {
+                    console.error('Error updating follow status:', error);
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error checking follow status:', error);
+        });
 }
+
+const createTopicButton = typeof isLoggedIn !== 'undefined' && isLoggedIn ? 
+    `<a href="../pages/new-topic.php" class="create-topic-btn">Create New Topic</a>` : '';
 
 document.getElementById("sortbar").innerHTML = `
         <input id="toggle1" type="checkbox" />
@@ -60,41 +120,38 @@ document.getElementById("sortbar").innerHTML = `
 
         <nav class="burgerMenu">
             <h2 id="mostPopSelect">Most Popular</h2>
-            <h2 id="hotSelecT">Hot</h2>
+            <h2 id="hotSelect">Hot</h2>
             <h2 id="risingSelect">Rising</h2>
             <h2 id="new">New</h2>
-        </nav>`;
+        </nav>
+        ${createTopicButton}`;
 
-        function createPhotoCard(topicName, desc, topicId, numMembers, numPosts, topicImg) {
-            let postCard = document.createElement("div");
-            postCard.className = "postCard";
-        
-            postCard.innerHTML = `
-                <div class="cardTitle">
-                    <h1><a href="${topicId}.html">${topicName}</a></h1>
-                </div>
-                <div class="postPictureContainer">
-                    <img src="../assets/${topicImg}" class="postPicture" alt="Post Picture">
-                </div>
-                <div class="photoCardBody">
-                    <p class="post-text">${desc.substring(0, 500)}...</p> 
-                                <span class="read-more-btn">Read More</span>
-                </div>
-                <div class="cardFooter">
-                    <img src="../assets/like.png" alt="like icon" class="likesIcon">
-                    <p><span class="like-count">${numMembers}</span> Followers - ${numPosts} Posts</a></p>
-                </div>
-            `;
-        
-            createFollowBtn(postCard, numMembers, numPosts);
-            createReadMoreBtn(postCard, desc);
-        
-            document.getElementById("content").appendChild(postCard);
-        }
+function createTopicCard(topicName, desc, topicId, numMembers, numPosts, topicImg) {
+    let topicCard = document.createElement("div");
+    topicCard.className = "postCard";
 
-createPhotoCard(topicName, desc, topicId, numMembers, numPosts, topicImg);
-createPhotoCard(topicName, desc, topicId, numMembers, numPosts, topicImg);
-createPhotoCard(topicName, desc, topicId, numMembers, numPosts, topicImg);
-createPhotoCard(topicName, desc, topicId, numMembers, numPosts, topicImg);
+    topicCard.innerHTML = `
+        <div class="cardTitle">
+            <h1><a href="topic.php?id=${topicId}">${topicName}</a></h1>
+        </div>
+        <div class="postPictureContainer">
+            <img src="../assets/${topicImg}" class="postPicture" alt="${topicName}" onerror="this.src='../assets/siteicon.png'">
+        </div>
+        <div class="photoCardBody">
+            <p class="post-text">${desc.substring(0, 200)}${desc.length > 200 ? '...' : ''}</p>
+            ${desc.length > 200 ? '<span class="read-more-btn">Read More</span>' : ''}
+        </div>
+        <div class="cardFooter">
+            <img src="../assets/like.png" alt="follow icon" class="likesIcon">
+            <p><span class="like-count">${numMembers}</span> Followers - ${numPosts} Posts</p>
+        </div>
+    `;
 
+    if (desc.length > 200) {
+        createReadMoreBtn(topicCard, desc);
+    }
+    
+    createFollowBtn(topicCard, topicId, numMembers);
 
+    document.querySelector("#topicContent").appendChild(topicCard);
+}
