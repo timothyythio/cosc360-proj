@@ -27,11 +27,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     mkdir($uploadDir, 0755, true);
                 }
 
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $fullPath)) {
+               $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                $detectedType = mime_content_type($_FILES['image']['tmp_name']);
+
+                if (!in_array($detectedType, $allowedTypes)) {
+                    $error = "Invalid image type. Only JPG, JPEG, PNG, or GIF allowed.";
+                } elseif (move_uploaded_file($_FILES['image']['tmp_name'], $fullPath)) {
                     $imagePath = $fullPath;
                 } else {
                     $error = "Image upload failed.";
                 }
+
             }
 
             if (!isset($error)) {
@@ -72,7 +78,7 @@ include('header.php');
         <div id="navbar"></div>
         <main id="content">
             <div id="create-container">
-                <img src="<?= htmlspecialchars($_SESSION['user_pfp'] ?? '../assets/profile-icon.png') ?>" alt="Profile Image" class="profile-pic" />
+                
                 <h2>Create New Topic</h2>
 
                 <?php if (isset($error)): ?>
