@@ -37,17 +37,17 @@ CREATE TABLE `Admin` (
     UNIQUE KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-    -- Create topics table
-    CREATE TABLE `Topics` (
-        `topic_id` INT NOT NULL AUTO_INCREMENT,
-        `topic_name` VARCHAR(100) NOT NULL,
-        `description` TEXT,
-        `members` INT DEFAULT 0,
-        `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        `topic_img` VARCHAR(255) NOT NULL,
+-- Create topics table
+CREATE TABLE `Topics` (
+    `topic_id` INT NOT NULL AUTO_INCREMENT,
+    `topic_name` VARCHAR(100) NOT NULL,
+    `description` TEXT,
+    `members` INT DEFAULT 0,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `topic_img` VARCHAR(255) NOT NULL,
         PRIMARY KEY (`topic_id`),
         UNIQUE KEY `topic_name` (`topic_name`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Create posts table
 CREATE TABLE `Posts` (
@@ -105,9 +105,6 @@ CREATE TABLE `Likes` (
     FOREIGN KEY (`post_id`) REFERENCES `Posts`(`post_id`) ON DELETE CASCADE,
     UNIQUE KEY `user_post_unique_like` (`user_id`, `post_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
-
 
 CREATE TABLE `comments` (
     `comment_id` INT NOT NULL AUTO_INCREMENT,

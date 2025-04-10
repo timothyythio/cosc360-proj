@@ -71,6 +71,9 @@ function createFollowBtn(topicCard, numMembers, numPosts) {
     });
 }
 
+const createTopicButton = isLoggedIn ? 
+    `<a href="../pages/new-topic.php" class="create-topic-btn">Create New Topic</a>` : '';
+
 document.getElementById("sortbar").innerHTML = `
         <input id="toggle1" type="checkbox" />
             <label class="hamburger" for="toggle1">
@@ -84,7 +87,8 @@ document.getElementById("sortbar").innerHTML = `
             <h2 id="hotSelect">Hot</h2>
             <h2 id="risingSelect">Rising</h2>
             <h2 id="new">New</h2>
-        </nav>`;
+        </nav>
+        ${createTopicButton}`;
 
 function createTopicCard(topicName, desc, topicId, numMembers, numPosts, topicImg) {
     let topicCard = document.createElement("div");
