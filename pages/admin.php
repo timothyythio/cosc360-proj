@@ -1,10 +1,29 @@
 <?php
 require_once '../sql/db_connect.php';
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+// if (!isset($_SESSION['user_id'])) {
+//     // Redirect to login page
+//     header("Location: ../login.php?redirect=admin");
+//     exit;
+// }
+
+$current_user_id = $_SESSION['user_id'];
+
+$stmt = $pdo->prepare("SELECT role FROM users WHERE user_id = ?");
+$stmt->execute([$current_user_id]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user || $user['role'] !== 'admin') {
+    header("Location: ../index.php?error=unauthorized");
+    exit;
+}
+
 include('header.php'); 
 
-
-//session_start();
-$current_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
 $postnum = $pdo->query("SELECT COUNT(*) FROM posts")->fetchColumn();
 $usernum = $pdo->query("SELECT COUNT(*) FROM users")->fetchColumn();
 $commentnum = $pdo->query("SELECT COUNT(*) FROM comments")->fetchColumn();
@@ -17,21 +36,14 @@ $topicList = $pdo->query("SELECT topic_name FROM topics")->fetchAll(PDO::FETCH_C
 $commentData = $pdo->query("SELECT comment_id, user_id, post_id, created_at FROM comments ORDER BY created_at DESC LIMIT 10")->fetchAll();
 
 $adminInfo = null;
-if ($current_user_id) {
-    $stmt = $pdo->prepare("
-        SELECT u.user_id, u.username, u.email, u.role, a.country, a.city, u.created_at
-        FROM users u LEFT JOIN admin a ON u.user_id = a.user_id
-        WHERE u.user_id = :user_id AND u.role = 'admin'
-    ");
-    $stmt->execute(['user_id' => $current_user_id]);
-    $adminInfo = $stmt->fetch(PDO::FETCH_ASSOC);
-}
+$stmt = $pdo->prepare("
+    SELECT u.user_id, u.username, u.email, u.role, a.country, a.city, u.created_at
+    FROM users u LEFT JOIN admin a ON u.user_id = a.user_id
+    WHERE u.user_id = :user_id AND u.role = 'admin'
+");
+$stmt->execute(['user_id' => $current_user_id]);
+$adminInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// if (!$adminInfo) {
-//     //redirect to login page
-//     header("Location: ../login.php");
-//     exit;
-// }
 ?>
 
 <!DOCTYPE html>
