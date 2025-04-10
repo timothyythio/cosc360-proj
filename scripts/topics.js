@@ -50,28 +50,64 @@ function createReadMoreBtn(topicCard, desc) {
     });
 }
 
-function createFollowBtn(topicCard, numMembers, numPosts) {
-    let isFollowed = false;
+function createFollowBtn(topicCard, topicId, numMembers) {
+    if (typeof isLoggedIn === 'undefined' || !isLoggedIn) {
+        // redirect to login if not logged in
+        let followIcon = topicCard.querySelector(".likesIcon");
+        if (followIcon) {
+            followIcon.addEventListener("click", function() {
+                window.location.href = '../pages/login.php';
+            });
+        }
+        return;
+    }
+
     let followIcon = topicCard.querySelector(".likesIcon");
     let followCountSpan = topicCard.querySelector(".like-count");
+    
+    if (!followIcon || !followCountSpan) return;
 
-    followIcon.addEventListener("click", function () {
-        if (!isFollowed) {
-            numMembers++;
-            followIcon.src = "../assets/liked.png";
-            isFollowed = true;
-        } else {
-            numMembers--;
-            followIcon.src = "../assets/like.png"; 
-            isFollowed = false;
-        }
-        followCountSpan.innerText = numMembers;
-        
-        // TODO: update follow status in database
-    });
+    // check if user already follows this topic
+    fetch(`../php/check_topic_follow.php?topic_id=${topicId}`)
+        .then(response => response.json())
+        .then(data => {
+            let isFollowed = data.follows;
+            
+            if (isFollowed) {
+                followIcon.src = "../assets/liked.png";
+            }
+            
+            followIcon.addEventListener("click", function() {
+                const formData = new FormData();
+                formData.append('topic_id', topicId);
+                
+                fetch('../php/follow_topic.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error('Error:', data.error);
+                        return;
+                    }
+                    
+                    // update UI with new follow status and count
+                    isFollowed = data.status === 'followed';
+                    followIcon.src = isFollowed ? "../assets/liked.png" : "../assets/like.png";
+                    followCountSpan.innerText = data.followers;
+                })
+                .catch(error => {
+                    console.error('Error updating follow status:', error);
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error checking follow status:', error);
+        });
 }
 
-const createTopicButton = isLoggedIn ? 
+const createTopicButton = typeof isLoggedIn !== 'undefined' && isLoggedIn ? 
     `<a href="../pages/new-topic.php" class="create-topic-btn">Create New Topic</a>` : '';
 
 document.getElementById("sortbar").innerHTML = `
@@ -99,24 +135,23 @@ function createTopicCard(topicName, desc, topicId, numMembers, numPosts, topicIm
             <h1><a href="topic.php?id=${topicId}">${topicName}</a></h1>
         </div>
         <div class="postPictureContainer">
-            <img src="../assets/${topicImg}" class="postPicture" alt="${topicName}">
+            <img src="../assets/${topicImg}" class="postPicture" alt="${topicName}" onerror="this.src='../assets/siteicon.png'">
         </div>
         <div class="photoCardBody">
             <p class="post-text">${desc.substring(0, 200)}${desc.length > 200 ? '...' : ''}</p>
             ${desc.length > 200 ? '<span class="read-more-btn">Read More</span>' : ''}
         </div>
         <div class="cardFooter">
-            <img src="../assets/like.png" alt="like icon" class="likesIcon">
+            <img src="../assets/like.png" alt="follow icon" class="likesIcon">
             <p><span class="like-count">${numMembers}</span> Followers - ${numPosts} Posts</p>
         </div>
     `;
 
-    if (desc && desc.length > 200) {
-        topicCard.querySelector(".photoCardBody").appendChild(document.createElement("div")).className = "read-more-btn";
+    if (desc.length > 200) {
         createReadMoreBtn(topicCard, desc);
     }
     
-    createFollowBtn(topicCard, numMembers, numPosts);
+    createFollowBtn(topicCard, topicId, numMembers);
 
     document.querySelector("#topicContent").appendChild(topicCard);
 }

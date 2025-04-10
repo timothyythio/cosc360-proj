@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
         topicData.image
     );
 
-    setupFollowButton();
+    setupFollowButton(topicData.id);
 
     setupSortBar();
 
@@ -35,17 +35,66 @@ function setTopicHeader(topicName, desc, followCount, topicImg) {
     if (topicImgEle) topicImgEle.src = `../assets/${topicImg}`;
 }
 
-function setupFollowButton() {
+function setupFollowButton(topicId) {
     let followBtn = document.getElementById("topicFollowBtn");
-    let isFollowed = false; 
-
-    if (followBtn) {
+    if (!followBtn) return;
+    
+    // redirect to login on follow btn click if not logged in
+    if (typeof isLoggedIn !== 'undefined' && !isLoggedIn) {
         followBtn.addEventListener("click", function() {
-            isFollowed = !isFollowed;
-            followBtn.textContent = isFollowed ? "Unfollow Topic" : "Follow Topic";
-            
-            // TODO: update follow status in database 
+            window.location.href = '../pages/login.php';
         });
+        return;
+    }
+    
+    // check if user already follows this topic
+    fetch(`../php/check_topic_follow.php?topic_id=${topicId}`)
+        .then(response => response.json())
+        .then(data => {
+            updateFollowButtonUI(followBtn, data.follows);
+            
+            followBtn.addEventListener("click", function() {
+                const formData = new FormData();
+                formData.append('topic_id', topicId);
+                
+                fetch('../php/follow_topic.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error('Error:', data.error);
+                        return;
+                    }
+                    
+                    // update ui with new follow status
+                    const isFollowed = data.status === 'followed';
+                    updateFollowButtonUI(followBtn, isFollowed);
+                    
+                    // update follower count
+                    const followCountEle = document.getElementById("topicFollows");
+                    if (followCountEle) {
+                        followCountEle.textContent = `${data.followers} Followers`;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error following topic:', error);
+                });
+            });
+        })
+        .catch(error => {
+            console.error('Error checking follow status:', error);
+        });
+}
+
+function updateFollowButtonUI(button, isFollowed) {
+    if (isFollowed) {
+        button.textContent = "Unfollow Topic";
+        button.classList.add("following");
+    } else {
+        button.textContent = "Follow Topic";
+        button.classList.remove("following");
     }
 }
 
