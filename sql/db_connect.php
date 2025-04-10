@@ -2,13 +2,13 @@
 $host = 'localhost';
 $db   = 'timnthio';
 $user = 'timnthio';
-$pass = 'timnthio';
+$pass = 'cosc360proj';
 $charset = 'utf8mb4';
 
 // Check if user is on the COSC360 server
 if (strpos($_SERVER['HTTP_HOST'], 'cosc360.ok.ubc.ca') !== false) {
     $user = 'timnthio';
-    $pass = 'timnthio';
+    $pass = 'cosc360proj';
     $db = 'timnthio';
 }
 
