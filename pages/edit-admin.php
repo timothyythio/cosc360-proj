@@ -1,6 +1,9 @@
 <?php
 require_once '../sql/db_connect.php';
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Hardcoded admin user_id for demo purposes — replace with session logic in production
 $adminUserId = 1;
 

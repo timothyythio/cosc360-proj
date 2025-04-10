@@ -6,6 +6,9 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 if (isset($_GET['action']) && $_GET['action'] === 'delete') {
     header('Content-Type: application/json');
     

@@ -7,6 +7,9 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit;
 }
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 $user_id = $_SESSION['user_id'];
 $successMessage = $errorMessage = "";
 
