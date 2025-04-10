@@ -3,8 +3,22 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
-
+require_once '../sql/db_connect.php';
 $pageTitle = $pageTitle ?? 'Bloggit';
+$pfpPath = '../assets/default-profile.png';
+
+if (isset($_SESSION['user_id'])) {
+    $userId = $_SESSION['user_id'];
+
+    $stmt = $pdo->prepare("SELECT pfp FROM users WHERE user_id = ?");
+    $stmt->execute([$userId]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user && !empty($user['pfp'])) {
+        $pfpPath = htmlspecialchars($user['pfp']);
+    }
+}
+
 
 // User state
 $isLoggedIn = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
@@ -88,7 +102,18 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
                     }
                     ?>
                 </nav>
-                <input type="text" class="search-bar" placeholder="Search Bloggit">
+                <form action="search.php" method="GET" class="header-search-form">
+                    <input 
+                        type="text" 
+                        name="q" 
+                        class="search-bar" 
+                        placeholder="Search Bloggit"
+                        value="<?= isset($_GET['q']) ? htmlspecialchars($_GET['q']) : '' ?>"
+                    >
+                    <button type="submit" class="search-icon-button">
+                        <img src="../assets/search-icon.png" alt="Search">
+                    </button>
+                </form>
             </div>
 
             <div class="topnav-right">
@@ -105,15 +130,18 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
                             </ul>
                         </div>
                     </div>
+                    <?php if ($isAdmin && $isLoggedIn): ?>
+                        <a href="../pages/admin.php" class="login-btn">Admin</a>
+                    <?php endif; ?>
                     <a href="../pages/profile.php" class="profile-icon-link">
-                        <img src="../uploads/<?= htmlspecialchars($_SESSION['user_pfp'] ?? 'default-profile.png') ?>" class="user-icon" alt="Profile">
+                        <img src="<?= $pfpPath ?>" alt="Profile" class="user-icon">
                     </a>
                     <a href="logout.php" class="logout-icon-link">
                         <img src="../assets/logout-icon.svg" class="logout-icon" alt="Logout">
                     </a>
                 <?php else: ?>
-                <a href="login.php" class="login-btn">Login</a>
-                <a href="register.php" class="register-btn">Register</a>
+                    <a href="login.php" class="login-btn">Login</a>
+                    <a href="register.php" class="register-btn">Register</a>
                 <?php endif; ?>
             </div>
 
@@ -155,11 +183,18 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
 document.addEventListener("DOMContentLoaded", function () {
     const notifBtn = document.getElementById("notification-btn");
     const notifDropdown = document.getElementById("notification-dropdown");
+    const notifDot = document.getElementById("notification-dot");
+
+    //for future if ever we want to add unread dot
+    // if (localStorage.getItem("notificationsRead") === "true") {
+    //     notifDot.style.display = "none";
+    // }
 
     if (notifBtn && notifDropdown) {
     notifBtn.addEventListener("click", () => {
         console.log("button clicked");
-        document.getElementById("notification-dot").style.display = "none";
+        // localStorage.setItem("notificationsRead", "true");
+        notifDot.style.display = "none";
         notifDropdown.style.display =
         notifDropdown.style.display === "block" ? "none" : "block";
     });
@@ -183,9 +218,11 @@ function fetchNotifications() {
         const list = document.getElementById("notification-list");
         list.innerHTML = "";
 
-        if (data.length > 0) {
-            document.getElementById("notification-dot").style.display = "inline-block";
-        }
+        //for future if ever we want to add unread dot
+        // if (data.length > 0) {
+        //     localStorage.setItem("notificationsRead", "false");
+        //     document.getElementById("notification-dot").style.display = "inline-block";
+        // }
 
         data.forEach(notif => {
             const li = document.createElement("li");

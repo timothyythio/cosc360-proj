@@ -118,6 +118,8 @@ function test_input($data) {
     $data = htmlspecialchars($data);
     return $data;
 }
+include("header.php");
+
 ?>
 
 

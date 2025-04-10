@@ -223,8 +223,7 @@ include('header.php');
         <div id="footer"></div>
     </div>
 
-    <script src="../scripts/router.js" defer></script>
-    <script src="../scripts/auth.js" defer></script>
+
     <script>
         function showTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');

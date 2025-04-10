@@ -121,8 +121,7 @@ $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 </div>
 <div id="footer"></div>
 
-<script src="../scripts/router.js"></script>
-<script src="../scripts/auth.js" defer></script>
+
 <script>
     document.addEventListener("DOMContentLoaded", checkUserLogin);
 </script>

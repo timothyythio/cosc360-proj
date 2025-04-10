@@ -208,8 +208,7 @@ document.getElementById('comment-form')?.addEventListener('submit', function(e) 
     }
 });
 </script>
-<!-- <script src="../scripts/router.js"></script>
-<script src="../scripts/auth.js" defer></script> -->
+
 <script src="../scripts/post-likes.js" defer></script>
 <script src="../scripts/save-post.js" defer></script>
 

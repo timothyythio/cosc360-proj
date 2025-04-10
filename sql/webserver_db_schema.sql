@@ -1,6 +1,16 @@
-DROP DATABASE IF EXISTS bloggit_db;
-CREATE DATABASE bloggit_db;
-USE bloggit_db;
+
+USE timnthio;
+
+DROP TABLE IF EXISTS `Comments`;
+DROP TABLE IF EXISTS `comments`;
+
+DROP TABLE IF EXISTS `Drafts`;
+DROP TABLE IF EXISTS `Likes`;
+DROP TABLE IF EXISTS `Saved`;
+DROP TABLE IF EXISTS `Admin`;
+DROP TABLE IF EXISTS `Posts`;
+DROP TABLE IF EXISTS `Topics`;
+DROP TABLE IF EXISTS `Users`;
 
 -- Set character encoding
 SET NAMES utf8mb4;
@@ -8,7 +18,7 @@ SET character_set_client = utf8mb4;
 SET character_set_connection = utf8mb4;
 SET character_set_results = utf8mb4;
 
--- Create users table
+-- Create Users table
 CREATE TABLE `Users` (
     `user_id` INT NOT NULL AUTO_INCREMENT,
     `username` VARCHAR(50) NOT NULL,
@@ -56,15 +66,15 @@ CREATE TABLE `Posts` (
     `image` VARCHAR(255),
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `user_id` INT,
-    `topic_id` INT,
+    `user_id` INT DEFAULT NULL,
+    `topic_id` INT DEFAULT NULL,
     `status` enum('draft','posted') DEFAULT 'posted',
     `image_path` varchar(255) DEFAULT NULL,
     `username` varchar(255) NOT NULL,
     `likes` INT DEFAULT 0,
     PRIMARY KEY (`post_id`),
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE SET NULL,
-    FOREIGN KEY (`topic_id`) REFERENCES `topics`(`topic_id`) ON DELETE SET NULL
+    FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE SET NULL,
+    FOREIGN KEY (`topic_id`) REFERENCES `Topics`(`topic_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `Drafts` (
@@ -75,12 +85,12 @@ CREATE TABLE `Drafts` (
     `content` TEXT,
     `saved_content` TEXT,
     `image_path` VARCHAR(255),
-    `topic_id` INT,
+    `topic_id` INT DEFAULT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`draft_id`),
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE,
-    FOREIGN KEY (`topic_id`) REFERENCES `topics`(`topic_id`) ON DELETE SET NULL
+    FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`topic_id`) REFERENCES `Topics`(`topic_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `Saved` (
@@ -108,23 +118,23 @@ CREATE TABLE `Likes` (
 
 
 
-CREATE TABLE `comments` (
+CREATE TABLE `Comments` (
     `comment_id` INT NOT NULL AUTO_INCREMENT,
     `content` TEXT NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    `user_id` INT,
+    `user_id` INT DEFAULT NULL,
     `post_id` INT,
     `parent_comment_id` INT DEFAULT NULL,
     PRIMARY KEY (`comment_id`),
-    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE SET NULL,
-    FOREIGN KEY (`post_id`) REFERENCES `posts`(`post_id`) ON DELETE CASCADE,
-    FOREIGN KEY (`parent_comment_id`) REFERENCES `comments`(`comment_id`) ON DELETE SET NULL
+    FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE SET NULL,
+    FOREIGN KEY (`post_id`) REFERENCES `Posts`(`post_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`parent_comment_id`) REFERENCES `Comments`(`comment_id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Insert sample users
-INSERT INTO `users` (`username`, `first_name`, `last_name`, `email`, `password`, `bio`, `role`, `pfp`) VALUES
-('admin', 'Admin', 'User', 'admin@bloggit.com', '$2y$10$74OUtU4vAHIHwM4AqFChsuTUMsm5cNqqCiAVQ7XTazylNILIvkVG6', 'Administrator', 'admin'),
+-- Insert sample Users
+INSERT INTO `Users` (`username`, `first_name`, `last_name`, `email`, `password`, `bio`, `role`, `pfp`) VALUES
+('admin', 'Admin', 'User', 'admin@bloggit.com', '$2y$10$74OUtU4vAHIHwM4AqFChsuTUMsm5cNqqCiAVQ7XTazylNILIvkVG6', 'Administrator', 'admin', '../assets/profile-icon.png'),
 ('exampleuser123', 'Example', 'User', 'user@example.com', '$2y$10$o4Vg./VSTfktdQrSXC9AeOpigfRsPAp3AmjKhd8HPerUJmpcvOKWi', 'I am a 3rd year computer science student in UBC.', 'user', '../assets/profile-icon.png'),
 ('janedoe', 'Jane', 'Doe', 'jane@gmail.com', '$2y$10$o4Vg./VSTfktdQrSXC9AeOpigfRsPAp3AmjKhd8HPerUJmpcvOKWi', 'I am a 2nd year computer science student in UBC.', 'user', '../assets/profile-icon.png'),
 ('johndoe', 'John', 'Doe', 'johndoe@gmail.com', '$2y$10$o4Vg./VSTfktdQrSXC9AeOpigfRsPAp3AmjKhd8HPerUJmpcvOKWi', 'I am also a 3rd year computer science student in UBC.', 'user', '../assets/profile-icon.png');
@@ -133,12 +143,12 @@ INSERT INTO `users` (`username`, `first_name`, `last_name`, `email`, `password`,
 -- insert admin 
 INSERT INTO `Admin` (`user_id`, `country`, `city`)
 VALUES (
-    (SELECT user_id FROM users WHERE username = 'admin'),
+    (SELECT user_id FROM Users WHERE username = 'admin'),
     'United States',
     'New York'
 );
 -- Insert sample topics
-INSERT INTO `topics` (`topic_id`, `topic_name`) VALUES
+INSERT INTO `Topics` (`topic_id`, `topic_name`) VALUES
 (1, 'Programming'),
 (2, 'Boba'),
 (3, 'Gaming'),
@@ -150,31 +160,31 @@ INSERT INTO `topics` (`topic_id`, `topic_name`) VALUES
 -- Insert sample posts
 
 INSERT INTO `Posts` (`title`, `content`, `image`, `user_id`, `topic_id`, `status`, `image_path`, `username`, `likes`) VALUES
-('Why I Love Programming', 'Programming helps me solve real-world problems.', NULL, (SELECT user_id FROM users WHERE username = 'exampleuser123'), 1, 'posted', NULL, 'exampleuser123', 3),
-('Best Boba Spots in Town', 'I tried 5 shops—here’s my verdict.', NULL, (SELECT user_id FROM users WHERE username = 'janedoe'), 2, 'posted', NULL, 'janedoe', 5),
-('Speedrunning Skyrim', 'My personal record is under 1 hour!', NULL, (SELECT user_id FROM users WHERE username = 'johndoe'), 3, 'posted', NULL, 'johndoe', 8);
+('Why I Love Programming', 'Programming helps me solve real-world problems.', NULL, (SELECT user_id FROM Users WHERE username = 'exampleuser123'), 1, 'posted', NULL, 'exampleuser123', 3),
+('Best Boba Spots in Town', 'I tried 5 shops—here’s my verdict.', NULL, (SELECT user_id FROM Users WHERE username = 'janedoe'), 2, 'posted', NULL, 'janedoe', 5),
+('Speedrunning Skyrim', 'My personal record is under 1 hour!', NULL, (SELECT user_id FROM Users WHERE username = 'johndoe'), 3, 'posted', NULL, 'johndoe', 8);
 
 -- Insert sample drafts
 
 INSERT INTO `Drafts` (`user_id`, `username`, `title`, `content`, `saved_content`, `image_path`, `topic_id`)
 VALUES
-((SELECT user_id FROM users WHERE username = 'exampleuser123'), 'exampleuser123', 'The Joy of Debugging', '', 'Debugging can be satisfying when you finally squash that bug.', NULL, 1),
-((SELECT user_id FROM users WHERE username = 'exampleuser123'), 'exampleuser123', 'Top 5 Cat Memes', '', 'Here are the best memes from this week.', NULL, 5);
+((SELECT user_id FROM Users WHERE username = 'exampleuser123'), 'exampleuser123', 'The Joy of Debugging', '', 'Debugging can be satisfying when you finally squash that bug.', NULL, 1),
+((SELECT user_id FROM Users WHERE username = 'exampleuser123'), 'exampleuser123', 'Top 5 Cat Memes', '', 'Here are the best memes from this week.', NULL, 5);
 
 -- Insert sample comments
 
-INSERT INTO `comments` (`content`, `user_id`, `post_id`, `parent_comment_id`)
+INSERT INTO `Comments` (`content`, `user_id`, `post_id`, `parent_comment_id`)
 VALUES
-('Great post! Really inspiring.', (SELECT user_id FROM users WHERE username = 'exampleuser123'), (SELECT post_id FROM posts WHERE title = 'Why I Love Programming'), NULL),
-('Which boba spot was your favorite?', (SELECT user_id FROM users WHERE username = 'exampleuser123'), (SELECT post_id FROM posts WHERE title = 'Best Boba Spots in Town'), NULL),
-('I liked T4 the best!', (SELECT user_id FROM users WHERE username = 'exampleuser123'), (SELECT post_id FROM posts WHERE title = 'Best Boba Spots in Town'), LAST_INSERT_ID());
+('Great post! Really inspiring.', (SELECT user_id FROM Users WHERE username = 'exampleuser123'), (SELECT post_id FROM Posts WHERE title = 'Why I Love Programming'), NULL),
+('Which boba spot was your favorite?', (SELECT user_id FROM Users WHERE username = 'exampleuser123'), (SELECT post_id FROM Posts WHERE title = 'Best Boba Spots in Town'), NULL),
+('I liked T4 the best!', (SELECT user_id FROM Users WHERE username = 'exampleuser123'), (SELECT post_id FROM Posts WHERE title = 'Best Boba Spots in Town'), LAST_INSERT_ID());
 
--- Insert sample saved posts
+-- Insert sample saved Posts
 
 INSERT INTO `Saved` (`user_id`, `post_id`)
 VALUES
-((SELECT user_id FROM users WHERE username = 'exampleuser123'), (SELECT post_id FROM posts WHERE title = 'Why I Love Programming')),
-((SELECT user_id FROM users WHERE username = 'exampleuser123'), (SELECT post_id FROM posts WHERE title = 'Best Boba Spots in Town'));
+((SELECT user_id FROM Users WHERE username = 'exampleuser123'), (SELECT post_id FROM Posts WHERE title = 'Why I Love Programming')),
+((SELECT user_id FROM Users WHERE username = 'exampleuser123'), (SELECT post_id FROM Posts WHERE title = 'Best Boba Spots in Town'));
 
 -- exampleuser likes janedoe's post "Best Boba Spots in Town"
 INSERT INTO `Likes` (`user_id`, `post_id`)
@@ -197,8 +207,4 @@ VALUES (
     (SELECT post_id FROM Posts WHERE title = 'Why I Love Programming')
 );
 
--- Create database user (run as admin)
-DROP USER IF EXISTS 'webuser'@'localhost';
-CREATE USER 'webuser'@'localhost' IDENTIFIED BY 'P@ssw0rd';
-GRANT ALL PRIVILEGES ON bloggit_db.* TO 'webuser'@'localhost';
-FLUSH PRIVILEGES;
+

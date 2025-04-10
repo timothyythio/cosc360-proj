@@ -195,9 +195,9 @@ include('header.php');
         <div id="footer"></div>
     </div>
 
-    <script src="../scripts/router.js"></script>
+
     <script src="../scripts/new-post.js"></script>
-    <script src="../scripts/auth.js" defer></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             checkUserLogin();

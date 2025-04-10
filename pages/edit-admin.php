@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($password !== $confirmPassword) {
         $error = "Passwords do not match.";
     } else {
-        $hashedPassword = !empty($password) ? md5($password) : $adminData['password'];
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         // Update users table
         $updateUser = $pdo->prepare("UPDATE users SET first_name = ?, email = ?, password = ? WHERE user_id = ?");

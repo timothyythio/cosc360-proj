@@ -512,7 +512,6 @@ $adminInfo = $stmt->fetch(PDO::FETCH_ASSOC);
       showTab(activeTab);
     };
   </script>
-  <script src="../scripts/router.js"></script>
-  <script src="../scripts/auth.js" defer></script>
+
 </body>
 </html>
