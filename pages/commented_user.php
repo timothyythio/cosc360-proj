@@ -2,6 +2,7 @@
 session_start();
 require 'db_connection.php';
 
+
 if (!isset($_GET['user_id']) || !is_numeric($_GET['user_id'])) {
     die("Invalid user ID.");
 }
