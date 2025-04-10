@@ -37,14 +37,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
         }
     }
 }
+$userId = $_SESSION['user_id'] ?? null;
+
 $stmt = $pdo->prepare("
-    SELECT p.*, u.username, u.pfp, u.user_id AS author_id
+    SELECT p.*, u.username, u.pfp, u.user_id AS author_id,
+           COUNT(l.like_id) AS like_count,
+           SUM(CASE WHEN l.user_id = :user_id THEN 1 ELSE 0 END) AS user_liked
     FROM posts p
-    LEFT JOIN users u ON p.username = u.username
-    WHERE p.post_id = :id
+    JOIN users u ON p.user_id = u.user_id
+    LEFT JOIN likes l ON p.post_id = l.post_id
+    WHERE p.post_id = :post_id
+    GROUP BY p.post_id
 ");
-$stmt->execute(['id' => $postId]);
-$post = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$stmt->execute([
+    'user_id' => $userId,
+    'post_id' => $_GET['id']
+]);
+
+$post = $stmt->fetch();
 
 if (!$post) {
     echo "Post not found.";
@@ -86,7 +97,7 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
         <div id="post-content">
             <h2><?= htmlspecialchars($post['title']) ?>
                 <div id="userspfp-post">
-                    <a href="profile.php?user_id=<?= htmlspecialchars($post['author_id'] ?? '') ?>">
+                    <a href="profile.php?user=<?= htmlspecialchars($post['author_id'] ?? '') ?>">
                         <img src="<?= htmlspecialchars($post['pfp'] ?? '../assets/profile-icon.png') ?>" alt="Author Profile">
                     </a>
                 </div>
@@ -95,10 +106,14 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
                 <img src="<?= htmlspecialchars($post['image_path']) ?>" alt="Post Image">
             <?php endif; ?>
             <div id="like-count">
-                <button id="like-button" data-post-id="<?= $postId ?>" style="background:none; border:none;">
-                    <img id="like-icon" src="../assets/heart-circle-svgrepo-com.svg" alt="Like Button">
+                <button id="like-button" data-post-id="<?= $postId ?>" type="button" style="background:none; border:none; cursor:pointer;">
+                    <?php if (isset($post['user_liked']) && $post['user_liked'] > 0): ?>
+                        <img id="like-icon" src="../assets/heart-circle-coloured.jpg" alt="Unlike" width="24" height="24">
+                    <?php else: ?>
+                        <img id="like-icon" src="../assets/heart-circle-svgrepo-com.svg" alt="Like" width="24" height="24">
+                    <?php endif; ?>
                 </button>
-                <p id="like-count-number"><?= intval($post['likes']) ?> likes</p>
+                <p id="like-count-number"><?= intval($post['like_count']) ?> likes</p>
                 <p>• Posted on <?= date('F j, Y \a\t g:i A', strtotime($post['created_at'])) ?></p>
             </div>
         </div>
@@ -130,7 +145,7 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php foreach ($comments as $comment): ?>
                     <div class="comment">
                         <div class="comment-header">
-                            <a href="commented_user.php?user_id=<?php echo $comment['user_id']; ?>">
+                            <a href="profile.php?user=<?= htmlspecialchars($comment['user_id'] ?? '') ?>">
                                 <div id="userspfp-post">
                                 <img src="<?php echo !empty($comment['pfp']) ? $comment['pfp'] : '../assets/profile-icon.png'; ?>" alt="User Profile Picture">
                                 </div>

@@ -28,32 +28,48 @@ function createReadMoreBtn(postCard, bodyText) {
 }
 
 function createLikeBtn(postCard, numLikes, authorName, postId) {
-    let isLiked = false;
     let likesIcon = postCard.querySelector(".likesIcon");
     let likeCountSpan = postCard.querySelector(".like-count");
     let currentLikes = parseInt(numLikes) || 0;
 
-    likesIcon.addEventListener("click", function () {
-        if (!isLiked) {
-            currentLikes++;
-            likesIcon.src = "../assets/liked.png"; 
-            isLiked = true;
-        } else {
-            currentLikes--;
-            likesIcon.src = "../assets/like.png"; 
-            isLiked = false;
-        }
-        likeCountSpan.innerText = currentLikes; 
+    // Set initial state
+    let isLiked = likedPostIds.includes(postId);
+    if (isLiked) {
+        likesIcon.src = "../assets/liked.png";
+    }
 
+    likesIcon.addEventListener("click", function () {
+        fetch("../php/like_post.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: "post_id=" + encodeURIComponent(postId)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === "liked") {
+                likesIcon.src = "../assets/liked.png";
+                currentLikes++;
+                isLiked = true;
+            } else if (data.status === "unliked") {
+                likesIcon.src = "../assets/like.png";
+                currentLikes--;
+                isLiked = false;
+            }
+            likeCountSpan.innerText = currentLikes;
+        })
+        .catch(error => {
+            console.error("Error updating like:", error);
+        });
     });
 }
+
 
 function createTextCard(post) {
     let postCard = document.createElement("div");
     postCard.className = "postCard";
     
     const timePosted = formatDate(post.created_at);
-    const numLikes = 0; 
+    const numLikes = post.like_count;
 
     postCard.innerHTML = `
         <div class="cardTitle">
@@ -65,12 +81,12 @@ function createTextCard(post) {
         </div>
         <div class="cardFooter">
             <img src="../assets/like.png" alt="like icon" class="likesIcon">
-            <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?username=${post.username}">${post.username}</a></p>
+                <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?user=${post.user_id}">${post.username}</a> </p>
         </div>
     `;
 
     createReadMoreBtn(postCard, post.content);
-    createLikeBtn(postCard, numLikes, post.username, post.post_id);
+    createLikeBtn(postCard, post.like_count, post.user_liked > 0, post.post_id);
 
     document.getElementById("content").appendChild(postCard);
 }
@@ -80,7 +96,7 @@ function createPhotoCard(post) {
     postCard.className = "postCard";
     
     const timePosted = formatDate(post.created_at);
-    const numLikes = 0; 
+    const numLikes = post.like_count;
     const imagePath = post.image_path || "../assets/default-post-image.jpg";
 
     postCard.innerHTML = `
@@ -94,7 +110,7 @@ function createPhotoCard(post) {
             </div>
             <div class="cardFooter">
                 <img src="../assets/like.png" alt="like icon" class="likesIcon">
-                <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?username=${post.username}">${post.username}</a></p>
+                <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?user=${post.user_id}">${post.username}</a> </p>
             </div>
         </div>
         <div class="postPictureContainer">
@@ -103,7 +119,7 @@ function createPhotoCard(post) {
     `;
 
     createReadMoreBtn(postCard, post.content);
-    createLikeBtn(postCard, numLikes, post.username, post.post_id);
+    createLikeBtn(postCard, post.like_count, post.user_liked > 0, post.post_id);
 
     document.getElementById("content").appendChild(postCard);
 }
@@ -113,7 +129,7 @@ function createTopicCard(post) {
     postCard.className = "postCard";
     
     const timePosted = formatDate(post.created_at);
-    const numLikes = 0; 
+    const numLikes = post.like_count;
     const imagePath = post.image_path || "../assets/default-post-image.jpg";
     const topicName = post.topic_name || "General";
 
@@ -132,12 +148,12 @@ function createTopicCard(post) {
         </div>
         <div class="cardFooter">
             <img src="../assets/like.png" alt="like icon" class="likesIcon">
-            <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?username=${post.username}">${post.username}</a></p>
+                <p><span class="like-count">${numLikes}</span> Likes - ${timePosted} posted by <a href="profile.php?user=${post.user_id}">${post.username}</a> </p>
         </div>
     `;
 
     createReadMoreBtn(postCard, post.content);
-    createLikeBtn(postCard, numLikes, post.username, post.post_id);
+    createLikeBtn(postCard, post.like_count, post.user_liked > 0, post.post_id);
 
     document.getElementById("content").appendChild(postCard);
 }
