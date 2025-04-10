@@ -44,7 +44,7 @@ CREATE TABLE `Admin` (
         `description` TEXT,
         `members` INT DEFAULT 0,
         `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        `topic_img` VARCHAR(255),
+        `topic_img` VARCHAR(255) NOT NULL,
         PRIMARY KEY (`topic_id`),
         UNIQUE KEY `topic_name` (`topic_name`)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

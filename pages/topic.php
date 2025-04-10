@@ -1,44 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-    <?php session_start(); ?>
-<script>
-    const isLoggedIn = <?php echo isset($_SESSION['logged_in']) && $_SESSION['logged_in'] ? 'true' : 'false'; ?>;
-    const loggedInUser = "<?php echo isset($_SESSION['username']) ? $_SESSION['username'] : ''; ?>";
-    const isAdmin = "<?php echo (isset($_SESSION['role']) && $_SESSION['role'] === 'admin') ? 'true' : 'false'; ?>";
-</script>
+<?php 
+session_start();
+require_once '../sql/db_connect.php';
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bloggit</title>
-    <link rel="stylesheet" href="../styles/main.css">
-    <link rel="stylesheet" href="../styles/topic.css">
-</head>
+// get topic ID 
+$topic_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
-<body>
-    <div id="app">
-        <div id="topnav"></div>
-        <div id="navbar"></div>
-        <main id="content">
-            <div id="topicMain">
-                <div id="topicImgContainer">
-                    <img src="../assets/siteicon.png" id="topicImg">
-                </div>
-                <div id="topicDescContainer">
-                    <h1 id="topicName">Topic Name</h1>
-                    <p id="topicFollows">X Followers</p>
-                    <p id="topicDesc">Topic Description</p>
-                    <button id="topicFollowBtn">Follow Topic</button>
-                </div>
-            </div>
-            <div id="sortbar"></div>
-        </main>
-        <div id="footer"></div>
+$stmt = $pdo->prepare("SELECT * FROM topics WHERE topic_id = ?");
+$stmt->execute([$topic_id]);
+$topic = $stmt->fetch();
+
+if (!$topic) {
+    // not found, redirect to topics page
+    header('Location: topics.php');
+    exit;
+}
+
+$pageTitle = htmlspecialchars($topic['topic_name']) . ' - Bloggit';
+$pageStyles = ['main.css', 'topic.css'];
+
+include('header.php');
+?>
+
+<main id="topicPageBody">
+<div id="topicMain">
+    <div id="topicImgContainer">
+        <img src="<?php echo $topic['topic_img'] ? '../assets/'.$topic['topic_img'] : '../assets/siteicon.png'; ?>" id="topicImg">
     </div>
+    <div id="topicDescContainer">
+        <h1 id="topicName"><?php echo htmlspecialchars($topic['topic_name']); ?></h1>
+        <p id="topicFollows"><?php echo $topic['members']; ?> Followers</p>
+        <p id="topicDesc"><?php echo htmlspecialchars($topic['description'] ?? 'No description available.'); ?></p>
+        <button id="topicFollowBtn">Follow Topic</button>
+    </div>
+</div>
+<div id="sortbar"></div>
+<div id="topicPosts">
+    <!-- topic posts will appear here -->
+    <div class="loading">Loading posts...</div>
+</div>
+</main>
 
-    <script src="../scripts/router.js"></script>
-    <script src="../scripts/auth.js" defer></script>
-    <script src="../scripts/topic.js" defer></script>
-</body>
-
-</html>
+<script>
+    const topicData = {
+        id: <?php echo $topic_id; ?>,
+        name: "<?php echo addslashes($topic['topic_name']); ?>",
+        description: "<?php echo addslashes($topic['description'] ?? ''); ?>",
+        members: <?php echo $topic['members']; ?>,
+        image: "<?php echo $topic['topic_img'] ? $topic['topic_img'] : 'siteicon.png'; ?>"
+    };
+</script>
+<script src="../scripts/topic.js?v=<?php echo time(); ?>" defer></script>

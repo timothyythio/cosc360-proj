@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function fetchTopics() {
-    fetch('../scripts/get_topics.php')
+    fetch('../php/get_topics.php')
         .then(response => response.json())
         .then(topics => {
             const topicContent = document.querySelector("#topicContent");

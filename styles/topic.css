@@ -11,17 +11,22 @@
     flex-direction: column;
 }
 
+#topicPageBody{
+    margin-left:80px;
+}
+
 #topicMain {
     display: flex;
     align-items: center;
     width: 100%;
-    height: 40vh;
+    height: 360px;
     border-bottom: 1px solid #ddd;
+    padding: auto 0;
 }
 
 #topicImgContainer{
     margin-left:25px;
-    width: 50%;
+    width: 25%;
     height: 90%;
     border-radius: 8px;
     border: 1px solid #ddd;
