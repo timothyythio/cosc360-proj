@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         // Build the SQL
-        $query = "UPDATE users SET username = :username, email = :email, bio = :bio";
+        $query = "UPDATE Users SET username = :username, email = :email, bio = :bio";
         $params = [
             ':username' => $username,
             ':email' => $email,

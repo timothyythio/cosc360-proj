@@ -10,7 +10,7 @@ $user_id = (int) $_GET['user_id'];
 $pfp = "../assets/profile-icon.png"; // default pfp
 
 try {
-    $stmt = $pdo->prepare("SELECT username, bio, pfp FROM users WHERE user_id = :user_id");
+    $stmt = $pdo->prepare("SELECT username, bio, pfp FROM Users WHERE user_id = :user_id");
     $stmt->execute(['user_id' => $user_id]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -72,7 +72,6 @@ include('header.php');
 
                 <div id="posts" class="tab-content">
                     <h2><?php echo htmlspecialchars($username); ?>'s Posts</h2>
-                    <!-- TODO: Loop user's posts here from DB -->
                     <p>Post fetching from DB coming soon!</p>
                 </div>
 

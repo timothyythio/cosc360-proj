@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!isset($error)) {
                 try {
                     if ($status === 'draft') {
-                        $stmt = $pdo->prepare("INSERT INTO drafts (user_id, username, title, content, image_path, topic_id, created_at, updated_at)
+                        $stmt = $pdo->prepare("INSERT INTO Drafts (user_id, username, title, content, image_path, topic_id, created_at, updated_at)
                                                VALUES (:user_id, :username, :title, :content, :image_path, :topic_id, NOW(), NOW())");
 
                         $stmt->execute([
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
 
                         // Important change: Added user_id to the INSERT statement
-                        $stmt = $pdo->prepare("INSERT INTO posts (user_id, username, title, content, topic_id, status, image_path, created_at)
+                        $stmt = $pdo->prepare("INSERT INTO Posts (user_id, username, title, content, topic_id, status, image_path, created_at)
                                                VALUES (:user_id, :username, :title, :caption, :topic_id, :status, :image_path, NOW())");
 
                         $stmt->execute([

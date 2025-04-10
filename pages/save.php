@@ -17,18 +17,18 @@ if (!$postId) {
     exit;
 }
 
-$stmt = $pdo->prepare("SELECT * FROM saved WHERE user_id = ? AND post_id = ?");
+$stmt = $pdo->prepare("SELECT * FROM Saved WHERE user_id = ? AND post_id = ?");
 $stmt->execute([$userId, $postId]);
 $saved = $stmt->fetch();
 
 //if alr saved remove
 if ($saved) {
-    $deleteStmt = $pdo->prepare("DELETE FROM saved WHERE user_id = ? AND post_id = ?");
+    $deleteStmt = $pdo->prepare("DELETE FROM Saved WHERE user_id = ? AND post_id = ?");
     $deleteStmt->execute([$userId, $postId]);
     echo json_encode(['success' => true, 'saved' => false]);
 } else {
 //add
-    $insertStmt = $pdo->prepare("INSERT INTO saved (user_id, post_id) VALUES (?, ?)");
+    $insertStmt = $pdo->prepare("INSERT INTO Saved (user_id, post_id) VALUES (?, ?)");
     $insertStmt->execute([$userId, $postId]);
     echo json_encode(['success' => true, 'saved' => true]);
 }
