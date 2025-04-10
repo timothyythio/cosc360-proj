@@ -1,10 +1,11 @@
-#create-container img {
+#create-container .profile-pic {
     width: 70px;
     height: 70px;
     border-radius: 50%;
     display: block;
     margin: 0 auto;
 }
+
 
 #content {
     display: flex;
@@ -16,7 +17,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 30px;
+    padding: 10px;
     text-align: center;
 }
 

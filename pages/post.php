@@ -145,7 +145,7 @@ $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php foreach ($comments as $comment): ?>
                     <div class="comment">
                         <div class="comment-header">
-                            <a href="commented_user.php?user_id=<?php echo $comment['user_id']; ?>">
+                            <a href="profile.php?user=<?= htmlspecialchars($comment['user_id'] ?? '') ?>">
                                 <div id="userspfp-post">
                                 <img src="<?php echo !empty($comment['pfp']) ? $comment['pfp'] : '../assets/profile-icon.png'; ?>" alt="User Profile Picture">
                                 </div>
