@@ -77,6 +77,96 @@
     background-color: darkred;
 }
 
+.notification-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    filter: invert(100%);
+}
+
+#notification-btn {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+}
+
+
+.notification-dropdown {
+    display: none; /* toggled with JS */
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #fff;
+    width: 280px;
+    max-height: 350px;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    padding: 10px;
+    z-index: 100;
+}
+
+.notification-dropdown .dropdown-header {
+    font-weight: bold;
+    font-size: 16px;
+    padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.notification-dot {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: red;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: none; /* Hidden by default */
+  }
+
+.notification-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.notification-item {
+    font-size: 14px;
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#notification-btn.has-unread::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+  }
+  
+
+.notification-item:last-child {
+    border-bottom: none;
+}
+
+.timestamp {
+    display: block;
+    font-size: 12px;
+    color: gray;
+    margin-top: 4px;
+}
+
 .site-icon{
     width: 60px;
     height: 60px;
@@ -169,6 +259,9 @@
     font-weight: bold;
     text-align: center;
 }
+
+
+
 
 /* Footer */
 footer {

@@ -21,6 +21,7 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $pageTitle; ?></title>
     <link rel="stylesheet" href="../styles/header.css">
+    <link rel="stylesheet" href="../styles/main.css">
     <?php if (isset($pageStyles) && is_array($pageStyles)): ?>
         <?php foreach ($pageStyles as $style): ?>
             <link rel="stylesheet" href="<?php echo "../styles/" . $style; ?>">
@@ -92,6 +93,18 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
 
             <div class="topnav-right">
                 <?php if ($isLoggedIn): ?>
+                    <div class="notification-wrapper">
+                        <button id="notification-btn">
+                            <img src="../assets/mail_icon.png" alt="Notifications" class="notification-icon">
+                            <span id="notification-dot" class="notification-dot"></span>
+                        </button>
+
+                        <div class="notification-dropdown" id="notification-dropdown">
+                            <p class="dropdown-header">Notifications</p>
+                            <ul class="notification-list" id="notification-list">
+                            </ul>
+                        </div>
+                    </div>
                     <a href="../pages/profile.php" class="profile-icon-link">
                         <img src="../uploads/<?= htmlspecialchars($_SESSION['user_pfp'] ?? 'default-profile.png') ?>" class="user-icon" alt="Profile">
                     </a>
@@ -135,5 +148,60 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
                 </a>
             </div>
         </aside>
-        
-        <main id="content">
+    </div>  
+    <main id="content"></main>
+</body>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const notifBtn = document.getElementById("notification-btn");
+    const notifDropdown = document.getElementById("notification-dropdown");
+
+    if (notifBtn && notifDropdown) {
+    notifBtn.addEventListener("click", () => {
+        console.log("button clicked");
+        document.getElementById("notification-dot").style.display = "none";
+        notifDropdown.style.display =
+        notifDropdown.style.display === "block" ? "none" : "block";
+    });
+    } else {
+    console.log("❌ Elements not found!");
+    }
+    //close dropdown when clicking outside
+    document.addEventListener("click", (e) => {
+        if (!notifBtn.contains(e.target) && !notifDropdown.contains(e.target)) {
+        notifDropdown.style.display = "none";
+        }
+    });
+});
+</script>
+
+<script>
+function fetchNotifications() {
+  fetch("../php/get_notifications.php") 
+    .then(res => res.json())
+    .then(data => {
+        const list = document.getElementById("notification-list");
+        list.innerHTML = "";
+
+        if (data.length > 0) {
+            document.getElementById("notification-dot").style.display = "inline-block";
+        }
+
+        data.forEach(notif => {
+            const li = document.createElement("li");
+            li.className = "notification-item";
+            li.innerHTML = `
+            <span>${notif.message}</span>
+            <span class="timestamp">${notif.created_at}</span>
+            `;
+            list.appendChild(li);
+      });
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetchNotifications();
+  setInterval(fetchNotifications, 5000); // every 5 sec
+});
+</script>
+
