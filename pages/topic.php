@@ -36,8 +36,7 @@
         <div id="footer"></div>
     </div>
 
-    <script src="../scripts/router.js"></script>
-    <script src="../scripts/auth.js" defer></script>
+
     <script src="../scripts/topic.js" defer></script>
 </body>
 

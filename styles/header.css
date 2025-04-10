@@ -41,6 +41,19 @@
     width: 60px;
 }
 
+.topnav-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.topnav-right a,
+.topnav-right button,
+.topnav-right img {
+    vertical-align: middle;
+}
+
 .topnav-right a {
     color: black; 
     text-decoration: none;
@@ -186,11 +199,28 @@
     color: #333;
     outline: none;
     box-sizing: border-box;
-    background-image: url("https://cdn-icons-png.flaticon.com/512/3917/3917132.png");
     background-position: center right 15px;
     background-repeat: no-repeat;
     background-size: 20px 20px;
 }
+
+.search-icon-button img {
+    width: 10px;
+    height: 10px;
+    object-fit: contain;
+
+}
+
+.search-icon-button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
 .user-icon {
     width: 40px;

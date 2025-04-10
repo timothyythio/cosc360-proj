@@ -123,11 +123,11 @@ CREATE TABLE `comments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Insert sample users
-INSERT INTO `users` (`username`, `first_name`, `last_name`, `email`, `password`, `bio`, `role`) VALUES
-('admin', 'Admin', 'User', 'admin@bloggit.com', '$2y$10$74OUtU4vAHIHwM4AqFChsuTUMsm5cNqqCiAVQ7XTazylNILIvkVG6', 'Administrator', 'admin'),
-('exampleuser123', 'Example', 'User', 'user@example.com', '$2y$10$o4Vg./VSTfktdQrSXC9AeOpigfRsPAp3AmjKhd8HPerUJmpcvOKWi', 'I am a 3rd year computer science student in UBC.', 'user'),
-('janedoe', 'Jane', 'Doe', 'jane@gmail.com', '$2y$10$o4Vg./VSTfktdQrSXC9AeOpigfRsPAp3AmjKhd8HPerUJmpcvOKWi', 'I am a 2nd year computer science student in UBC.', 'user'),
-('johndoe', 'John', 'Doe', 'johndoe@gmail.com', '$2y$10$o4Vg./VSTfktdQrSXC9AeOpigfRsPAp3AmjKhd8HPerUJmpcvOKWi', 'I am also a 3rd year computer science student in UBC.', 'user');
+INSERT INTO `users` (`username`, `first_name`, `last_name`, `email`, `password`, `bio`, `role`, `pfp`) VALUES
+('admin', 'Admin', 'User', 'admin@bloggit.com', '$2y$10$74OUtU4vAHIHwM4AqFChsuTUMsm5cNqqCiAVQ7XTazylNILIvkVG6', 'Administrator', 'admin', '../assets/profile-icon.png'),
+('exampleuser123', 'Example', 'User', 'user@example.com', '$2y$10$o4Vg./VSTfktdQrSXC9AeOpigfRsPAp3AmjKhd8HPerUJmpcvOKWi', 'I am a 3rd year computer science student in UBC.', 'user', '../assets/profile-icon.png'),
+('janedoe', 'Jane', 'Doe', 'jane@gmail.com', '$2y$10$o4Vg./VSTfktdQrSXC9AeOpigfRsPAp3AmjKhd8HPerUJmpcvOKWi', 'I am a 2nd year computer science student in UBC.', 'user', '../assets/profile-icon.png'),
+('johndoe', 'John', 'Doe', 'johndoe@gmail.com', '$2y$10$o4Vg./VSTfktdQrSXC9AeOpigfRsPAp3AmjKhd8HPerUJmpcvOKWi', 'I am also a 3rd year computer science student in UBC.', 'user', '../assets/profile-icon.png');
 
 
 -- insert admin 

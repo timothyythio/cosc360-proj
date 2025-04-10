@@ -1,7 +1,5 @@
 <?php
 require_once '../sql/db_connect.php';
-include('header.php'); 
-
 
 //session_start();
 $current_user_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null;
@@ -27,11 +25,13 @@ if ($current_user_id) {
     $adminInfo = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-// if (!$adminInfo) {
-//     //redirect to login page
-//     header("Location: ../login.php");
-//     exit;
-// }
+if (!$adminInfo) {
+    //redirect to login page
+    header('Location: ../pages/login.php');
+    exit;
+}
+
+include('header.php'); 
 ?>
 
 <!DOCTYPE html>
@@ -500,7 +500,6 @@ if ($current_user_id) {
       showTab(activeTab);
     };
   </script>
-  <script src="../scripts/router.js"></script>
-  <script src="../scripts/auth.js" defer></script>
+
 </body>
 </html>
