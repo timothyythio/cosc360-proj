@@ -5,6 +5,9 @@
 session_start();
 require_once '../sql/db_connect.php';
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 //$pageStyles = ["../styles/feed.css"];  Make sure this is correct path
 $pageStyles = [
     "../styles/main.css",
@@ -19,7 +22,7 @@ $stmt = $pdo->prepare("
     t.topic_name,
     (
         SELECT COUNT(*) 
-        FROM likes l 
+        FROM Likes l 
         WHERE l.post_id = p.post_id
     ) AS like_count
 FROM posts p
