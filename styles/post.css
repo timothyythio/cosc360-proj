@@ -131,6 +131,40 @@ body, html {
 #comment-section .comment-divider:first-of-type {
     margin-top: 0; 
 }
+.comment {
+    margin-bottom: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.comment-header a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+}
+
+.comment-header a:hover {
+    opacity: 0.8;
+}
+
+.comment-header span {
+    margin-left: 10px;
+    font-weight: 500;
+}
+
+.comment-text {
+    padding-left: 50px; /* This aligns with the profile picture */
+    white-space: pre-line;
+    color: #333;
+    line-height: 1.4;
+}
 
 #backbutton {
     position: absolute; 
