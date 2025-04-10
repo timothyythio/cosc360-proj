@@ -1,8 +1,8 @@
 <?php
 $host = 'localhost';
-$db   = 'bloggit_db';
-$user = 'webuser';
-$pass = 'P@ssw0rd';
+$db   = 'timnthio';
+$user = 'timnthio';
+$pass = 'timnthio';
 $charset = 'utf8mb4';
 
 // Check if user is on the COSC360 server
