@@ -1,0 +1,48 @@
+.create-topic-btn {
+    display: inline-block;
+    background-color: #4A6EF2;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-left: 125px;
+    align-self: center;
+    transition: background-color 0.3s ease;
+}
+
+.create-topic-btn:hover {
+    background-color: #3a5ad9;
+}
+
+#create-container h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+#topicForm input[type="text"],
+#topicForm textarea {
+    width: 100%;
+    padding: 12px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    margin-top: 10px;
+    font-family: inherit;
+}
+
+#topicForm textarea {
+    height: 150px;
+    resize: none;
+}
+
+#topicForm .button-cont button {
+    background-color: #4A6EF2;
+    color: white;
+    padding: 12px 30px;
+    transition: background-color 0.3s ease;
+}
+
+#topicForm .button-cont button:hover {
+    background-color: #3a5ad9;
+}

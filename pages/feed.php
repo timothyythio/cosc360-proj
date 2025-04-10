@@ -14,7 +14,6 @@ $pageStyles = [
     "../styles/feed.css"
 ];
 
-
 // grab posts from db
 $stmt = $pdo->prepare("
     SELECT 
