@@ -14,13 +14,22 @@ $pageStyles = [
 
 // grab posts from db
 $stmt = $pdo->prepare("
-    SELECT p.*, t.topic_name 
-    FROM posts p
-    LEFT JOIN topics t ON p.topic_id = t.topic_id
-    WHERE p.status = 'posted'
-    ORDER BY p.created_at DESC
+    SELECT 
+    p.*,
+    t.topic_name,
+    (
+        SELECT COUNT(*) 
+        FROM likes l 
+        WHERE l.post_id = p.post_id
+    ) AS like_count
+FROM posts p
+LEFT JOIN topics t ON p.topic_id = t.topic_id
+WHERE p.status = 'posted'
+ORDER BY p.created_at DESC
 ");
+
 $stmt->execute();
+
 $posts = $stmt->fetchAll();
 
 include('header.php');
@@ -30,6 +39,19 @@ include('header.php');
     // send post data to JS
     const postsData = <?php echo json_encode($posts); ?>;
 </script>
+<?php
+$likedPostIds = [];
+if (isset($_SESSION['user_id'])) {
+    $stmt = $pdo->prepare("SELECT post_id FROM likes WHERE user_id = ?");
+    $stmt->execute([$_SESSION['user_id']]);
+    $likedPostIds = $stmt->fetchAll(PDO::FETCH_COLUMN);
+}
+?>
+
+<script>
+    const likedPostIds = <?php echo json_encode($likedPostIds); ?>;
+</script>
+
 
 <head>
     <meta charset="UTF-8">

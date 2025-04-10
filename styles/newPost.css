@@ -6,6 +6,10 @@
     margin: 0 auto;
 }
 
+#content {
+    display: flex;
+}
+
 #create-container {
     width: 500px;
     display: flex;

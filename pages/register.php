@@ -176,7 +176,7 @@ function test_input($data) {
                 <button type="submit" class="btn submit-btn">Register</button>
             </form>
 
-            <p class="login-link">Already have an account? <a href="login.html">Login here</a></p>
+            <p class="login-link">Already have an account? <a href="login.php">Login here</a></p>
         </div>
     </div>
     <script src="../scripts/router.js" defer></script>
