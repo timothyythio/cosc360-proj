@@ -90,9 +90,9 @@ include('header.php');
                                     posts.created_at, 
                                     posts.likes, 
                                     users.username,
-                                    (SELECT COUNT(*) FROM likes WHERE likes.post_id = posts.post_id) AS like_count
-                                FROM posts
-                                JOIN users ON posts.user_id = users.user_id
+                                    (SELECT COUNT(*) FROM Likes WHERE likes.post_id = posts.post_id) AS like_count
+                                FROM Posts
+                                JOIN Users ON posts.user_id = users.user_id
                                 WHERE posts.user_id = :user_id
                                 ORDER BY posts.created_at DESC
                             ");
@@ -134,8 +134,8 @@ include('header.php');
                         try {
                             $stmt = $pdo->prepare("
                                 SELECT p.title, p.created_at 
-                                FROM likes l
-                                JOIN posts p ON l.post_id = p.post_id
+                                FROM Likes l
+                                JOIN Posts p ON l.post_id = p.post_id
                                 WHERE l.user_id = :user_id
                                 ORDER BY l.liked_at DESC
                             ");
@@ -163,8 +163,8 @@ include('header.php');
                         try {
                             $stmt = $pdo->prepare("
                                 SELECT p.title, p.created_at 
-                                FROM saved s
-                                JOIN posts p ON s.post_id = p.post_id
+                                FROM Saved s
+                                JOIN Posts p ON s.post_id = p.post_id
                                 WHERE s.user_id = :user_id
                                 ORDER BY s.saved_at DESC
                             ");
@@ -193,8 +193,8 @@ include('header.php');
                         try {
                             $stmt = $pdo->prepare("
                                 SELECT c.content, c.created_at, p.title 
-                                FROM comments c
-                                LEFT JOIN posts p ON c.post_id = p.post_id
+                                FROM Comments c
+                                LEFT JOIN Posts p ON c.post_id = p.post_id
                                 WHERE c.user_id = :user_id
                                 ORDER BY c.created_at DESC
                             ");
