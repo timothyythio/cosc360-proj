@@ -1,4 +1,12 @@
+body {
+    background-color: #F5F5F5;
+}
+
+#app, #content {
+    background-color: #F5F5F5;
+}
 /* Main Containers */
+
 .search-container {
     max-width: 1000px !important;
     margin: 0 auto !important;

@@ -70,10 +70,7 @@ if (isset($_SESSION['user_id'])) {
         </main>
         <div id="footer"></div>
     </div>
-
-    <script src="../scripts/router.js?v=<?php echo time(); ?>" defer></script>
     <script src="../scripts/feed.js?v=<?php echo time(); ?>"></script>
-    <script src="../scripts/auth.js?v=<?php echo time(); ?>" defer></script>
 </body>
 
 </html>

@@ -59,11 +59,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     mkdir($uploadDir, 0755, true);
                 }
 
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $fullPath)) {
+                $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                $detectedType = mime_content_type($_FILES['image']['tmp_name']);
+
+                if (!in_array($detectedType, $allowedTypes)) {
+                    $error = "Invalid image type. Only JPG, JPEG, PNG, or GIF allowed.";
+                } elseif (move_uploaded_file($_FILES['image']['tmp_name'], $fullPath)) {
                     $imagePath = $fullPath;
                 } else {
                     $error = "Image upload failed.";
                 }
+
             } else if (!empty($_POST['existing_image_path'])) {
                 $imagePath = $_POST['existing_image_path'];
             }
@@ -189,9 +195,9 @@ include('header.php');
         <div id="footer"></div>
     </div>
 
-    <script src="../scripts/router.js"></script>
+
     <script src="../scripts/new-post.js"></script>
-    <script src="../scripts/auth.js" defer></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             checkUserLogin();

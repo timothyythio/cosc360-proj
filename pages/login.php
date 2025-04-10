@@ -41,6 +41,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 }
+
+include("header.php");
+
 ?>
 
 <!DOCTYPE html>
@@ -84,7 +87,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </div>
 
 <div id="footer">© 2025 COSC360 Blogging Platform</div>
-<script src="../scripts/router.js" defer></script>
-<script src="../scripts/auth.js" defer></script>
+
 </body>
 </html>
