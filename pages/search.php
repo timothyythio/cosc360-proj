@@ -152,6 +152,7 @@ include("header.php");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= empty($searchQuery) ? 'Search Posts' : "Search Results for \"$searchQuery\"" ?> - Bloggit</title>
     <link rel="stylesheet" href="../styles/search.css">
+    <link rel="stylesheet" href="../styles/main.css">
 </head>
 <body>
     <div class="search-container">

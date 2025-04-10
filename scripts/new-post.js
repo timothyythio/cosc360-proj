@@ -93,7 +93,21 @@ const uploadIcon = document.getElementById('upload-icon');
 if (imageInput && previewImage && uploadIcon) {
     imageInput.addEventListener('change', function (event) {
         const file = event.target.files[0];
+        const allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+        const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+
         if (file) {
+            const fileType = file.type.toLowerCase();
+            const fileExt = file.name.split('.').pop().toLowerCase();
+
+            if (!allowedMimeTypes.includes(fileType) || !allowedExtensions.includes(fileExt)) {
+                alert(`"${fileExt}" images are not accepted. Only JPG, JPEG, PNG, or GIF are allowed.`);
+                imageInput.value = '';
+                previewImage.style.display = 'none';
+                uploadIcon.style.display = 'block';
+                return;
+            }
+
             const reader = new FileReader();
             reader.onload = function (e) {
                 previewImage.src = e.target.result;
