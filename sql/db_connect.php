@@ -5,6 +5,13 @@ $user = 'webuser';
 $pass = 'P@ssw0rd';
 $charset = 'utf8mb4';
 
+// Check if user is on the COSC360 server
+if (strpos($_SERVER['HTTP_HOST'], 'cosc360.ok.ubc.ca') !== false) {
+    $user = 'timnthio';
+    $pass = 'timnthio';
+    $db = 'timnthio';
+}
+
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
