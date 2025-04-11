@@ -24,7 +24,7 @@ $bio = "";
 $pfp = "../assets/profile-icon.png"; 
 
 try {
-    $stmt = $pdo->prepare("SELECT username, bio, pfp FROM users WHERE user_id = :user_id");
+    $stmt = $pdo->prepare("SELECT username, bio, pfp FROM Users WHERE user_id = :user_id");
     $stmt->execute(['user_id' => $user_id]);
     $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
