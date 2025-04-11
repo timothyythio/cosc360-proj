@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 // Fetch Current User Info
-$stmt = $pdo->prepare("SELECT username, email, bio FROM users WHERE user_id = :user_id");
+$stmt = $pdo->prepare("SELECT username, email, bio FROM Users WHERE user_id = :user_id");
 $stmt->execute(['user_id' => $user_id]);
 $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 ?>
