@@ -1,12 +1,15 @@
 <?php
 require_once '../sql/db_connect.php';
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Hardcoded admin user_id for demo purposes — replace with session logic in production
 $adminUserId = 1;
 
 // Fetch user and admin details
 $stmt = $pdo->prepare("SELECT u.username, u.first_name, u.last_name, u.email, u.password, a.admin_id, a.country, a.city
-                        FROM users u
+                        FROM Users u
                         JOIN admin a ON u.user_id = a.user_id
                         WHERE u.user_id = ?");
 $stmt->execute([$adminUserId]);

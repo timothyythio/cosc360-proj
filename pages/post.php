@@ -13,7 +13,7 @@ $commentError = '';
 
 $isSaved = false;
 if (isset($_SESSION['user_id'])) {
-    $checkSaved = $pdo->prepare("SELECT 1 FROM saved WHERE user_id = ? AND post_id = ?");
+    $checkSaved = $pdo->prepare("SELECT 1 FROM Saved WHERE user_id = ? AND post_id = ?");
     $checkSaved->execute([$_SESSION['user_id'], $postId]);
     $isSaved = $checkSaved->fetchColumn() ? true : false;
 }
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['comment'])) {
             $commentError = "Comment cannot be empty.";
         } else {
             try {
-                $stmt = $pdo->prepare("INSERT INTO comments (post_id, user_id, content, created_at) VALUES (?, ?, ?, NOW())");
+                $stmt = $pdo->prepare("INSERT INTO Comments (post_id, user_id, content, created_at) VALUES (?, ?, ?, NOW())");
                 $stmt->execute([$postId, $_SESSION['user_id'], $content]);
                 header("Location: post.php?id=" . $postId);
                 exit;
@@ -44,8 +44,8 @@ $stmt = $pdo->prepare("
            COUNT(l.like_id) AS like_count,
            SUM(CASE WHEN l.user_id = :user_id THEN 1 ELSE 0 END) AS user_liked
     FROM posts p
-    JOIN users u ON p.user_id = u.user_id
-    LEFT JOIN likes l ON p.post_id = l.post_id
+    JOIN Users u ON p.user_id = u.user_id
+    LEFT JOIN Likes l ON p.post_id = l.post_id
     WHERE p.post_id = :post_id
     GROUP BY p.post_id
 ");
@@ -64,8 +64,8 @@ if (!$post) {
 
 $commentStmt = $pdo->prepare("
     SELECT c.comment_id, c.content, c.created_at, u.username, u.pfp, u.user_id
-    FROM comments c 
-    LEFT JOIN users u ON c.user_id = u.user_id 
+    FROM Comments c 
+    LEFT JOIN Users u ON c.user_id = u.user_id 
     WHERE c.post_id = :post_id 
     ORDER BY c.created_at ASC
 ");

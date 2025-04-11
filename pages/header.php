@@ -3,6 +3,10 @@
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once '../sql/db_connect.php';
 $pageTitle = $pageTitle ?? 'Bloggit';
 $pfpPath = '../assets/default-profile.png';
@@ -10,7 +14,7 @@ $pfpPath = '../assets/default-profile.png';
 if (isset($_SESSION['user_id'])) {
     $userId = $_SESSION['user_id'];
 
-    $stmt = $pdo->prepare("SELECT pfp FROM users WHERE user_id = ?");
+    $stmt = $pdo->prepare("SELECT pfp FROM Users WHERE user_id = ?");
     $stmt->execute([$userId]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 

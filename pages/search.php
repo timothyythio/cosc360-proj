@@ -21,7 +21,7 @@ $showAdvanced = isset($_GET['advanced']) ||
 // Get all topics for filter dropdown
 $topics = [];
 try {
-    $topicStmt = $pdo->query("SELECT topic_id, topic_name FROM Topics ORDER BY topic_name");
+    $topicStmt = $pdo->query("SELECT topic_id, topic_name FROM topics ORDER BY topic_name");
     $topics = $topicStmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log("Error fetching topics: " . $e->getMessage());
@@ -44,7 +44,7 @@ if (!empty($searchQuery) || $author || $topic || $dateFrom || $dateTo || $hasIma
                 (SELECT COUNT(*) FROM Likes WHERE post_id = p.post_id) AS like_count
             FROM Posts p 
             LEFT JOIN Users u ON p.username = u.username
-            LEFT JOIN topics t ON p.topic_id = t.topic_id
+            LEFT JOIN Topics t ON p.topic_id = t.topic_id
             WHERE p.status = 'posted'";
         
         $params = [];

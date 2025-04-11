@@ -1,5 +1,8 @@
 <?php
 session_start();
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 require_once '../sql/db_connect.php';
 
 $username = $password = "";
@@ -20,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (empty($usernameError) && empty($passwordError)) {
         try {
-            $stmt = $pdo->prepare("SELECT * FROM users WHERE username = :username");
+            $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = :username");
             $stmt->execute([':username' => $username]);
             $user = $stmt->fetch();
 

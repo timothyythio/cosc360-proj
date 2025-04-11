@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 require_once '../sql/db_connect.php';
 
 
@@ -22,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $usernameError = "Username needs to be 3 characters or longer";
         } else {
             try {
-                $stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
+                $stmt = $pdo->prepare("SELECT COUNT(*) FROM Users WHERE username = :username");
                 $stmt->execute([':username' => $username]);
                 $count = $stmt->fetchColumn();
                 if ($count > 0) {
@@ -87,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
             $stmt = $pdo->prepare(
-                "INSERT INTO users (username, first_name, last_name, email, password, bio, pfp, role) 
+                "INSERT INTO Users (username, first_name, last_name, email, password, bio, pfp, role) 
                  VALUES (:username, :first_name, :last_name, :email, :password, :bio, :pfp, :role)"
             );            
             $stmt->execute([
