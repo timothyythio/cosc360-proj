@@ -100,6 +100,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $safeName = uniqid('pfp_', true) . '.' . $fileExt;
                 $uploadPath = $uploadDir . $safeName;
 
+                if (!is_uploaded_file($fileTmp)) {
+                    echo "Not a valid uploaded file: $fileTmp<br>";
+                    print_r($_FILES['profile-pic']);
+                    die();
+                }
+
                 if (move_uploaded_file($fileTmp, $uploadPath)) {
                     echo "Checkpoint 2: File moved to $uploadPath<br>";
                     flush();
