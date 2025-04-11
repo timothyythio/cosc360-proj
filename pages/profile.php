@@ -90,7 +90,7 @@ include('header.php');
                                     Posts.created_at, 
                                     Posts.likes, 
                                     Users.username,
-                                    (SELECT COUNT(*) FROM Likes WHERE likes.post_id = Posts.post_id) AS like_count
+                                    (SELECT COUNT(*) FROM Likes WHERE Likes.post_id = Posts.post_id) AS like_count
                                 FROM Posts
                                 JOIN Users ON Posts.user_id = Users.user_id
                                 WHERE Posts.user_id = :user_id
