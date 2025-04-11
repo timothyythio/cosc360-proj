@@ -1,52 +1,29 @@
-document.getElementById("loginForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-    validateLoginForm();
-});
-
-function validateLoginForm() {
-    const username = document.getElementById("username");
-    const password = document.getElementById("password");
-
-    const usernameError = document.getElementById("usernameError");
-    const passwordError = document.getElementById("passwordError");
-
-    
-    [username, password].forEach(input => input.classList.remove("invalid", "valid"));
-    [usernameError, passwordError].forEach(error => error.textContent = "");
-
-    let isValid = true;
-
-    //username needs to be > 3
-    if (username.value.trim().length < 3) {
-        username.classList.add("invalid");
-        usernameError.textContent = "Username must be at least 3 wewe long.";
-        isValid = false;
-    } else {
-        username.classList.add("valid");
-    }
-
-    //password cannot be empty
-    if (password.value.trim() === "") {
-        password.classList.add("invalid");
-        passwordError.textContent = "Password cannot be empty.";
-        isValid = false;
-    } else {
-        password.classList.add("valid");
-    }
-
-    //goes to feed if valid
-    if (isValid) {
-        usernameValue = username.value.trim();
-        document.getElementById("loginForm").reset();
-        [username, password].forEach(input => input.classList.remove("valid"));
-
-        if (usernameValue === "admin") {
-            alert("Admin login successful! Redirecting to the admin page...");
-            loginAdmin(usernameValue);
-        } else {
-            alert("Login successful! Redirecting to the feed page...");
-            loginUser(usernameValue);
-        }
-        
-    }
-}
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("form");
+    const errorContainer = document.createElement("div");
+    errorContainer.style.color = "red";
+    form.prepend(errorContainer);
+  
+    form.addEventListener("submit", (event) => {
+      errorContainer.innerHTML = ""; // Clear previous errors
+  
+      const username = form.username.value.trim();
+      const password = form.password.value;
+  
+      const errors = [];
+  
+      if (username.length < 3 || !/^[a-zA-Z0-9]+$/.test(username)) {
+        errors.push("Username must be at least 3 characters and contain only letters and numbers.");
+      }
+  
+      if (password.length === 0) {
+        errors.push("Please enter your password.");
+      }
+  
+      if (errors.length > 0) {
+        event.preventDefault();
+        errorContainer.innerHTML = errors.map(e => `<p>${e}</p>`).join("");
+      }
+    });
+  });
+  
