@@ -2,6 +2,10 @@
 session_start();
 require_once '../sql/db_connect.php';
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // Initialize search parameters
 $searchQuery = trim($_GET['q'] ?? '');
 $author = trim($_GET['author'] ?? '');
@@ -11,6 +15,7 @@ $dateTo = $_GET['to'] ?? '';
 $hasImage = isset($_GET['has_image']) ? true : false;
 $hasLikes = isset($_GET['min_likes']) ? (int)$_GET['min_likes'] : 0;
 $sortBy = $_GET['sort'] ?? 'recent';
+
 
 $results = [];
 $resultCount = 0;
@@ -49,7 +54,6 @@ if (!empty($searchQuery) || $author || $topic || $dateFrom || $dateTo || $hasIma
         
         $params = [];
         
-        // Add search conditions
         if (!empty($searchQuery)) {
             $sql .= " AND (LOWER(p.title) LIKE LOWER(?) OR LOWER(p.content) LIKE LOWER(?))";
             $searchPattern = '%' . $searchQuery . '%';
@@ -101,22 +105,24 @@ if (!empty($searchQuery) || $author || $topic || $dateFrom || $dateTo || $hasIma
     } catch (PDOException $e) {
         $error = "We encountered an issue with your search.";
         error_log("Search error: " . $e->getMessage());
-    }
-} else {
-    // Default content when no search term is provided
+    }    
+}
+
+try {
     $stmt = $pdo->prepare(" SELECT 
-                            Posts.*, 
-                            Users.username,
-                            Users.pfp,
-                            (SELECT COUNT(*) FROM Likes WHERE likes.post_id = Posts.post_id) AS like_count
-                        FROM Posts
-                        JOIN Users ON Posts.user_id = Users.user_id
-                        WHERE Posts.status = 'posted' AND Posts.created_at >= NOW() - INTERVAL 7 DAY
-                        ORDER BY like_count DESC
-                        LIMIT 3
-                       ");
+                        Posts.*, 
+                        Users.username,
+                        Users.pfp,
+                        (SELECT COUNT(*) FROM Likes WHERE Likes.post_id = Posts.post_id) AS like_count
+                    FROM Posts
+                    JOIN Users ON Posts.user_id = Users.user_id
+                    WHERE Posts.status = 'posted' AND Posts.created_at >= NOW() - INTERVAL 7 DAY
+                    ORDER BY like_count DESC
+                    LIMIT 3
+                   ");
     $stmt->execute();
-    $topicStmt = $pdo->prepare(" SELECT Topics.topic_name, COUNT(*) AS post_count
+    $topicStmt = $pdo->prepare(" SELECT Topics.topic_name, Topics.topic_id,
+                    COUNT(*) AS post_count
                     FROM Posts
                     JOIN Topics ON Posts.topic_id = Topics.topic_id
                     WHERE Posts.created_at >= NOW() - INTERVAL 7 DAY
@@ -127,6 +133,10 @@ if (!empty($searchQuery) || $author || $topic || $dateFrom || $dateTo || $hasIma
     $hotTopics = $topicStmt->fetchAll();
     $hotPosts = $stmt->fetchAll();
     $showHotPosts = true;
+} catch (PDOException $e) {
+    $hotPosts = [];
+    $hotTopics = [];
+    error_log("Failed to fetch hot posts: " . $e->getMessage());
 }
 
 // Helper functions
@@ -265,7 +275,7 @@ include("header.php");
             </div>
         <?php endif; ?>
         <div class="hot-section-container">
-            <?php if (empty($results)) : ?>
+            <?php if (!isset($_GET['q']) || trim($_GET['q']) === '') : ?>
                 <div class="hot-posts-column">
                 <h3>🔥 Hot Posts This Week</h3>
                     <?php foreach ($hotPosts as $post): ?>
@@ -303,7 +313,7 @@ include("header.php");
                         <ul class="hot-topics-list">
                             <?php foreach ($hotTopics as $topics): ?>
                             <li>
-                                <a href="topic.php?topic=<?= urlencode($topics['topic_name']) ?>">
+                                <a href="topic.php?id=<?= htmlspecialchars($topics['topic_id']) ?>">
                                 <?= htmlspecialchars($topics['topic_name']) ?>
                                 </a>
                                 (<?= $topics['post_count'] ?> post<?= $topics['post_count'] > 1 ? 's' : '' ?>)

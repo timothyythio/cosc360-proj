@@ -1,7 +1,10 @@
 <?php
 session_start();
 require_once '../sql/db_connect.php';
-include("header.php");
+
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 if (!isset($_GET['id'])) {
     echo "Post not found.";
@@ -71,6 +74,8 @@ $commentStmt = $pdo->prepare("
 ");
 $commentStmt->execute(['post_id' => $postId]);
 $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
+
+include("header.php");
 ?>
 
 <!DOCTYPE html>
