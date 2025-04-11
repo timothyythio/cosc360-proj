@@ -359,7 +359,6 @@ include('header.php');
             <tr>
               <th>Username</th>
               <th>Role</th>
-              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -376,12 +375,6 @@ include('header.php');
             <tr>
               <td><?= htmlspecialchars($user['username']) ?></td>
               <td><span class="user-role <?= $roleClass ?>"><?= htmlspecialchars($user['role']) ?></span></td>
-              <td>
-                <div class="user-actions">
-                  <button class="action-btn edit-btn">Edit</button>
-                  <button class="action-btn delete-btn">Delete</button>
-                </div>
-              </td>
             </tr>
             <?php endforeach; ?>
           </tbody>
