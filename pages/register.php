@@ -85,7 +85,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
             //actually inserting pfp into db
-            $pfpPath = 'profile-icon.png';
+            $pfpPath = '../assets/profile-icon.png';
             if (isset($_FILES['profile-pic']) && $_FILES['profile-pic']['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = '../uploads/';
                 if (!is_dir($uploadDir)) {
