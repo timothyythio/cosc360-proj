@@ -10,7 +10,7 @@ $adminUserId = 1;
 // Fetch user and admin details
 $stmt = $pdo->prepare("SELECT u.username, u.first_name, u.last_name, u.email, u.password, a.admin_id, a.country, a.city
                         FROM Users u
-                        JOIN admin a ON u.user_id = a.user_id
+                        JOIN Admin a ON u.user_id = a.user_id
                         WHERE u.user_id = ?");
 $stmt->execute([$adminUserId]);
 $adminData = $stmt->fetch();
@@ -29,11 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         // Update users table
-        $updateUser = $pdo->prepare("UPDATE users SET first_name = ?, email = ?, password = ? WHERE user_id = ?");
+        $updateUser = $pdo->prepare("UPDATE Users SET first_name = ?, email = ?, password = ? WHERE user_id = ?");
         $updateUser->execute([$firstName, $email, $hashedPassword, $adminUserId]);
 
         // Update admin table
-        $updateAdmin = $pdo->prepare("UPDATE admin SET country = ?, city = ? WHERE user_id = ?");
+        $updateAdmin = $pdo->prepare("UPDATE Admin SET country = ?, city = ? WHERE user_id = ?");
         $updateAdmin->execute([$country, $city, $adminUserId]);
 
         $success = "Profile updated successfully.";

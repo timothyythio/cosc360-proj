@@ -21,7 +21,7 @@ $showAdvanced = isset($_GET['advanced']) ||
 // Get all topics for filter dropdown
 $topics = [];
 try {
-    $topicStmt = $pdo->query("SELECT topic_id, topic_name FROM Topics ORDER BY topic_name");
+    $topicStmt = $pdo->query("SELECT topic_id, topic_name FROM topics ORDER BY topic_name");
     $topics = $topicStmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log("Error fetching topics: " . $e->getMessage());
@@ -105,22 +105,22 @@ if (!empty($searchQuery) || $author || $topic || $dateFrom || $dateTo || $hasIma
 } else {
     // Default content when no search term is provided
     $stmt = $pdo->prepare(" SELECT 
-                            posts.*, 
-                            users.username,
-                            users.pfp,
-                            (SELECT COUNT(*) FROM Likes WHERE likes.post_id = posts.post_id) AS like_count
+                            Posts.*, 
+                            Users.username,
+                            Users.pfp,
+                            (SELECT COUNT(*) FROM Likes WHERE likes.post_id = Posts.post_id) AS like_count
                         FROM Posts
-                        JOIN Users ON posts.user_id = users.user_id
-                        WHERE posts.status = 'posted' AND posts.created_at >= NOW() - INTERVAL 7 DAY
+                        JOIN Users ON Posts.user_id = Users.user_id
+                        WHERE Posts.status = 'posted' AND Posts.created_at >= NOW() - INTERVAL 7 DAY
                         ORDER BY like_count DESC
                         LIMIT 3
                        ");
     $stmt->execute();
-    $topicStmt = $pdo->prepare(" SELECT topics.topic_name, COUNT(*) AS post_count
+    $topicStmt = $pdo->prepare(" SELECT Topics.topic_name, COUNT(*) AS post_count
                     FROM Posts
-                    JOIN Topics ON posts.topic_id = topics.topic_id
-                    WHERE posts.created_at >= NOW() - INTERVAL 7 DAY
-                    GROUP BY topics.topic_name
+                    JOIN Topics ON Posts.topic_id = Topics.topic_id
+                    WHERE Posts.created_at >= NOW() - INTERVAL 7 DAY
+                    GROUP BY Topics.topic_name
                     ORDER BY post_count DESC
                     LIMIT 5");
     $topicStmt->execute();
