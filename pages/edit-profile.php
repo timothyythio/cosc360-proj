@@ -11,11 +11,11 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     exit;
 }
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+
 
 $user_id = $_SESSION['user_id'];
 $successMessage = $errorMessage = "";
+$errors = [];
 
 // Handle Form Submission
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -26,6 +26,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $confirmPassword = $_POST['confirm_password'];
 
     try {
+        // Username validation
+        if (strlen($username) < 3 || !preg_match('/^[a-zA-Z0-9]+$/', $username)) {
+            $errors[] = "Username must be at least 3 characters and contain only letters and numbers.";
+        }
+
+        // Email validation
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = "Please enter a valid email address.";
+        }
         // Validate password match
         if (!empty($newPassword) && $newPassword !== $confirmPassword) {
             throw new Exception("Passwords do not match.");

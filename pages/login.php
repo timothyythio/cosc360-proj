@@ -91,5 +91,8 @@ include("header.php");
 
 <div id="footer">© 2025 COSC360 Blogging Platform</div>
 
+<script src="../scripts/login.js" defer></script>
+
+
 </body>
 </html>
