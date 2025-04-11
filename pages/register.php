@@ -134,7 +134,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['username'] = $username;
         $_SESSION['logged_in'] = true;
         $_SESSION['user_pfp'] = $pfpPath;
-        header("Location: feed.php");
+        header('Location: feed.php');
             exit;
     }
 }
