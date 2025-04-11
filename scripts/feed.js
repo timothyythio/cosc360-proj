@@ -12,11 +12,25 @@ function formatDate(dateString) {
 function createReadMoreBtn(postCard, bodyText) {
     let readMoreBtn = postCard.querySelector(".read-more-btn");
     let postText = postCard.querySelector(".post-text");
+    
+    if (!readMoreBtn || !postText) return;
+
+    const charLimit = 500;
     let isExpanded = false;
+
+    // check if text is long enough to need a read more
+    if (bodyText.length <= charLimit) {
+        // remove the read more button if text is short
+        readMoreBtn.remove();
+        return;
+    }
+
+    postText.innerText = bodyText.substring(0, charLimit) + "...";
+    readMoreBtn.innerText = "Read More";
 
     readMoreBtn.addEventListener("click", () => {
         if (isExpanded) {
-            postText.innerText = bodyText.substring(0, 500) + "...";
+            postText.innerText = bodyText.substring(0, charLimit) + "...";
             readMoreBtn.innerText = "Read More";
             isExpanded = false;
         } else {
