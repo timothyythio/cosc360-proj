@@ -58,6 +58,20 @@ CREATE TABLE `Topics` (
     UNIQUE KEY `topic_name` (`topic_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE `Topic_Followers` (
+    `follow_id` INT NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `topic_id` INT NOT NULL,
+    `followed_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`follow_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `Users`(`user_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`topic_id`) REFERENCES `Topics`(`topic_id`) ON DELETE CASCADE,
+    UNIQUE KEY `user_topic_unique` (`user_id`, `topic_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- update topics table for member count
+ALTER TABLE `Topics` ADD COLUMN `members_count_updated` TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
 -- Create posts table
 CREATE TABLE `Posts` (
     `post_id` INT NOT NULL AUTO_INCREMENT,
@@ -115,9 +129,6 @@ CREATE TABLE `Likes` (
     UNIQUE KEY `user_post_unique_like` (`user_id`, `post_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
-
-
 CREATE TABLE `Comments` (
     `comment_id` INT NOT NULL AUTO_INCREMENT,
     `content` TEXT NOT NULL,
@@ -139,7 +150,6 @@ INSERT INTO `Users` (`username`, `first_name`, `last_name`, `email`, `password`,
 ('janedoe', 'Jane', 'Doe', 'jane@gmail.com', '$2y$10$o4Vg./VSTfktdQrSXC9AeOpigfRsPAp3AmjKhd8HPerUJmpcvOKWi', 'I am a 2nd year computer science student in UBC.', 'user', '../assets/profile-icon.png'),
 ('johndoe', 'John', 'Doe', 'johndoe@gmail.com', '$2y$10$o4Vg./VSTfktdQrSXC9AeOpigfRsPAp3AmjKhd8HPerUJmpcvOKWi', 'I am also a 3rd year computer science student in UBC.', 'user', '../assets/profile-icon.png');
 
-
 -- insert admin 
 INSERT INTO `Admin` (`user_id`, `country`, `city`)
 VALUES (
@@ -147,8 +157,9 @@ VALUES (
     'United States',
     'New York'
 );
+
 -- Insert sample topics
-INSERT INTO `Topics` (`topic_id`, `topic_name`) VALUES
+INSERT INTO `topics` (`topic_id`, `topic_name`) VALUES
 (1, 'Programming'),
 (2, 'Boba'),
 (3, 'Gaming'),
@@ -156,6 +167,28 @@ INSERT INTO `Topics` (`topic_id`, `topic_name`) VALUES
 (5, 'Cats'),
 (6, 'Drawing'),
 (7, 'Spoons');
+
+UPDATE `Topics` 
+SET 
+    `description` = CASE 
+        WHEN `topic_id` = 1 THEN 'Share programming tips, resources, and questions'
+        WHEN `topic_id` = 2 THEN 'Discuss bubble tea flavors, shops, and recipes'
+        WHEN `topic_id` = 3 THEN 'All about video games, from casual to competitive'
+        WHEN `topic_id` = 4 THEN 'Share your favorite songs, artists, and genres'
+        WHEN `topic_id` = 5 THEN 'For cat lovers and cat memes'
+        WHEN `topic_id` = 6 THEN 'Share your artwork and drawing tips'
+        WHEN `topic_id` = 7 THEN 'All things spoon-related'
+    END,
+    `topic_img` = CASE 
+        WHEN `topic_id` = 1 THEN 'programming.jpg'
+        WHEN `topic_id` = 2 THEN 'boba.jpg'
+        WHEN `topic_id` = 3 THEN 'gaming.png'
+        WHEN `topic_id` = 4 THEN 'music.jpg'
+        WHEN `topic_id` = 5 THEN 'cat.jpg'
+        WHEN `topic_id` = 6 THEN 'drawing.jpg'
+        WHEN `topic_id` = 7 THEN 'spoon.jpg'
+    END
+WHERE `topic_id` BETWEEN 1 AND 7;
 
 -- Insert sample posts
 
