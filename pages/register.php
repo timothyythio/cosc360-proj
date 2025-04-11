@@ -1,8 +1,9 @@
 <?php
 session_start();
 
-error_reporting(E_ALL);
 ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 require_once '../sql/db_connect.php';
 
@@ -36,16 +37,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     }
-    //VALIDATE EMAIL
     if (empty($_POST["email"])) {
         $emailError = "Email is required!";
     } else {
-        //sanitize input
+        // Sanitize input
         $email = test_input($_POST["email"]);
-
-        //validate email format
+    
+        // Validate email format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $emailError = "Invalid email format";
+        } else {
+            // Check if email already exists in the database
+            try {
+                $stmt = $pdo->prepare("SELECT COUNT(*) FROM Users WHERE email = :email");
+                $stmt->execute([':email' => $email]);
+                $count = $stmt->fetchColumn();
+                if ($count > 0) {
+                    $emailError = "This email is already registered!";
+                }
+            } catch (PDOException $e) {
+                die("Error: " . $e->getMessage());
+            }
         }
     }
     //VALIDATE PASSWORD
@@ -71,9 +83,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($usernameError) && empty($emailError) && empty($passwordError) && empty($confirmPasswordError)) {
         try {
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+            echo "Checkpoint 1: Starting insert process.<br>";
+            flush();
             
             //actually inserting pfp into db
-            $pfpPath = 'default-profile.png';
+            $pfpPath = 'profile-icon.png';
             if (isset($_FILES['profile-pic']) && $_FILES['profile-pic']['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = '../uploads/';
                 if (!is_dir($uploadDir)) {
@@ -86,7 +101,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $uploadPath = $uploadDir . $safeName;
 
                 if (move_uploaded_file($fileTmp, $uploadPath)) {
+                    echo "Checkpoint 2: File moved to $uploadPath<br>";
+                    flush();
                     $pfpPath = $uploadPath;
+                } else {
+                    echo "Error moving file to $uploadPath<br>";
+                    print_r(error_get_last());
+                    die();
                 }
             }
             $stmt = $pdo->prepare(
@@ -102,7 +123,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 ':bio' => '',
                 ':pfp' => $pfpPath,
                 ':role' => 'user'
-            ]);            
+            ]);
+            echo "Checkpoint 3: DB insert done.<br>";
+            flush();            
 
         } catch(PDOException $e) {
             die("Error: " . $e->getMessage());

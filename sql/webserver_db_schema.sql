@@ -9,6 +9,8 @@ DROP TABLE IF EXISTS `Likes`;
 DROP TABLE IF EXISTS `Saved`;
 DROP TABLE IF EXISTS `Admin`;
 DROP TABLE IF EXISTS `Posts`;
+DROP TABLE IF EXISTS `Topic_Followers`;
+
 DROP TABLE IF EXISTS `Topics`;
 DROP TABLE IF EXISTS `Users`;
 
@@ -54,6 +56,7 @@ CREATE TABLE `Topics` (
     `description` TEXT,
     `members` INT DEFAULT 0,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `topic_img` VARCHAR(255) NOT NULL,
     PRIMARY KEY (`topic_id`),
     UNIQUE KEY `topic_name` (`topic_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
