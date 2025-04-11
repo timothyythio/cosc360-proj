@@ -3,7 +3,7 @@ session_start();
 require_once '../sql/db_connect.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../login.php");
+    header("Location: ../pages/login.php");
     exit;
 }
 $draftTitle = '';
