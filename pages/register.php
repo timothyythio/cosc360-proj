@@ -89,6 +89,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             //actually inserting pfp into db
             $pfpPath = 'profile-icon.png';
+
+            echo "<pre>";
+            print_r($_FILES);
+            echo "</pre>";
             if (isset($_FILES['profile-pic']) && $_FILES['profile-pic']['error'] === UPLOAD_ERR_OK) {
                 $uploadDir = '../uploads/';
                 if (!is_dir($uploadDir)) {
@@ -99,7 +103,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
                 $safeName = uniqid('pfp_', true) . '.' . $fileExt;
                 $uploadPath = $uploadDir . $safeName;
-
+                echo "Checkpoint 1.5: File moved to $uploadPath<br>";
+                flush(); 
+                echo "Checkpoint 1.75: Temp file is $fileTmp<br>";
+                flush(); 
                 if (move_uploaded_file($fileTmp, $uploadPath)) {
                     echo "Checkpoint 2: File moved to $uploadPath<br>";
                     flush();
