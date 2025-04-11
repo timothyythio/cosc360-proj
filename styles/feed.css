@@ -47,10 +47,10 @@
 
 .topicPostPictureContainer {
     position: absolute;
-    top: 25px;
+    top: 65px;
     right: 25px;
-    width: 25%;
-    height: 75%;
+    width: 20%;
+    height: 70%;
     overflow: hidden;
     border-radius: 5px; 
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
