@@ -43,7 +43,7 @@ $stmt = $pdo->prepare("
     SELECT p.*, u.username, u.pfp, u.user_id AS author_id,
            COUNT(l.like_id) AS like_count,
            SUM(CASE WHEN l.user_id = :user_id THEN 1 ELSE 0 END) AS user_liked
-    FROM posts p
+    FROM Posts p
     JOIN Users u ON p.user_id = u.user_id
     LEFT JOIN Likes l ON p.post_id = l.post_id
     WHERE p.post_id = :post_id
