@@ -24,7 +24,6 @@ if (!$user || $user['role'] !== 'admin') {
     exit;
 }
 
-include('header.php'); 
 
 $postnum = $pdo->query("SELECT COUNT(*) FROM Posts")->fetchColumn();
 $usernum = $pdo->query("SELECT COUNT(*) FROM Users")->fetchColumn();
@@ -61,6 +60,9 @@ $stmt = $pdo->prepare("
 ");
 $stmt->execute(['user_id' => $current_user_id]);
 $adminInfo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+include('header.php'); 
+
 
 ?>
 
