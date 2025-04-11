@@ -1,41 +1,30 @@
-# Introduction 
+# Bloggit 
 
-Welcome to Bloggit, a blogging platform that users can use to create posts, interact with other users, and be part of communities that have similar interests.
+## Introduction
+COSC360 Introduction to Web Development Final Project <br/>
+Team: Eddy Tian, Nikola Rowe, Timothy Thio <br/>
+Professor: Dr. Ifeoma Adaji
 
-## List of Responsibilities:
-| TASK  | Assignee |
-| :---- | :---- |
-| Profile Page | Timothy |
-| Edit Profile Page | Timothy |
-| Register/Login Page | Timothy |
-| Admin Page | Nikola |
-| New Post Page | Nikola |
-| Post Example Page | Nikola |
-| Feed Page | Eddy |
-| Topic Page | Eddy |
+Welcome to Bloggit, a blogging platform where users interact with communities through topics, posts, likes, and more. This walkthrough demonstrates the website's core essential user functionality. For the best experience, please log in with an account to get the full flow of post creation, post interaction, and user interaction.
+
+## Website Link:
+https://cosc360.ok.ubc.ca/timnthio/cosc360-proj
+
+## Summary & Walkthrough Documents: 
 
 
-## Walkthrough
-Below is a step-by-step flow of a new user's experience with the website. At the end of the bullet points, there will be the appropriate HTML file that the page refers to. 
-### First Steps
-- The user will be first directed to the feed page, where they can view the hottest posts. Because they are not signed in/registered yet, the posts they view will be very general and not tailored to the user yet (feed.html)
-- The user can register/sign-in at the top right section of the page in the top navigation bar
-### Register / Sign-in
-- If the user chooses to register, they will have to upload a profile picture, a username, their email, and a password. (register.html)
-- Once registered, the user can view posts that are tailored to them on the feed page
-### Feed
-- In the feed page, users can view posts in detail by clicking on the post's picture. (post.html)
-- Users can also view the poster's profile page and follow them by clicking on their username (profile2.html)
-### Creating a Post
-- Users can create posts and their captions by clicking on the "New Post" button on the side bar (newPost.html)
-- On this page, the user will need to upload a picture, and create a caption for the post
-### Profile
-- The user can navigate to the profile page through the button on the sidebar to view posts that they have saved, liked, commented on, and created. (profile.html)
-- If the user wishes to edit their personal information, they can navigate to the edit profile page (edit-profile.html)
-- Here, they can edit their username, email, password, bio, phone number, and profile picture
+## Summary of Testing: 
+- Tested login/register input validation to ensure feedback is present and user knows what fields were invalid
+![image](https://github.com/user-attachments/assets/be630001-7db7-4e59-bfbb-04fb18908d02)
+![image](https://github.com/user-attachments/assets/2f1a0b2b-0083-46ff-9f52-bed46b3c3a57)
 
+- Tested the search page by searching for invalid items, valid items, and empty queries to see if they return the correct posts and if the hot topics & posts are hidden when there are results
 
+- Tested the edit profile page's input validation to ensure no invalid fields can be sent to the database
+![image](https://github.com/user-attachments/assets/569d31b2-4a6b-444b-a878-04fb052e84e4)
 
+- Tested the navbar by logging in as different user groups to see whether the nav links properly reflect the user's role (admin should have admin button, logged-in user should see profile and notifications)
+  ![image](https://github.com/user-attachments/assets/a25408ad-4728-47c2-8166-28ff5b15c3f7)
+  
+- Tested asynchronous updates (likes, comments, saves, notifications) to ensure that they are updated seamlessly between users without having to refresh the page
 
-### Link to project proposal: 
-https://docs.google.com/document/d/1ykmB7nqvC0VPw17DfRBhNaMX2L5UVcHyAZRkSLQckLg/edit?usp=sharing
