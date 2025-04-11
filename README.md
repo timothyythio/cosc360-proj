@@ -10,9 +10,6 @@ Welcome to Bloggit, a blogging platform where users interact with communities th
 ## Website Link:
 https://cosc360.ok.ubc.ca/timnthio/cosc360-proj
 
-## Summary & Walkthrough Documents: 
-
-
 ## Summary of Testing: 
 - Tested login/register input validation to ensure feedback is present and user knows what fields were invalid
 ![image](https://github.com/user-attachments/assets/be630001-7db7-4e59-bfbb-04fb18908d02)
