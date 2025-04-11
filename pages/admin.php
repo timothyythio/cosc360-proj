@@ -31,7 +31,23 @@ $topicnum = $pdo->query("SELECT COUNT(*) FROM Topics")->fetchColumn();
 
 $roles = $pdo->query("SELECT role, COUNT(*) AS count FROM Users GROUP BY role")
               ->fetchAll(PDO::FETCH_KEY_PAIR);
-$userList = $pdo->query("SELECT username, role FROM Users")->fetchAll();
+
+              if (isset($_GET['search']) && !empty($_GET['search'])) {
+                $search = '%'.$_GET['search'].'%';
+                $stmt = $pdo->prepare("SELECT username, role FROM Users 
+                                      WHERE username LIKE :search1 
+                                      OR email LIKE :search2 
+                                      OR CAST(user_id AS CHAR) LIKE :search3");
+                $stmt->execute([
+                    'search1' => $search,
+                    'search2' => $search,
+                    'search3' => $search
+                ]);
+                $userList = $stmt->fetchAll();
+            } else {
+                $userList = $pdo->query("SELECT username, role FROM Users")->fetchAll();
+            }
+// $userList = $pdo->query("SELECT username, role FROM Users")->fetchAll();
 $topicList = $pdo->query("SELECT topic_name FROM Topics")->fetchAll(PDO::FETCH_COLUMN);
 $commentData = $pdo->query("SELECT comment_id, user_id, post_id, created_at FROM Comments ORDER BY created_at DESC LIMIT 10")->fetchAll();
 
@@ -245,6 +261,43 @@ $adminInfo = $stmt->fetch(PDO::FETCH_ASSOC);
       display: block;
       margin-top: 20px;
     }
+
+    .search-form {
+      margin: 20px 0;
+      display: flex;
+      gap: 10px;
+      max-width: 600px;
+    }
+
+    .search-form input {
+      flex: 1;
+      padding: 10px 15px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.95em;
+      transition: all 0.2s;
+    }
+
+    .search-form input:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .search-form button {
+      padding: 10px 20px;
+      background-color: #667eea;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+
+    .search-form button:hover {
+      background-color: #5a67d8;
+    }
   </style>
 </head>
 <body>
@@ -289,6 +342,14 @@ $adminInfo = $stmt->fetch(PDO::FETCH_ASSOC);
         </div>
         
         <h3>User List</h3>
+        <div class="search-form">
+          <form method="GET" action="">
+              <input type="text" name="search" 
+                placeholder="Search by username, email, or user ID"
+                value="<?= isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+              <button type="submit">Search</button>
+          </form>
+        </div>
         <table class="user-table">
           <thead>
             <tr>
