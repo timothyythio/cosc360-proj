@@ -159,7 +159,7 @@ VALUES (
 );
 
 -- Insert sample topics
-INSERT INTO `topics` (`topic_id`, `topic_name`) VALUES
+INSERT INTO `Topics` (`topic_id`, `topic_name`) VALUES
 (1, 'Programming'),
 (2, 'Boba'),
 (3, 'Gaming'),
