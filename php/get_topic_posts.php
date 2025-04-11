@@ -13,9 +13,9 @@ if (!$topic_id) {
 try {
     $stmt = $pdo->prepare("
         SELECT p.*, u.username, COUNT(l.like_id) as like_count
-        FROM posts p
-        LEFT JOIN users u ON p.user_id = u.user_id
-        LEFT JOIN likes l ON p.post_id = l.post_id
+        FROM Posts p
+        LEFT JOIN Users u ON p.user_id = u.user_id
+        LEFT JOIN Likes l ON p.post_id = l.post_id
         WHERE p.topic_id = ? AND p.status = 'posted'
         GROUP BY p.post_id
         ORDER BY p.created_at DESC
