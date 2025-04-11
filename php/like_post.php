@@ -2,6 +2,8 @@
 session_start();
 require_once '../sql/db_connect.php';
 
+header('Content-Type: application/json');
+
 if (!isset($_SESSION['user_id'])) {
     http_response_code(401);
     echo json_encode(['error' => 'Not logged in']);

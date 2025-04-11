@@ -138,8 +138,25 @@
 }
 
 .burgerMenu h2{
-    margin:5px;
+    margin:-3px;
     cursor: pointer;
+}
+
+.burgerMenu .sort-option {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.burgerMenu .sort-option:hover {
+    background-color: rgba(128, 128, 128, 0.1);
+}
+
+.burgerMenu .sort-option.active {
+    font-weight: bold;
+    color: #0066cc;
+    background-color: rgba(0, 102, 204, 0.1);
 }
 
 .postCard {

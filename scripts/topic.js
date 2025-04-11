@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     setupSortBar();
 
-    fetchTopicPosts(topicData.id);
+    // set default sort to popular
+    fetchTopicPosts(topicData.id, 'popular');
 });
 
 function setTopicHeader(topicName, desc, followCount, topicImg) {
@@ -110,25 +111,58 @@ function setupSortBar() {
                 </label>
 
             <nav class="burgerMenu">
-                <h2 id="mostPopSelect">Most Popular</h2>
-                <h2 id="hotSelect">Hot</h2>
-                <h2 id="risingSelect">Rising</h2>
-                <h2 id="newSelect">New</h2>
+                <h2 id="mostPopSelect" class="sort-option active">Most Popular</h2>
+                <h2 id="hotSelect" class="sort-option">Hot</h2>
+                <h2 id="newSelect" class="sort-option">New</h2>
             </nav>`;
+            
+        // event listeners for sort options
+        document.getElementById("mostPopSelect").addEventListener("click", function() {
+            setActiveSort(this);
+            fetchTopicPosts(topicData.id, 'popular');
+        });
+        
+        document.getElementById("hotSelect").addEventListener("click", function() {
+            setActiveSort(this);
+            fetchTopicPosts(topicData.id, 'hot');
+        });
+        
+        document.getElementById("newSelect").addEventListener("click", function() {
+            setActiveSort(this);
+            fetchTopicPosts(topicData.id, 'new');
+        });
     }
 }
 
-function fetchTopicPosts(topicId) {
-    fetch(`../php/get_topic_posts.php?id=${topicId}`)
+function setActiveSort(element) {
+    document.querySelectorAll('.sort-option').forEach(el => {
+        el.classList.remove('active');
+    });
+    
+    element.classList.add('active');
+    
+    const burgerMenu = document.querySelector('.burgerMenu');
+    
+    // reorder the menu items once option is selected
+    if (burgerMenu && element.parentNode === burgerMenu) {
+        burgerMenu.insertBefore(element, burgerMenu.firstChild);
+    }
+    
+    document.getElementById('toggle1').checked = false;
+}
+
+function fetchTopicPosts(topicId, sortBy = 'popular') {
+    const postsContainer = document.getElementById("topicPosts");
+    if (!postsContainer) {
+        console.error("Posts container not found");
+        return;
+    }
+    
+    postsContainer.innerHTML = '<div class="loading">Loading posts...</div>';
+    
+    fetch(`../php/get_topic_posts.php?id=${topicId}&sort=${sortBy}`)
         .then(response => response.json())
         .then(posts => {
-            const postsContainer = document.getElementById("topicPosts");
-            
-            if (!postsContainer) {
-                console.error("Posts container not found");
-                return;
-            }
-            
             postsContainer.innerHTML = '';
             
             if (posts.error) {
@@ -168,7 +202,7 @@ function fetchTopicPosts(topicId) {
         })
         .catch(error => {
             console.error('Error fetching posts:', error);
-            document.getElementById("topicPosts").innerHTML = 
+            postsContainer.innerHTML = 
                 '<div class="error-message">Failed to load posts. Please try again later.</div>';
         });
 }
@@ -230,12 +264,23 @@ function createLikeBtn(postCard, numLikes, postId, authorName) {
         }
         likeCountSpan.innerText = numLikes;
         
-        fetch('../scripts/like_post.php', {
+        const formData = new FormData();
+        formData.append('post_id', postId);
+        
+        fetch('../php/like_post.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `post_id=${postId}`
+            body: formData
         })
-        .then(response => response.json())
+        .then(response => {
+            return response.text().then(text => {
+                try {
+                    return JSON.parse(text);
+                } catch (e) {
+                    console.log('Response was not valid JSON:', text);
+                    return { status: 'unknown' };
+                }
+            });
+        })
         .then(data => {
             console.log('Like status updated:', data);
         })

@@ -1,12 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
-    fetchTopics();
+    // set default sort to popular
+    fetchTopics('popular');
+    setupSortBar();
 });
 
-function fetchTopics() {
-    fetch('../php/get_topics.php')
+function fetchTopics(sortBy = 'popular') {
+    const topicContent = document.querySelector("#topicContent");
+    
+    topicContent.innerHTML = '<div class="loading">Loading topics...</div>';
+    
+    fetch(`../php/get_topics.php?sort=${sortBy}`)
         .then(response => response.json())
         .then(topics => {
-            const topicContent = document.querySelector("#topicContent");
             topicContent.innerHTML = '';
             
             if (topics.length === 0) {
@@ -31,6 +36,60 @@ function fetchTopics() {
                 '<div class="error-message">Failed to load topics. Please try again later.</div>';
         });
 }
+
+function setupSortBar() {
+    const createTopicButton = typeof isLoggedIn !== 'undefined' && isLoggedIn ? 
+        `<a href="../pages/new-topic.php" class="create-topic-btn">Create New Topic</a>` : '';
+
+    document.getElementById("sortbar").innerHTML = `
+        <input id="toggle1" type="checkbox" />
+            <label class="hamburger" for="toggle1">
+                <div class="top"></div>
+                <div class="meat"></div>
+                <div class="bottom"></div>
+            </label>
+
+        <nav class="burgerMenu">
+            <h2 id="mostPopSelect" class="sort-option active">Most Popular</h2>
+            <h2 id="hotSelect" class="sort-option">Hot</h2>
+            <h2 id="newSelect" class="sort-option">New</h2>
+        </nav>
+        ${createTopicButton}`;
+        
+    // event listeners for sort options
+    document.getElementById("mostPopSelect").addEventListener("click", function() {
+        setActiveSort(this);
+        fetchTopics('popular');
+    });
+    
+    document.getElementById("hotSelect").addEventListener("click", function() {
+        setActiveSort(this);
+        fetchTopics('hot');
+    });
+    
+    document.getElementById("newSelect").addEventListener("click", function() {
+        setActiveSort(this);
+        fetchTopics('new');
+    });
+}
+
+function setActiveSort(element) {
+    document.querySelectorAll('.sort-option').forEach(el => {
+        el.classList.remove('active');
+    });
+    
+    element.classList.add('active');
+    
+    const burgerMenu = document.querySelector('.burgerMenu');
+    
+    // reorder the menu items once option is selected
+    if (burgerMenu && element.parentNode === burgerMenu) {
+        burgerMenu.insertBefore(element, burgerMenu.firstChild);
+    }
+    
+    document.getElementById('toggle1').checked = false;
+}
+
 
 function createReadMoreBtn(topicCard, desc) {
     let readMoreBtn = topicCard.querySelector(".read-more-btn");
@@ -106,25 +165,6 @@ function createFollowBtn(topicCard, topicId, numMembers) {
             console.error('Error checking follow status:', error);
         });
 }
-
-const createTopicButton = typeof isLoggedIn !== 'undefined' && isLoggedIn ? 
-    `<a href="../pages/new-topic.php" class="create-topic-btn">Create New Topic</a>` : '';
-
-document.getElementById("sortbar").innerHTML = `
-        <input id="toggle1" type="checkbox" />
-            <label class="hamburger" for="toggle1">
-                <div class="top"></div>
-                <div class="meat"></div>
-                <div class="bottom"></div>
-            </label>
-
-        <nav class="burgerMenu">
-            <h2 id="mostPopSelect">Most Popular</h2>
-            <h2 id="hotSelect">Hot</h2>
-            <h2 id="risingSelect">Rising</h2>
-            <h2 id="new">New</h2>
-        </nav>
-        ${createTopicButton}`;
 
 function createTopicCard(topicName, desc, topicId, numMembers, numPosts, topicImg) {
     let topicCard = document.createElement("div");

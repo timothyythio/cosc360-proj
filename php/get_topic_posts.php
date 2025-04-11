@@ -3,6 +3,7 @@ session_start();
 require_once '../sql/db_connect.php';
 
 $topic_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$sort = isset($_GET['sort']) ? $_GET['sort'] : 'popular';
 
 if (!$topic_id) {
     header('Content-Type: application/json');
@@ -11,15 +12,30 @@ if (!$topic_id) {
 }
 
 try {
-    $stmt = $pdo->prepare("
+    $query = "
         SELECT p.*, u.username, COUNT(l.like_id) as like_count
         FROM Posts p
         LEFT JOIN Users u ON p.user_id = u.user_id
         LEFT JOIN Likes l ON p.post_id = l.post_id
         WHERE p.topic_id = ? AND p.status = 'posted'
         GROUP BY p.post_id
-        ORDER BY p.created_at DESC
-    ");
+    ";
+    
+    switch ($sort) {
+        case 'hot':
+            // posts with most likes in the last 24h
+            $query .= " HAVING p.created_at > DATE_SUB(NOW(), INTERVAL 24 HOUR) ORDER BY like_count DESC";
+            break;
+        case 'new':
+            $query .= " ORDER BY p.created_at DESC";
+            break;
+        case 'popular':
+        default:
+            $query .= " ORDER BY like_count DESC";
+            break;
+    }
+    
+    $stmt = $pdo->prepare($query);
     $stmt->execute([$topic_id]);
     $posts = $stmt->fetchAll();
 
