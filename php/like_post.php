@@ -19,17 +19,17 @@ if (!$post_id) {
 
 try {
     // Check if already liked
-    $check = $pdo->prepare("SELECT * FROM likes WHERE user_id = ? AND post_id = ?");
+    $check = $pdo->prepare("SELECT * FROM Likes WHERE user_id = ? AND post_id = ?");
     $check->execute([$user_id, $post_id]);
 
     if ($check->fetch()) {
         // Unlike
-        $delete = $pdo->prepare("DELETE FROM likes WHERE user_id = ? AND post_id = ?");
+        $delete = $pdo->prepare("DELETE FROM Likes WHERE user_id = ? AND post_id = ?");
         $delete->execute([$user_id, $post_id]);
         echo json_encode(['status' => 'unliked']);
     } else {
         // Like
-        $insert = $pdo->prepare("INSERT INTO likes (user_id, post_id) VALUES (?, ?)");
+        $insert = $pdo->prepare("INSERT INTO Likes (user_id, post_id) VALUES (?, ?)");
         $insert->execute([$user_id, $post_id]);
         echo json_encode(['status' => 'liked']);
     }

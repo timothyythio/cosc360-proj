@@ -10,22 +10,22 @@ $userId = $_SESSION['user_id']; // logged-in user
 
 $sql = "
     SELECT l.user_id AS sender_id, l.post_id, l.liked_at AS created_at, 'like' AS type
-    FROM likes l
-    JOIN posts p ON l.post_id = p.post_id
+    FROM Likes l
+    JOIN Posts p ON l.post_id = p.post_id
     WHERE p.user_id = ?
 
     UNION
 
     SELECT c.user_id AS sender_id, c.post_id, c.created_at, 'comment' AS type
-    FROM comments c
-    JOIN posts p ON c.post_id = p.post_id
+    FROM Comments c
+    JOIN Posts p ON c.post_id = p.post_id
     WHERE p.user_id = ?
 
     UNION
 
     SELECT s.user_id AS sender_id, s.post_id, s.saved_at AS created_at, 'save' AS type
-    FROM saved s
-    JOIN posts p ON s.post_id = p.post_id
+    FROM Saved s
+    JOIN Posts p ON s.post_id = p.post_id
     WHERE p.user_id = ?
 
     LIMIT 20;
@@ -39,7 +39,7 @@ $notifications = [];
 
 foreach ($result as $row) {
     // get sender username
-    $senderStmt = $pdo->prepare("SELECT username FROM users WHERE user_id = ?");
+    $senderStmt = $pdo->prepare("SELECT username FROM Users WHERE user_id = ?");
     $senderStmt->execute([$row['sender_id']]);
     $sender = $senderStmt->fetch(PDO::FETCH_ASSOC);
 
