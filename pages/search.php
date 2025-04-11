@@ -103,30 +103,36 @@ if (!empty($searchQuery) || $author || $topic || $dateFrom || $dateTo || $hasIma
         error_log("Search error: " . $e->getMessage());
     }
 } else {
-    // Default content when no search term is provided
-    $stmt = $pdo->prepare(" SELECT 
+    try {
+        $stmt = $pdo->prepare(" SELECT 
                             Posts.*, 
                             Users.username,
                             Users.pfp,
-                            (SELECT COUNT(*) FROM Likes WHERE likes.post_id = Posts.post_id) AS like_count
+                            (SELECT COUNT(*) FROM Likes WHERE Likes.post_id = Posts.post_id) AS like_count
                         FROM Posts
                         JOIN Users ON Posts.user_id = Users.user_id
                         WHERE Posts.status = 'posted' AND Posts.created_at >= NOW() - INTERVAL 7 DAY
                         ORDER BY like_count DESC
                         LIMIT 3
                        ");
-    $stmt->execute();
-    $topicStmt = $pdo->prepare(" SELECT Topics.topic_name, COUNT(*) AS post_count
-                    FROM Posts
-                    JOIN Topics ON Posts.topic_id = Topics.topic_id
-                    WHERE Posts.created_at >= NOW() - INTERVAL 7 DAY
-                    GROUP BY Topics.topic_name
-                    ORDER BY post_count DESC
-                    LIMIT 5");
-    $topicStmt->execute();
-    $hotTopics = $topicStmt->fetchAll();
-    $hotPosts = $stmt->fetchAll();
-    $showHotPosts = true;
+        $stmt->execute();
+        $topicStmt = $pdo->prepare(" SELECT Topics.topic_name, COUNT(*) AS post_count
+                        FROM Posts
+                        JOIN Topics ON Posts.topic_id = Topics.topic_id
+                        WHERE Posts.created_at >= NOW() - INTERVAL 7 DAY
+                        GROUP BY Topics.topic_name
+                        ORDER BY post_count DESC
+                        LIMIT 5");
+        $topicStmt->execute();
+        $hotTopics = $topicStmt->fetchAll();
+        $hotPosts = $stmt->fetchAll();
+        $showHotPosts = true;
+    } catch (PDOException $e) {
+        $hotPosts = [];
+        $hotTopics = [];
+        error_log("Failed to fetch hot posts: " . $e->getMessage());
+    }
+    
 }
 
 // Helper functions
