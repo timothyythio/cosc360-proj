@@ -123,6 +123,7 @@ footer p{
     border-radius: 50%;
     cursor: pointer;
     margin-top: 10px;
+    margin-right: 15px;
 }
 
 .header-search-form {

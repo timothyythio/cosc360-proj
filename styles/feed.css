@@ -100,23 +100,6 @@
     color: #6A5ACD;
 }
 
-/* .photoCardBody {
-    max-height: 200px; 
-    overflow-y: auto; 
-    padding-right: 270px;
-}
-
-.textCardBody {
-    max-height: 200px; 
-    overflow-y: auto; 
-}
-
-.topicCardBody {
-    max-height: 200px; 
-    overflow-y: auto; 
-    padding-right: 270px;
-} */
-
 .photoCardBody, .textCardBody, .topicCardBody {
     max-height: 200px; 
     overflow-y: auto;
@@ -130,11 +113,15 @@
 }
 
 .photoCardBody {
-    padding-right: 270px;
+    padding-right: 300px;
+}
+
+.textCardBody{
+    width:100%;
 }
 
 .topicCardBody {
-    padding-right: 270px;
+    padding-right: 300px;
 }
 
 .cardFooter{

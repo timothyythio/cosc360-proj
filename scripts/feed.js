@@ -12,11 +12,25 @@ function formatDate(dateString) {
 function createReadMoreBtn(postCard, bodyText) {
     let readMoreBtn = postCard.querySelector(".read-more-btn");
     let postText = postCard.querySelector(".post-text");
+    
+    if (!readMoreBtn || !postText) return;
+
+    const charLimit = 500;
     let isExpanded = false;
+
+    // check if text is long enough to need a read more
+    if (bodyText.length <= charLimit) {
+        // remove the read more button if text is short
+        readMoreBtn.remove();
+        return;
+    }
+
+    postText.innerText = bodyText.substring(0, charLimit) + "...";
+    readMoreBtn.innerText = "Read More";
 
     readMoreBtn.addEventListener("click", () => {
         if (isExpanded) {
-            postText.innerText = bodyText.substring(0, 500) + "...";
+            postText.innerText = bodyText.substring(0, charLimit) + "...";
             readMoreBtn.innerText = "Read More";
             isExpanded = false;
         } else {
@@ -132,11 +146,12 @@ function createTopicCard(post) {
     const numLikes = post.like_count;
     const imagePath = post.image_path || "../assets/default-post-image.jpg";
     const topicName = post.topic_name || "General";
+    const topicId = post.topic_id || 0;
 
     postCard.innerHTML = `
         <div class="cardTitle">
             <h1><a href="post.php?id=${post.post_id}">${post.title}</a> 
-                <span class="topicName"><a href="topic.php?name=${topicName}">Topic: ${topicName}</a></span>
+                <span class="topicName"><a href="topic.php?id=${topicId}">Topic: ${topicName}</a></span>
             </h1>
         </div>
         <div class="topicPostPictureContainer">
