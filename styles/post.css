@@ -16,10 +16,8 @@ body, html {
 }
 
 #content {
-    margin-top: 80px;
     margin-left: 100px;
     padding: 20px;
-    padding-bottom: 100px;
     box-sizing: border-box;
     display: flex; /*COULD B THIS ONE*/
     flex-direction: column; 
