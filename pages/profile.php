@@ -83,18 +83,18 @@ include('header.php');
                         <?php
                         try {
                             $stmt = $pdo->prepare(" SELECT 
-                                    posts.post_id, 
-                                    posts.title, 
-                                    posts.content, 
-                                    posts.image_path, 
-                                    posts.created_at, 
-                                    posts.likes, 
+                                    Posts.post_id, 
+                                    Posts.title, 
+                                    Posts.content, 
+                                    Posts.image_path, 
+                                    Posts.created_at, 
+                                    Posts.likes, 
                                     users.username,
-                                    (SELECT COUNT(*) FROM Likes WHERE likes.post_id = posts.post_id) AS like_count
+                                    (SELECT COUNT(*) FROM Likes WHERE likes.post_id = Posts.post_id) AS like_count
                                 FROM Posts
-                                JOIN Users ON posts.user_id = users.user_id
-                                WHERE posts.user_id = :user_id
-                                ORDER BY posts.created_at DESC
+                                JOIN Users ON Posts.user_id = Users.user_id
+                                WHERE Posts.user_id = :user_id
+                                ORDER BY Posts.created_at DESC
                             ");
                             $stmt->execute(['user_id' => $user_id]);
                             $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
