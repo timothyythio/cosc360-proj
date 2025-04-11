@@ -132,11 +132,12 @@ function createTopicCard(post) {
     const numLikes = post.like_count;
     const imagePath = post.image_path || "../assets/default-post-image.jpg";
     const topicName = post.topic_name || "General";
+    const topicId = post.topic_id || 0;
 
     postCard.innerHTML = `
         <div class="cardTitle">
             <h1><a href="post.php?id=${post.post_id}">${post.title}</a> 
-                <span class="topicName"><a href="topic.php?name=${topicName}">Topic: ${topicName}</a></span>
+                <span class="topicName"><a href="topic.php?id=${topicId}">Topic: ${topicName}</a></span>
             </h1>
         </div>
         <div class="topicPostPictureContainer">

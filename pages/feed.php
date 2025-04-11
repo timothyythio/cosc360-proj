@@ -19,6 +19,7 @@ $stmt = $pdo->prepare("
     SELECT 
     p.*,
     t.topic_name,
+    t.topic_id,
     (
         SELECT COUNT(*) 
         FROM Likes l 
