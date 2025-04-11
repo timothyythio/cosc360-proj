@@ -57,8 +57,8 @@ CREATE TABLE `Topics` (
     `members` INT DEFAULT 0,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `topic_img` VARCHAR(255) NOT NULL,
-    PRIMARY KEY (`topic_id`),
-    UNIQUE KEY `topic_name` (`topic_name`)
+        PRIMARY KEY (`topic_id`),
+        UNIQUE KEY `topic_name` (`topic_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE `Topic_Followers` (

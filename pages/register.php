@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $fileExt = pathinfo($fileName, PATHINFO_EXTENSION);
                 $safeName = uniqid('pfp_', true) . '.' . $fileExt;
                 $uploadPath = $uploadDir . $safeName;
-                
+
                 if (move_uploaded_file($fileTmp, $uploadPath)) {
                     
                     $pfpPath = $uploadPath;
@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['username'] = $username;
         $_SESSION['logged_in'] = true;
         $_SESSION['user_pfp'] = $pfpPath;
-        header("Location: feed.php");
+        header('Location: feed.php');
             exit;
     }
 }
